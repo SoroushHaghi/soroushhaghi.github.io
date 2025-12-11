@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { contact } from '../portfolio';
 import '../assets/styles/Contact.scss';
 // import emailjs from '@emailjs/browser';
 import Box from '@mui/material/Box';
@@ -54,7 +55,11 @@ function Contact() {
       <div className="items-container">
         <div className="contact_wrapper">
           <h1>Contact Me</h1>
-          <p>Got a project waiting to be realized? Let's collaborate and make it happen!</p>
+          <p>
+            Got a project waiting to be realized? Let's collaborate and make it happen!
+            <br />
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          </p>
           <Box
             ref={form}
             component="form"

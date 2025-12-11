@@ -31,6 +31,7 @@ const projects = [
     stack: ["Python", "PyTorch", "Docker", "CI/CD"],
     sourceCode: "https://github.com/SoroushHaghi/Job-Prep2025", // لینک ریپو اگر داری
     livePreview: "",
+    image: "AI_EYES.png",
   },
   {
     name: "Gas Detection MLOps Pipeline",
@@ -39,6 +40,7 @@ const projects = [
     stack: ["Scikit-learn", "Streamlit", "Pandas", "MLOps"],
     sourceCode: "https://github.com/SoroushHaghi/gas-detection",
     livePreview: "",
+    image: "AI_NOSE.png",
   },
   {
     name: "MRI Brain Tumor Segmentation",
@@ -47,6 +49,7 @@ const projects = [
     stack: ["Deep Learning", "Computer Vision", "PyTorch"],
     sourceCode: "https://github.com/SoroushHaghi/ptb-mri-detection",
     livePreview: "",
+    image: "AI_ASSISTANT.png",
   },
 ]
 
@@ -60,8 +63,27 @@ const skills = [
   "C++",
 ]
 
+const timeline = [
+  {
+    type: "education",
+    date: "Master's Degree (2025 - Present)",
+    title: "M.Sc. Quantum Technology",
+    place: "TU Braunschweig, Germany",
+    description:
+      "Specializing in a comprehensive curriculum divided into two core pillars: Quantum Information Theory and Quantum Structure Devices. While mastering the physical and theoretical frameworks of quantum technologies, I am actively directing my independent research toward Quantum Machine Learning (QML). My core ambition is to bridge these disciplines to revolutionize Autonomous Driving, specifically by integrating Quantum Sensors (LiDAR) with Computer Vision and Mixed-Signal Electronics.",
+  },
+  {
+    type: "education",
+    date: "Bachelor's Degree (2019 - 2024)",
+    title: "B.Eng. Computer Engineering",
+    place: "Azad University, Iran",
+    description:
+      "A multidisciplinary engineering degree combining Software Engineering with Electronic Systems. Beyond the core curriculum, I aggressively expanded my software stack, completing two specialized Python tracks (Machine Learning & Data Science – see Certificates on LinkedIn) and mastering SQL & Database Management. I specialized in building end-to-end systems—from designing circuit logic in Proteus to implementing intelligent algorithms in Python, C, and MATLAB. This comprehensive background provided the necessary foundation for my current research in Quantum Technology.",
+  },
+]
+
 const contact = {
   email: "s.haghi@tu-braunschweig.de",
 }
 
-export { header, about, about2, projects, skills, contact }
+export { header, about, about2, projects, skills, timeline, contact }

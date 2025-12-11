@@ -15,6 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
+import { header } from '../portfolio';
 
 const drawerWidth = 240;
 const navItems = [['Expertise', 'expertise'], ['History', 'history'], ['Projects', 'projects'], ['Contact', 'contact']];
@@ -87,6 +88,7 @@ function Navigation({parentToChild, modeChange}: any) {
           >
             <MenuIcon />
           </IconButton>
+          <p className="navbar-brand">{header.title}</p>
           {mode === 'dark' ? (
             <LightModeIcon onClick={() => modeChange()}/>
           ) : (
