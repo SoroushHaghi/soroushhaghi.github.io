@@ -39,7 +39,7 @@ const projects = [
       "Real-time gas classification system processing data from a 16-sensor array. Achieved 95% accuracy using Random Forest and deployed via an interactive Streamlit dashboard.",
     stack: ["Scikit-learn", "Streamlit", "Pandas", "MLOps"],
     sourceCode: "https://github.com/SoroushHaghi/gas-detection",
-    livePreview: "",
+    livePreview: "https://gas-detection-tubs.streamlit.app/",
     image: "AI_NOSE.png",
   },
   {
