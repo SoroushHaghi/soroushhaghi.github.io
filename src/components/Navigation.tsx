@@ -88,12 +88,16 @@ function Navigation({parentToChild, modeChange}: any) {
           >
             <MenuIcon />
           </IconButton>
-          <p className="navbar-brand">{header.title}</p>
-          {mode === 'dark' ? (
-            <LightModeIcon onClick={() => modeChange()}/>
-          ) : (
-            <DarkModeIcon onClick={() => modeChange()}/>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {mode === 'dark' ? (
+              <LightModeIcon onClick={() => modeChange()}/>
+            ) : (
+              <DarkModeIcon onClick={() => modeChange()}/>
+            )}
+            <span style={{ color: '#fff' }}>|</span>
+            <p className="navbar-brand">{header.title}</p>
+          </div>
+          <div style={{ flexGrow: 1 }}></div>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
               <Button key={item[0]} onClick={() => scrollToSection(item[1])} sx={{ color: '#fff' }}>
