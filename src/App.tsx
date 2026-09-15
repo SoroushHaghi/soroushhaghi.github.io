@@ -9,10 +9,12 @@ import {
   Footer,
 } from "./components";
 import FadeIn from './components/FadeIn';
+import Dashboard from './components/Dashboard';
 import './index.scss';
 
 function App() {
     const [mode, setMode] = useState<string>('dark');
+    const isDashboard = window.location.pathname.replace(/\/+$/, '') === '/dashboard';
 
     const handleModeChange = () => {
         if (mode === 'dark') {
@@ -25,6 +27,10 @@ function App() {
     useEffect(() => {
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
       }, []);
+
+    if (isDashboard) {
+        return <Dashboard />;
+    }
 
     return (
     <div className={`main-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}>
