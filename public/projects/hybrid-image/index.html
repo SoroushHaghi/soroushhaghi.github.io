@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hybrid Image Generation | Soroush Haghi</title>
+<meta name="description" content="Interactive browser demo of an undergraduate hybrid-image project originally implemented in MATLAB.">
+<style>
+:root{--bg:#07111f;--bg2:#101a2d;--panel:rgba(255,255,255,.07);--line:rgba(255,255,255,.12);--text:#f7f9fc;--muted:#aeb8c9;--blue:#8cc6ff;--violet:#b59cff;--green:#8fe8c0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(900px 600px at 8% -8%,rgba(65,140,255,.22),transparent 62%),radial-gradient(800px 550px at 96% 12%,rgba(173,92,255,.18),transparent 58%),linear-gradient(150deg,#05070c,var(--bg) 42%,var(--bg2));}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+.wrap{width:min(1180px,calc(100% - 28px));margin:auto;padding:30px 0 60px}.glass{background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.045));border:1px solid var(--line);border-radius:28px;box-shadow:0 28px 90px rgba(0,0,0,.38);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}.hero-main{padding:38px}.kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:800}.hero h1{font-size:clamp(42px,6vw,72px);line-height:.97;letter-spacing:-.05em;margin:13px 0 18px}.lead{font-size:18px;line-height:1.65;color:#dbe5f3;max-width:760px;margin:0}.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}.chip{font-size:12px;padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.055)}
+.meta{padding:28px}.meta-row{padding:0 0 14px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}.meta-row:last-child{border:0}.ml{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.mv{margin-top:5px;font-size:14px;line-height:1.45}.note{font-size:12px;line-height:1.6;color:var(--muted);margin-top:18px}
+.lab{margin-top:20px;padding:25px}.labhead{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.lab h2{margin:0;font-size:24px}.sub{margin:7px 0 0;color:var(--muted);line-height:1.6}.badge{font-size:11px;color:var(--green);white-space:nowrap;border:1px solid rgba(143,232,192,.25);background:rgba(143,232,192,.07);padding:8px 10px;border-radius:999px}
+.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.ctl{padding:14px;border-radius:17px;border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.13)}.ct{display:flex;justify-content:space-between;font-size:12px;margin-bottom:10px}.ct b{color:var(--blue);font-weight:600}input[type=range]{width:100%;accent-color:#8cc6ff}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button,.file{font:inherit;font-size:12px;color:var(--text);border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);border-radius:13px;padding:10px 13px;cursor:pointer;transition:.16s}.file:hover,button:hover{transform:translateY(-1px);background:rgba(255,255,255,.1)}button.primary{background:linear-gradient(135deg,rgba(111,179,255,.30),rgba(168,120,255,.25))}input[type=file]{display:none}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:14px;margin-top:17px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.card{overflow:hidden;border-radius:21px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.17)}.ch{display:flex;justify-content:space-between;gap:10px;padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.08)}.ch strong{font-size:13px}.ch span{font-size:10px;color:var(--muted)}.cw{aspect-ratio:4/3;background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.04),transparent 55%),rgba(2,5,10,.42);display:grid;place-items:center;overflow:hidden;position:relative}canvas{display:block;width:100%;height:100%}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin-top:16px}.node{font-size:12px;text-align:center;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:#dce6f5}.arr{font-size:20px;color:var(--blue)}
+.distance{margin-top:14px;padding:14px 16px;border:1px solid rgba(255,255,255,.09);border-radius:17px;background:rgba(0,0,0,.12);display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}.distance span{font-size:11px;color:var(--muted)}.preview{margin-top:12px;min-height:185px;border:1px solid rgba(255,255,255,.09);border-radius:17px;background:rgba(0,0,0,.12);display:grid;place-items:center;overflow:hidden}.preview canvas{width:62%;height:auto;border-radius:13px;box-shadow:0 16px 50px rgba(0,0,0,.35);transition:width .2s ease}
+.info{margin-top:16px;padding:15px 16px;border-left:3px solid var(--blue);border-radius:12px;background:rgba(128,190,255,.07);font-size:13px;line-height:1.65;color:#d8e5f5}.footer{text-align:center;margin-top:22px;font-size:11px;color:var(--muted)}
+@media(max-width:920px){.hero{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}@media(max-width:580px){.wrap{width:min(100% - 18px,1180px);padding-top:16px}.hero-main,.meta,.lab{padding:19px}.controls{grid-template-columns:1fr}.labhead{flex-direction:column}.flow{grid-template-columns:1fr}.arr{transform:rotate(90deg);text-align:center}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="hero">
+<div class="glass hero-main">
+<div class="kicker">Undergraduate Computer Vision Project</div>
+<h1>Hybrid Image<br>Generation</h1>
+<p class="lead">Combine the low spatial frequencies of one image with the high spatial frequencies of another, then explore how the perceived image changes with scale and viewing distance.</p>
+<div class="chips"><span class="chip">MATLAB original</span><span class="chip">Gaussian filtering</span><span class="chip">Image Processing</span><span class="chip">Interactive demo</span></div>
+</div>
+<aside class="glass meta">
+<div class="meta-row"><div class="ml">Course</div><div class="mv">Fundamentals of Vision / Computer Vision</div></div>
+<div class="meta-row"><div class="ml">Academic term</div><div class="mv">Term 4012</div></div>
+<div class="meta-row"><div class="ml">Original environment</div><div class="mv">MATLAB + Image Processing Toolbox</div></div>
+<p class="note">This browser version is a later visualization of the original undergraduate project. The original MATLAB logic used low-pass filtering, high-frequency extraction, and image combination.</p>
+</aside>
+</section>
+
+<section class="glass lab">
+<div class="labhead"><div><h2>Interactive experiment</h2><p class="sub">The built-in sample pair is illustrative. Upload any two images to reproduce the same hybrid-image concept with your own inputs.</p></div><div class="badge">Runs locally in your browser</div></div>
+
+<div class="controls">
+<div class="ctl"><div class="ct"><span>Low-frequency blur</span><b id="v1">8 px</b></div><input id="r1" type="range" min="1" max="24" value="8"></div>
+<div class="ctl"><div class="ct"><span>High-frequency blur</span><b id="v2">10 px</b></div><input id="r2" type="range" min="1" max="24" value="10"></div>
+<div class="ctl"><div class="ct"><span>Detail strength</span><b id="v3">1.30×</b></div><input id="r3" type="range" min="20" max="260" value="130"></div>
+<div class="ctl"><div class="ct"><span>Hybrid gain</span><b id="v4">1.00×</b></div><input id="r4" type="range" min="20" max="220" value="100"></div>
+</div>
+
+<div class="toolbar">
+<label class="file">Upload image A<input id="fa" type="file" accept="image/*"></label>
+<label class="file">Upload image B<input id="fb" type="file" accept="image/*"></label>
+<button id="swap">Swap A / B</button>
+<button id="reset">Reset sample</button>
+<button id="download" class="primary">Download result</button>
+</div>
+
+<div class="grid3">
+<article class="card"><div class="ch"><strong>Image A</strong><span>low-frequency source</span></div><div class="cw"><canvas id="a"></canvas></div></article>
+<article class="card"><div class="ch"><strong>Image B</strong><span>high-frequency source</span></div><div class="cw"><canvas id="b"></canvas></div></article>
+<article class="card"><div class="ch"><strong>Hybrid result</strong><span>combined perception</span></div><div class="cw"><canvas id="hy"></canvas></div></article>
+</div>
+
+<div class="grid2">
+<article class="card"><div class="ch"><strong>Low-frequency component</strong><span>blurred image A</span></div><div class="cw"><canvas id="lo"></canvas></div></article>
+<article class="card"><div class="ch"><strong>High-frequency component</strong><span>detail from image B</span></div><div class="cw"><canvas id="hi"></canvas></div></article>
+</div>
+
+<div class="flow"><div class="node">Image A<br><strong>Gaussian low-pass</strong></div><div class="arr">+</div><div class="node">Image B − blurred B<br><strong>high-frequency detail</strong></div><div class="arr">→</div><div class="node"><strong>Hybrid image</strong><br>two-scale perception</div></div>
+
+<div class="distance"><span>Closer</span><input id="dist" type="range" min="20" max="100" value="65"><span>Farther</span></div>
+<div class="preview"><canvas id="pv"></canvas></div>
+
+<div class="info"><strong>How it works:</strong> a blurred version of image A provides low spatial frequencies. A blurred copy of image B is subtracted from image B to isolate high-frequency detail. Adding both components produces an image whose interpretation changes with viewing scale.</div>
+</section>
+<div class="footer">Soroush Haghi · Undergraduate engineering project visualization</div>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const A=new Image(),B=new Image();
+let readyA=false,readyB=false;
+
+function svgFace(kind){
+ const cat=kind==="cat";
+ const ears=cat?'<path d="M92 92 L126 34 L150 102 M258 92 L224 34 L200 102" fill="#f2bd85" stroke="#4c2c25" stroke-width="12" stroke-linejoin="round"/>':'<path d="M88 105 Q48 76 42 122 Q50 176 102 163 M262 105 Q302 76 308 122 Q300 176 248 163" fill="#b97a56" stroke="#4c2c25" stroke-width="12"/>';
+ const eye=cat?'<path d="M120 155 q18 -14 36 0 q-18 16 -36 0 M194 155 q18 -14 36 0 q-18 16 -36 0" fill="#153a32"/>':'<circle cx="140" cy="153" r="10" fill="#29211e"/><circle cx="210" cy="153" r="10" fill="#29211e"/>';
+ const muzzle=cat?'<path d="M155 200 Q175 216 195 200 M175 184 l-12 12 h24z" fill="#6d4040" stroke="#4c2c25" stroke-width="5"/><path d="M150 194 l-70 -12 M150 205 l-72 10 M200 194 l70 -12 M200 205 l72 10" stroke="#4c2c25" stroke-width="4"/>':'<ellipse cx="175" cy="205" rx="66" ry="48" fill="#e8c2a4"/><ellipse cx="175" cy="185" rx="22" ry="16" fill="#3d2a24"/><path d="M145 218 Q175 245 205 218" fill="none" stroke="#4c2c25" stroke-width="7"/>';
+ const color=cat?"#efb67b":"#c9895f";
+ return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="350" height="300" viewBox="0 0 350 300"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="'+color+'"/><stop offset="1" stop-color="'+(cat?"#f2d0a8":"#dfab87")+'"/></linearGradient></defs><rect width="350" height="300" rx="34" fill="#18263d"/>'+ears+'<ellipse cx="175" cy="165" rx="112" ry="105" fill="url(#g)" stroke="#4c2c25" stroke-width="12"/>'+eye+muzzle+'</svg>');
+}
+const SAMPLE_A=svgFace("dog"), SAMPLE_B=svgFace("cat");
+
+const C={a:$("a"),b:$("b"),lo:$("lo"),hi:$("hi"),hy:$("hy"),pv:$("pv")};
+function dims(){return [420,360]}function draw(ctx,img,w,h){ctx.clearRect(0,0,w,h);ctx.drawImage(img,0,0,w,h)}
+function data(img,w,h,blur=0){const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d",{willReadFrequently:true});if(blur)x.filter='blur('+blur+'px)';draw(x,img,w,h);x.filter="none";return x.getImageData(0,0,w,h)}
+function put(c,d){c.getContext("2d").putImageData(d,0,0)}
+function render(){
+ if(!readyA||!readyB)return;
+ const [w,h]=dims();Object.values(C).forEach(c=>{c.width=w;c.height=h});
+ draw(C.a.getContext("2d"),A,w,h);draw(C.b.getContext("2d"),B,w,h);
+ const lb=+$("r1").value,hb=+$("r2").value,ds=+$("r3").value/100,hg=+$("r4").value/100;
+ $("v1").textContent=lb+" px";$("v2").textContent=hb+" px";$("v3").textContent=ds.toFixed(2)+"×";$("v4").textContent=hg.toFixed(2)+"×";
+ const low=data(A,w,h,lb),raw=data(B,w,h),blur=data(B,w,h,hb),high=new ImageData(w,h),hy=new ImageData(w,h);
+ for(let i=0;i<raw.data.length;i+=4){for(let k=0;k<3;k++){const d=(raw.data[i+k]-blur.data[i+k])*ds;high.data[i+k]=Math.max(0,Math.min(255,128+d));hy.data[i+k]=Math.max(0,Math.min(255,low.data[i+k]+d*hg))}high.data[i+3]=255;hy.data[i+3]=255}
+ put(C.lo,low);put(C.hi,high);put(C.hy,hy);put(C.pv,hy);distance();
+}
+function distance(){C.pv.style.width=(28+(+$("dist").value/100)*52)+"%"}
+A.onload=()=>{readyA=true;render()};B.onload=()=>{readyB=true;render()};
+A.src=SAMPLE_A;B.src=SAMPLE_B;
+["r1","r2","r3","r4"].forEach(id=>$(id).addEventListener("input",()=>requestAnimationFrame(render)));$("dist").addEventListener("input",distance);
+function load(file,img,which){if(!file)return;const u=URL.createObjectURL(file);if(which==="A")readyA=false;else readyB=false;img.onload=()=>{URL.revokeObjectURL(u);if(which==="A")readyA=true;else readyB=true;render()};img.src=u}
+$("fa").onchange=e=>load(e.target.files[0],A,"A");$("fb").onchange=e=>load(e.target.files[0],B,"B");
+$("swap").onclick=()=>{const s=A.src;readyA=readyB=false;A.src=B.src;B.src=s};
+$("reset").onclick=()=>{readyA=readyB=false;A.src=SAMPLE_A;B.src=SAMPLE_B;$("r1").value=8;$("r2").value=10;$("r3").value=130;$("r4").value=100;$("dist").value=65};
+$("download").onclick=()=>{const a=document.createElement("a");a.download="hybrid-image.png";a.href=C.hy.toDataURL("image/png");a.click()};
+</script>
+</body></html>
