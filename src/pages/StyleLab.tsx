@@ -3,7 +3,7 @@ import SectionHeading from "../components/SectionHeading";
 import Wordmark from "../components/Wordmark";
 
 type ThemeMode = "system" | "light" | "dark";
-type FocusTarget = "all" | "glass" | "curves" | "shadow" | "background";
+type FocusTarget = "all" | "glass" | "curves" | "shadow" | "accent" | "background";
 
 type Values = {
   glass: number;
@@ -140,7 +140,7 @@ function StyleLab({ themeMode, onThemeModeChange }: Props) {
         <div className="lab-toolbar-group">
           <span className="lab-toolbar-label">FOCUS</span>
           <div className="lab-segmented lab-focus-tabs" role="group" aria-label="Preview target">
-            {(["all", "glass", "curves", "shadow", "background"] as FocusTarget[]).map((item) => (
+            {(["all", "glass", "curves", "shadow", "accent", "background"] as FocusTarget[]).map((item) => (
               <button
                 key={item}
                 className={focus === item ? "active" : ""}
@@ -215,6 +215,13 @@ function StyleLab({ themeMode, onThemeModeChange }: Props) {
 
               <div className="lab-sample lab-sample-shadow">
                 <div className="lab-shadow-tile">SHADOW</div>
+              </div>
+
+              <div className="lab-sample lab-sample-accent">
+                <div className="lab-accent-swatch">
+                  <span>ACCENT</span>
+                  <strong>{values.accentHue}°</strong>
+                </div>
               </div>
 
               <div className="lab-sample lab-sample-background">
