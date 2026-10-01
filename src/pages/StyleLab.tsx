@@ -1,18 +1,9 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import Wordmark from "../components/Wordmark";
 
-const controls = [
-  ["glass", "Glass opacity", "NAV + CARDS", 0.04, 0.34, 0.01],
-  ["blur", "Backdrop blur", "NAV + CARDS", 4, 34, 1],
-  ["border", "Edge highlight", "NAV + CARDS", 0.04, 0.28, 0.01],
-  ["navRadius", "Navbar curve", "TOP ISLAND", 14, 34, 1],
-  ["surfaceRadius", "Card curve", "PANELS", 14, 42, 1],
-  ["shadow", "Shadow strength", "NAV + CARDS", 0.04, 0.36, 0.01],
-  ["accentHue", "Accent hue", "TECH ACCENT", 180, 300, 1],
-  ["backgroundLightness", "Background lightness", "PAGE BACKGROUND", 4, 14, 0.5],
-  ["backgroundDepth", "Background depth", "PAGE BACKGROUND", 0, 0.14, 0.005],
-] as const;
+type ThemeMode = "system" | "light" | "dark";
+type FocusTarget = "all" | "glass" | "curves" | "shadow" | "background";
 
 type Values = {
   glass: number;
@@ -26,33 +17,98 @@ type Values = {
   backgroundDepth: number;
 };
 
-function StyleLab() {
-  const [values, setValues] = useState<Values>({
-    glass: 0.11,
-    blur: 20,
-    border: 0.12,
-    navRadius: 22,
-    surfaceRadius: 28,
-    shadow: 0.18,
-    accentHue: 218,
-    backgroundLightness: 7,
-    backgroundDepth: 0.055,
+type Props = {
+  themeMode: ThemeMode;
+  onThemeModeChange: (mode: ThemeMode) => void;
+};
+
+const defaultValues: Values = {
+  glass: 0.04,
+  blur: 4,
+  border: 0.04,
+  navRadius: 34,
+  surfaceRadius: 42,
+  shadow: 0.36,
+  accentHue: 231,
+  backgroundLightness: 4,
+  backgroundDepth: 0.14,
+};
+
+const minimalValues: Values = {
+  glass: 0.04,
+  blur: 4,
+  border: 0.04,
+  navRadius: 24,
+  surfaceRadius: 28,
+  shadow: 0.08,
+  accentHue: 231,
+  backgroundLightness: 4,
+  backgroundDepth: 0.03,
+};
+
+const controls = [
+  ["glass", "Glass opacity", "GLASS", 0.04, 0.34, 0.01],
+  ["blur", "Backdrop blur", "GLASS", 4, 34, 1],
+  ["border", "Edge highlight", "GLASS", 0.04, 0.28, 0.01],
+  ["navRadius", "Navbar curve", "CURVES", 14, 40, 1],
+  ["surfaceRadius", "Card curve", "CURVES", 14, 48, 1],
+  ["shadow", "Shadow strength", "SHADOW", 0.04, 0.4, 0.01],
+  ["accentHue", "Accent hue", "ACCENT", 180, 300, 1],
+  ["backgroundLightness", "Background lightness", "BACKGROUND", 4, 14, 0.5],
+  ["backgroundDepth", "Background depth", "BACKGROUND", 0, 0.16, 0.005],
+] as const;
+
+const cssVarFor = (key: keyof Values, value: number) => {
+  if (key === "glass") return ["--glass-alpha", String(value)] as const;
+  if (key === "blur") return ["--glass-blur", value + "px"] as const;
+  if (key === "border") return ["--glass-border-alpha", String(value)] as const;
+  if (key === "navRadius") return ["--nav-radius", value + "px"] as const;
+  if (key === "surfaceRadius") return ["--surface-radius", value + "px"] as const;
+  if (key === "shadow") return ["--shadow-alpha", String(value)] as const;
+  if (key === "accentHue") return ["--accent-hue", String(value)] as const;
+  if (key === "backgroundLightness") return ["--bg-lightness", value + "%"] as const;
+  return ["--bg-depth-alpha", String(value)] as const;
+};
+
+function StyleLab({ themeMode, onThemeModeChange }: Props) {
+  const [values, setValues] = useState<Values>(() => {
+    try {
+      const saved = window.localStorage.getItem("portfolio-style-lab-v1");
+      return saved ? { ...defaultValues, ...JSON.parse(saved) } : defaultValues;
+    } catch {
+      return defaultValues;
+    }
   });
 
-  const update = (key: keyof Values, value: number) => {
-    const next = { ...values, [key]: value };
-    setValues(next);
+  const [focus, setFocus] = useState<FocusTarget>("all");
 
+  const resolvedTheme = useMemo(() => {
+    if (themeMode !== "system") return themeMode;
+    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  }, [themeMode]);
+
+  const apply = (next: Values) => {
+    setValues(next);
     const root = document.documentElement;
-    root.style.setProperty("--glass-alpha", String(next.glass));
-    root.style.setProperty("--glass-blur", `${next.blur}px`);
-    root.style.setProperty("--glass-border-alpha", String(next.border));
-    root.style.setProperty("--nav-radius", `${next.navRadius}px`);
-    root.style.setProperty("--surface-radius", `${next.surfaceRadius}px`);
-    root.style.setProperty("--shadow-alpha", String(next.shadow));
-    root.style.setProperty("--accent-hue", String(next.accentHue));
-    root.style.setProperty("--bg-lightness", `${next.backgroundLightness}%`);
-    root.style.setProperty("--bg-depth-alpha", String(next.backgroundDepth));
+
+    (Object.keys(next) as Array<keyof Values>).forEach((key) => {
+      const [name, value] = cssVarFor(key, next[key]);
+      root.style.setProperty(name, value);
+    });
+
+    window.localStorage.setItem("portfolio-style-lab-v1", JSON.stringify(next));
+  };
+
+  const update = (key: keyof Values, value: number) => {
+    apply({ ...values, [key]: value });
+  };
+
+  const setMinimal = (key: keyof Values) => {
+    update(key, minimalValues[key]);
+  };
+
+  const resetAll = () => {
+    apply(defaultValues);
   };
 
   return (
@@ -60,24 +116,65 @@ function StyleLab() {
       <SectionHeading
         eyebrow="DEV ONLY"
         title="Style Lab"
-        copy="Every slider updates the real top navigation and the preview objects below, so you can see exactly where each token is applied."
+        copy="Tune one visual system at a time. Values are saved in this browser automatically and also affect the real preview pages."
       />
+
+      <div className="lab-toolbar glass-panel">
+        <div className="lab-toolbar-group">
+          <span className="lab-toolbar-label">THEME</span>
+          <div className="lab-segmented" role="group" aria-label="Theme preview">
+            {(["system", "light", "dark"] as ThemeMode[]).map((mode) => (
+              <button
+                key={mode}
+                className={themeMode === mode ? "active" : ""}
+                onClick={() => onThemeModeChange(mode)}
+                type="button"
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
+          <small>System currently resolves to <strong>{resolvedTheme}</strong>.</small>
+        </div>
+
+        <div className="lab-toolbar-group">
+          <span className="lab-toolbar-label">FOCUS</span>
+          <div className="lab-segmented lab-focus-tabs" role="group" aria-label="Preview target">
+            {(["all", "glass", "curves", "shadow", "background"] as FocusTarget[]).map((item) => (
+              <button
+                key={item}
+                className={focus === item ? "active" : ""}
+                onClick={() => setFocus(item)}
+                type="button"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <small>Use Focus when an effect is hard to distinguish.</small>
+        </div>
+
+        <button className="lab-reset" type="button" onClick={resetAll}>Reset to current defaults</button>
+      </div>
 
       <div className="lab-layout">
         <aside className="lab-controls glass-panel">
           <div className="lab-control-note">
-            <strong>LIVE</strong>
-            <span>Move a slider and watch both the navbar above and the scene on the right.</span>
+            <strong>AUTO-SAVED</strong>
+            <span>Your current values stay in this browser while you move between Home, Work, Education and the Lab.</span>
           </div>
 
           {controls.map(([key, label, target, min, max, step]) => (
-            <label key={key}>
+            <label key={key} className={`lab-control lab-control-${target.toLowerCase()}`}>
               <span className="lab-label-row">
                 <span>
                   {label}
                   <small>{target}</small>
                 </span>
-                <strong>{values[key]}</strong>
+                <span className="lab-control-actions">
+                  <button type="button" onClick={() => setMinimal(key)}>MIN</button>
+                  <strong>{values[key]}</strong>
+                </span>
               </span>
               <input
                 type="range"
@@ -85,13 +182,13 @@ function StyleLab() {
                 max={max}
                 step={step}
                 value={values[key]}
-                onChange={(e) => update(key, Number(e.target.value))}
+                onChange={(event) => update(key, Number(event.target.value))}
               />
             </label>
           ))}
         </aside>
 
-        <section className="lab-scene" aria-label="Live style preview">
+        <section className={`lab-scene lab-focus-${focus}`} aria-label="Live style preview">
           <div className="lab-scene-grid" aria-hidden="true" />
           <div className="lab-orb lab-orb-a" aria-hidden="true" />
           <div className="lab-orb lab-orb-b" aria-hidden="true" />
@@ -99,6 +196,35 @@ function StyleLab() {
           <div className="lab-line lab-line-b" aria-hidden="true" />
 
           <div className="lab-demo-stack">
+            <div className="lab-effect-samples">
+              <div className="lab-sample lab-sample-glass">
+                <div className="lab-sample-backdrop" aria-hidden="true">
+                  <span>Q</span><span>AI</span><span>01</span><span>λ</span>
+                </div>
+                <div className="lab-sample-pane glass-panel">
+                  <small>GLASS</small>
+                  <strong>Opacity + blur + edge</strong>
+                </div>
+              </div>
+
+              <div className="lab-sample lab-sample-curves">
+                <div className="lab-curve-nav" />
+                <div className="lab-curve-card" />
+                <small>CURVES</small>
+              </div>
+
+              <div className="lab-sample lab-sample-shadow">
+                <div className="lab-shadow-tile">SHADOW</div>
+              </div>
+
+              <div className="lab-sample lab-sample-background">
+                <div className="lab-background-swatch">
+                  <span>{resolvedTheme.toUpperCase()}</span>
+                  <strong>{values.backgroundLightness}%</strong>
+                </div>
+              </div>
+            </div>
+
             <div className="lab-demo-nav glass-surface">
               <span className="lab-demo-brand"><Wordmark variant="nav" /></span>
               <span>WORK</span>
@@ -108,10 +234,9 @@ function StyleLab() {
 
             <div className="glass-panel preview-card">
               <div className="eyebrow">OPTICAL SURFACE</div>
-              <h2>Glass should reveal what is behind it.</h2>
+              <h2>See each effect in isolation and in context.</h2>
               <p>
-                The grid, light forms and line work behind this panel are intentionally visible so transparency,
-                blur, edge highlight and shadow changes are obvious.
+                The small samples above isolate glass, curves, shadow and background. The card and navbar show how the same tokens behave in the real interface.
               </p>
               <div className="lab-demo-actions">
                 <button className="button primary">Primary</button>
@@ -124,6 +249,7 @@ function StyleLab() {
               <span>Card curve <strong>{values.surfaceRadius}px</strong></span>
               <span>Blur <strong>{values.blur}px</strong></span>
               <span>Opacity <strong>{values.glass}</strong></span>
+              <span>Shadow <strong>{values.shadow}</strong></span>
               <span>Background <strong>{values.backgroundLightness}%</strong></span>
             </div>
           </div>
