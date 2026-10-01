@@ -1,50 +1,53 @@
-import React, {useState, useEffect} from "react";
-import {
-  Main,
-  Timeline,
-  Expertise,
-  Project,
-  Contact,
-  Navigation,
-  Footer,
-} from "./components";
-import FadeIn from './components/FadeIn';
-import Dashboard from './components/Dashboard';
-import './index.scss';
+import React, { useEffect, useState } from "react";
+import SiteNav from "./components/SiteNav";
+import HomePage from "./pages/HomePage";
+import WorkPage from "./pages/WorkPage";
+import EducationPage from "./pages/EducationPage";
+import StyleLab from "./pages/StyleLab";
+import "./index.scss";
+
+const normalizePath = (path: string) => {
+  const cleaned = path.replace(/\/+$/, "");
+  return cleaned || "/";
+};
 
 function App() {
-    const [mode, setMode] = useState<string>('dark');
-    const isDashboard = window.location.pathname.replace(/\/+$/, '') === '/dashboard';
+  const [path, setPath] = useState(() => normalizePath(window.location.pathname));
 
-    const handleModeChange = () => {
-        if (mode === 'dark') {
-            setMode('light');
-        } else {
-            setMode('dark');
-        }
-    }
+  useEffect(() => {
+    const onPopState = () => setPath(normalizePath(window.location.pathname));
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
-    useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
-      }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [path]);
 
-    if (isDashboard) {
-        return <Dashboard />;
-    }
+  const navigate = (nextPath: string) => {
+    const normalized = normalizePath(nextPath);
+    if (normalized === path) return;
+    window.history.pushState({}, "", normalized);
+    setPath(normalized);
+  };
 
-    return (
-    <div className={`main-container ${mode === 'dark' ? 'dark-mode' : 'light-mode'}`}>
-        <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
-        <FadeIn transitionDuration={700}>
-            <Main/>
-            <Expertise/>
-            <Timeline/>
-            <Project/>
-            <Contact/>
-        </FadeIn>
-        <Footer />
+  const renderPage = () => {
+    if (path === "/work") return <WorkPage />;
+    if (path === "/education") return <EducationPage />;
+    if (path === "/lab" && process.env.NODE_ENV !== "production") return <StyleLab />;
+    return <HomePage onNavigate={navigate} />;
+  };
+
+  return (
+    <div className="site-root">
+      <SiteNav currentPath={path} onNavigate={navigate} />
+      {renderPage()}
+      <footer className="site-footer page-shell">
+        <span>© {new Date().getFullYear()} S. Haghi</span>
+        <span>Built as a modular portfolio system.</span>
+      </footer>
     </div>
-    );
+  );
 }
 
 export default App;
