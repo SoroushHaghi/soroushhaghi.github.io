@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
 import EducationPage from "./pages/EducationPage";
 import StyleLab from "./pages/StyleLab";
+import { fromPublicPath, toPublicPath } from "./routes";
 import "./index.scss";
 
 const normalizePath = (path: string) => {
@@ -18,11 +19,11 @@ function App() {
       sessionStorage.removeItem("spaPath");
       window.history.replaceState({}, "", restoredPath);
     }
-    return normalizePath(window.location.pathname);
+    return normalizePath(fromPublicPath(window.location.pathname));
   });
 
   useEffect(() => {
-    const onPopState = () => setPath(normalizePath(window.location.pathname));
+    const onPopState = () => setPath(normalizePath(fromPublicPath(window.location.pathname)));
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
@@ -34,14 +35,14 @@ function App() {
   const navigate = (nextPath: string) => {
     const normalized = normalizePath(nextPath);
     if (normalized === path) return;
-    window.history.pushState({}, "", normalized);
+    window.history.pushState({}, "", toPublicPath(normalized));
     setPath(normalized);
   };
 
   const renderPage = () => {
     if (path === "/work") return <WorkPage />;
     if (path === "/education") return <EducationPage />;
-    if (path === "/lab" && process.env.NODE_ENV !== "production") return <StyleLab />;
+    if (path === "/lab" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) return <StyleLab />;
     return <HomePage onNavigate={navigate} />;
   };
 
