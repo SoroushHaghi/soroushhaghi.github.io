@@ -13,7 +13,7 @@ function HomePage({ onNavigate }: Props) {
 
   return (
     <main>
-      <section className="hero page-shell">
+      <section className="hero page-shell" data-scroll-section="hero">
         <div className="hero-copy">
           <div className="eyebrow">B.SC. COMPUTER ENGINEERING → M.SC. QUANTUM TECHNOLOGIES</div>
           <h1 className="hero-name"><Wordmark variant="hero" /></h1>
@@ -30,7 +30,7 @@ function HomePage({ onNavigate }: Props) {
         <SignaturePlaceholder />
       </section>
 
-      <section className="section page-shell" id="education-preview">
+      <section className="section page-shell" id="education-preview" data-scroll-section="education">
         <SectionHeading
           eyebrow="EDUCATION"
           title="Current direction, built on an engineering foundation."
@@ -53,7 +53,7 @@ function HomePage({ onNavigate }: Props) {
         </div>
       </section>
 
-      <section className="section page-shell">
+      <section className="section page-shell" data-scroll-section="expertise">
         <SectionHeading
           eyebrow="EXPERTISE"
           title="One profile, seen through connected technical domains."
@@ -62,7 +62,7 @@ function HomePage({ onNavigate }: Props) {
         <ExpertiseLayer />
       </section>
 
-      <section className="section page-shell">
+      <section className="section page-shell" data-scroll-section="work">
         <SectionHeading
           eyebrow="SELECTED WORK"
           title="Concrete evidence, not a skills wall."
@@ -90,7 +90,7 @@ function HomePage({ onNavigate }: Props) {
         {trustSignals.map((signal) => <span key={signal}>{signal}</span>)}
       </section>
 
-      <section className="contact-section page-shell">
+      <section className="contact-section page-shell" data-scroll-section="contact">
         <div className="contact-card glass-panel">
           <div>
             <div className="eyebrow">CONTACT</div>
