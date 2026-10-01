@@ -12,7 +12,14 @@ const normalizePath = (path: string) => {
 };
 
 function App() {
-  const [path, setPath] = useState(() => normalizePath(window.location.pathname));
+  const [path, setPath] = useState(() => {
+    const restoredPath = sessionStorage.getItem("spaPath");
+    if (restoredPath) {
+      sessionStorage.removeItem("spaPath");
+      window.history.replaceState({}, "", restoredPath);
+    }
+    return normalizePath(window.location.pathname);
+  });
 
   useEffect(() => {
     const onPopState = () => setPath(normalizePath(window.location.pathname));
