@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { navItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
+import Wordmark from "./Wordmark";
 
 type SiteNavProps = {
   currentPath: string;
@@ -35,8 +36,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
             onClick={(event) => go(event, "/")}
             aria-label="S. Haghi — Home"
           >
-            <span className="brand-short">SH</span>
-            <span className="brand-long">S. HAGHI</span>
+            <Wordmark variant="nav" />
           </a>
 
           <div className="desktop-nav">
