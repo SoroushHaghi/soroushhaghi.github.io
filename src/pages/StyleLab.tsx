@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SectionHeading from "../components/SectionHeading";
 
 const controls = [
   ["glass", "Glass opacity", 0.06, 0.36, 0.01],
