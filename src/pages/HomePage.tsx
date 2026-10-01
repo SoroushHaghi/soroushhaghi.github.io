@@ -3,6 +3,7 @@ import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import SignaturePlaceholder from "../components/SignaturePlaceholder";
 import { education, trustSignals, workItems } from "../siteConfig";
+import { toPublicPath } from "../routes";
 
 type Props = { onNavigate: (path: string) => void };
 
@@ -19,10 +20,10 @@ function HomePage({ onNavigate }: Props) {
             Engineering across computation, intelligent physical systems, and quantum technologies.
           </p>
           <div className="hero-actions">
-            <a href="/work" className="button primary" onClick={(e) => { e.preventDefault(); onNavigate("/work"); }}>
+            <a href={toPublicPath("/work")} className="button primary" onClick={(e) => { e.preventDefault(); onNavigate("/work"); }}>
               View work <span>→</span>
             </a>
-            <a href="/cv" className="button secondary">CV</a>
+            <a href={toPublicPath("/cv")} className="button secondary">CV</a>
           </div>
         </div>
         <SignaturePlaceholder />
@@ -75,7 +76,7 @@ function HomePage({ onNavigate }: Props) {
               <div className="work-visual-placeholder" />
               <h3>{item.title}</h3>
               <p>{item.subtitle}</p>
-              <a href="/work" onClick={(e) => { e.preventDefault(); onNavigate("/work"); }} className="text-link">
+              <a href={toPublicPath("/work")} onClick={(e) => { e.preventDefault(); onNavigate("/work"); }} className="text-link">
                 View work <span>→</span>
               </a>
             </article>
@@ -96,7 +97,7 @@ function HomePage({ onNavigate }: Props) {
           </div>
           <div className="contact-actions">
             <a className="button primary" href="mailto:s.haghi.career@outlook.com">Email</a>
-            <a className="button secondary" href="/cv">Open CV</a>
+            <a className="button secondary" href={toPublicPath("/cv")}>Open CV</a>
           </div>
         </div>
       </section>
