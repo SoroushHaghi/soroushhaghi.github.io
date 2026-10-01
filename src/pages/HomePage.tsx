@@ -2,6 +2,7 @@ import React from "react";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import SignaturePlaceholder from "../components/SignaturePlaceholder";
+import Wordmark from "../components/Wordmark";
 import { education, trustSignals, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 
@@ -14,10 +15,10 @@ function HomePage({ onNavigate }: Props) {
     <main>
       <section className="hero page-shell">
         <div className="hero-copy">
-          <div className="eyebrow">M.Sc. QUANTUM TECHNOLOGIES · COMPUTER ENGINEERING</div>
-          <h1>Soroush Haghi</h1>
+          <div className="eyebrow">B.SC. COMPUTER ENGINEERING → M.SC. QUANTUM TECHNOLOGIES</div>
+          <h1 className="hero-name"><Wordmark variant="hero" /></h1>
           <p className="hero-lead">
-            Engineering across computation, intelligent physical systems, and quantum technologies.
+            From computer engineering to quantum technologies, connecting software, sensing, communication, and computation.
           </p>
           <div className="hero-actions">
             <a href={toPublicPath("/work")} className="button primary" onClick={(e) => { e.preventDefault(); onNavigate("/work"); }}>
