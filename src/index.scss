@@ -1,6 +1,8 @@
 :root {
-  --bg: #090a0c;
-  --bg-soft: #101216;
+  --bg: #101216;
+  --bg-soft: #15181d;
+  --bg-lightness: 8%;
+  --bg-depth-alpha: .055;
   --text: #f4f6f8;
   --muted: #9da5af;
   --hairline: rgba(255,255,255,.08);
@@ -28,8 +30,9 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(1200px 700px at 78% -10%, rgba(255,255,255,.035), transparent 64%),
-    linear-gradient(180deg, #0b0c0f 0%, var(--bg) 40%, #070809 100%);
+    radial-gradient(1200px 760px at 78% -8%, rgba(255,255,255,var(--bg-depth-alpha)), transparent 64%),
+    radial-gradient(900px 620px at 8% 22%, rgba(255,255,255,.018), transparent 68%),
+    linear-gradient(180deg, #121419 0%, hsl(220 8% var(--bg-lightness)) 42%, #0b0d10 100%);
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -122,9 +125,9 @@ button { color: inherit; }
   max-width: 0;
   opacity: 0;
   transition:
-    max-width 260ms cubic-bezier(.2,.8,.2,1),
-    opacity 150ms ease,
-    margin 260ms cubic-bezier(.2,.8,.2,1);
+    max-width 400ms cubic-bezier(.2,.8,.2,1),
+    opacity 220ms ease,
+    margin 400ms cubic-bezier(.2,.8,.2,1);
 }
 
 .wm-nav-dot { margin: 0; }
@@ -146,7 +149,7 @@ button { color: inherit; }
 
 .wm-nav-h {
   display: inline-block;
-  transition: margin-left 260ms cubic-bezier(.2,.8,.2,1);
+  transition: margin-left 400ms cubic-bezier(.2,.8,.2,1);
 }
 
 .brand-mark:hover .wm-nav-h,
@@ -195,8 +198,8 @@ button { color: inherit; }
   max-width: 0;
   opacity: 0;
   transition:
-    max-width 360ms cubic-bezier(.2,.8,.2,1),
-    opacity 160ms ease;
+    max-width 540ms cubic-bezier(.2,.8,.2,1),
+    opacity 240ms ease;
 }
 
 .wordmark-hero .wm-dot {
@@ -205,8 +208,8 @@ button { color: inherit; }
   opacity: 1;
   overflow: hidden;
   transition:
-    max-width 260ms cubic-bezier(.2,.8,.2,1),
-    opacity 160ms ease;
+    max-width 440ms cubic-bezier(.2,.8,.2,1),
+    opacity 220ms ease;
 }
 
 .hero-name:hover .wm-given-tail,
