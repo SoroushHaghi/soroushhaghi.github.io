@@ -45,6 +45,26 @@ function App() {
   }, [themeMode]);
 
   useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("portfolio-style-lab-v1");
+      if (!saved) return;
+      const values = JSON.parse(saved);
+      const root = document.documentElement;
+      if (typeof values.glass === "number") root.style.setProperty("--glass-alpha", String(values.glass));
+      if (typeof values.blur === "number") root.style.setProperty("--glass-blur", values.blur + "px");
+      if (typeof values.border === "number") root.style.setProperty("--glass-border-alpha", String(values.border));
+      if (typeof values.navRadius === "number") root.style.setProperty("--nav-radius", values.navRadius + "px");
+      if (typeof values.surfaceRadius === "number") root.style.setProperty("--surface-radius", values.surfaceRadius + "px");
+      if (typeof values.shadow === "number") root.style.setProperty("--shadow-alpha", String(values.shadow));
+      if (typeof values.accentHue === "number") root.style.setProperty("--accent-hue", String(values.accentHue));
+      if (typeof values.backgroundLightness === "number") root.style.setProperty("--bg-lightness", values.backgroundLightness + "%");
+      if (typeof values.backgroundDepth === "number") root.style.setProperty("--bg-depth-alpha", String(values.backgroundDepth));
+    } catch {
+      // Ignore malformed local preview state and keep repository defaults.
+    }
+  }, []);
+
+  useEffect(() => {
     const onPopState = () => setPath(normalizePath(fromPublicPath(window.location.pathname)));
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
