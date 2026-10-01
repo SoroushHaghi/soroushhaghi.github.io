@@ -99,5 +99,4 @@ export const trustSignals = [
   "TU Braunschweig",
   "Iran Khodro",
   "Azad University",
-  "Ferdowsi University context",
 ];
