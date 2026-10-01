@@ -5,6 +5,7 @@ import WorkPage from "./pages/WorkPage";
 import EducationPage from "./pages/EducationPage";
 import StyleLab from "./pages/StyleLab";
 import { fromPublicPath, toPublicPath } from "./routes";
+import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
 
 type ThemeMode = "system" | "light" | "dark";
@@ -15,6 +16,7 @@ const normalizePath = (path: string) => {
 };
 
 function App() {
+  useAdaptiveSectionScroll({ enabled: path === "/" });
   const [path, setPath] = useState(() => {
     const restoredPath = sessionStorage.getItem("spaPath");
     if (restoredPath) {
