@@ -16,7 +16,6 @@ const normalizePath = (path: string) => {
 };
 
 function App() {
-  useAdaptiveSectionScroll({ enabled: path === "/" });
   const [path, setPath] = useState(() => {
     const restoredPath = sessionStorage.getItem("spaPath");
     if (restoredPath) {
@@ -25,6 +24,8 @@ function App() {
     }
     return normalizePath(fromPublicPath(window.location.pathname));
   });
+
+  useAdaptiveSectionScroll({ enabled: path === "/" });
 
   const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
     const saved = window.localStorage.getItem("portfolio-theme-mode");
