@@ -70,7 +70,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
           {navItems.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={toPublicPath(item.href)}
               onClick={(event) => go(event, item.href, item.external)}
             >
               {item.label}
