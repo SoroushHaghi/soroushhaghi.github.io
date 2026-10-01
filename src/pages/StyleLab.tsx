@@ -10,6 +10,8 @@ const controls = [
   ["surfaceRadius", "Card curve", "PANELS", 14, 42, 1],
   ["shadow", "Shadow strength", "NAV + CARDS", 0.04, 0.36, 0.01],
   ["accentHue", "Accent hue", "TECH ACCENT", 180, 300, 1],
+  ["backgroundLightness", "Background lightness", "PAGE BACKGROUND", 4, 14, 0.5],
+  ["backgroundDepth", "Background depth", "PAGE BACKGROUND", 0, 0.14, 0.005],
 ] as const;
 
 type Values = {
@@ -20,6 +22,8 @@ type Values = {
   surfaceRadius: number;
   shadow: number;
   accentHue: number;
+  backgroundLightness: number;
+  backgroundDepth: number;
 };
 
 function StyleLab() {
@@ -31,6 +35,8 @@ function StyleLab() {
     surfaceRadius: 28,
     shadow: 0.18,
     accentHue: 218,
+    backgroundLightness: 7,
+    backgroundDepth: 0.055,
   });
 
   const update = (key: keyof Values, value: number) => {
@@ -45,6 +51,8 @@ function StyleLab() {
     root.style.setProperty("--surface-radius", `${next.surfaceRadius}px`);
     root.style.setProperty("--shadow-alpha", String(next.shadow));
     root.style.setProperty("--accent-hue", String(next.accentHue));
+    root.style.setProperty("--bg-lightness", `${next.backgroundLightness}%`);
+    root.style.setProperty("--bg-depth-alpha", String(next.backgroundDepth));
   };
 
   return (
@@ -116,6 +124,7 @@ function StyleLab() {
               <span>Card curve <strong>{values.surfaceRadius}px</strong></span>
               <span>Blur <strong>{values.blur}px</strong></span>
               <span>Opacity <strong>{values.glass}</strong></span>
+              <span>Background <strong>{values.backgroundLightness}%</strong></span>
             </div>
           </div>
         </section>
