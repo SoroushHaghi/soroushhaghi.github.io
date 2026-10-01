@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { navItems } from "../siteConfig";
+import { toPublicPath } from "../routes";
 
 type SiteNavProps = {
   currentPath: string;
@@ -29,7 +30,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
       <header className={`site-nav-shell ${scrolled ? "is-scrolled" : ""} ${mobileOpen ? "is-open" : ""}`}>
         <nav className="site-nav glass-surface" aria-label="Primary">
           <a
-            href="/"
+            href={toPublicPath("/")}
             className="brand-mark"
             onClick={(event) => go(event, "/")}
             aria-label="S. Haghi — Home"
@@ -42,7 +43,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
             {navItems.map((item) => (
               <a
                 key={item.href}
-                href={item.href}
+                href={toPublicPath(item.href)}
                 className={currentPath === item.href ? "active" : ""}
                 onClick={(event) => go(event, item.href, item.external)}
               >
