@@ -9,7 +9,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: "all", label: "All" },
   { id: "experience", label: "Experience" },
   { id: "project", label: "Projects" },
-  { id: "system", label: "Systems" },
+  { id: "co-op", label: "Co-op" },
 ];
 
 function WorkPage() {
@@ -28,7 +28,6 @@ function WorkPage() {
       <SectionHeading
         eyebrow="WORK"
         title="Experience and projects over time."
-        copy="One timeline. Different kinds of work stay visibly distinct."
       />
 
       <div className="timeline-filter-row" role="toolbar" aria-label="Filter work timeline">
@@ -99,11 +98,6 @@ function WorkPage() {
             </div>
           </article>
         ))}
-      </div>
-
-      <div className="work-timeline-note">
-        <span>Timeline rule</span>
-        <p>Verified role periods are used where available; project publication or coursework periods are used when a precise project date is not supported.</p>
       </div>
     </main>
   );
