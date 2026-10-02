@@ -1,7 +1,33 @@
 import React, { useEffect, useRef, useState } from "react";
 import { organizationMarks } from "../siteConfig";
 
-const visibleCount = 5;
+const visibleCount = 6;
+const rotationMs = 2800;
+
+type Mark = (typeof organizationMarks)[number];
+
+function MarkVisual({ item }: { item: Mark }) {
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [item.id]);
+
+  if (failed) {
+    return <span className="organization-mark-fallback">{item.short}</span>;
+  }
+
+  return (
+    <img
+      key={item.id}
+      src={item.logo}
+      alt=""
+      loading="eager"
+      decoding="async"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 function AffiliationRail() {
   const [visible, setVisible] = useState(() => organizationMarks.slice(0, visibleCount));
@@ -9,6 +35,13 @@ function AffiliationRail() {
   const slot = useRef(0);
 
   useEffect(() => {
+    // Warm the image cache so a mark is ready before it rotates into view.
+    organizationMarks.forEach((item) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = item.logo;
+    });
+
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reduceMotion.matches || organizationMarks.length <= visibleCount) return;
 
@@ -20,7 +53,7 @@ function AffiliationRail() {
         cursor.current = (cursor.current + 1) % organizationMarks.length;
         return next;
       });
-    }, 4200);
+    }, rotationMs);
 
     return () => window.clearInterval(timer);
   }, []);
@@ -34,17 +67,13 @@ function AffiliationRail() {
           target="_blank"
           rel="noreferrer"
           aria-label={item.name}
+          title={item.name}
           key={index}
           style={{ "--brand-hue": item.hue } as React.CSSProperties}
         >
-          <span className="organization-mark-glow" aria-hidden="true" />
-          <img
-            key={item.id}
-            src={item.logo}
-            alt=""
-            loading="lazy"
-            referrerPolicy="no-referrer"
-          />
+          <span className="organization-mark-content" key={item.id}>
+            <MarkVisual item={item} />
+          </span>
         </a>
       ))}
     </div>
