@@ -7,10 +7,12 @@ import StyleLab from "./pages/StyleLab";
 import HeroLab from "./pages/HeroLab";
 import WorkLab from "./pages/WorkLab";
 import EducationLab from "./pages/EducationLab";
+import BackgroundLab from "./pages/BackgroundLab";
 import DynamicBackground from "./components/DynamicBackground";
 import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
+import "./dynamicBackground.scss";
 
 
 const normalizePath = (path: string) => {
@@ -44,9 +46,9 @@ function App() {
       root.dataset.backgroundMode = values?.mode ?? "off";
       if (typeof values?.hue === "number") root.style.setProperty("--dynamic-hue", String(values.hue));
       if (typeof values?.intensity === "number") root.style.setProperty("--dynamic-intensity", String(values.intensity));
-      if (typeof values?.edgeResponse === "number") root.style.setProperty("--dynamic-edge", String(values.edgeResponse));
+      if (typeof values?.edge === "number") root.style.setProperty("--dynamic-edge", String(values.edge));
       if (typeof values?.speed === "number") root.style.setProperty("--dynamic-speed", values.speed + "s");
-      if (typeof values?.fieldScale === "number") root.style.setProperty("--dynamic-field-scale", String(values.fieldScale));
+      if (typeof values?.scale === "number") root.style.setProperty("--dynamic-field-scale", String(values.scale));
     } catch {
       document.documentElement.dataset.backgroundMode = "off";
     }
@@ -137,6 +139,9 @@ function App() {
   const renderPage = () => {
     if (path === "/work") return <WorkPage />;
     if (path === "/education") return <EducationPage />;
+    if (path === "/lab/background" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
+      return <BackgroundLab />;
+    }
     if (path === "/lab/education" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <EducationLab />;
     }
