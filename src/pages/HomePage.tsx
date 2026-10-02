@@ -3,7 +3,7 @@ import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import SignaturePlaceholder from "../components/SignaturePlaceholder";
 import Wordmark from "../components/Wordmark";
-import { education, trustSignals, workItems } from "../siteConfig";
+import { affiliations, education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 
 type Props = { onNavigate: (path: string) => void };
@@ -33,7 +33,7 @@ function HomePage({ onNavigate }: Props) {
         <SectionHeading
           eyebrow="EDUCATION"
           title="Current direction, built on an engineering foundation."
-          copy="A concise preview here; the Education page carries the full academic story."
+          copy="From Computer Engineering into Quantum Technologies, with focus spanning computation, communication, photonics and devices."
           action={{ label: "Explore education", href: "/education" }}
           onNavigate={onNavigate}
         />
@@ -52,11 +52,11 @@ function HomePage({ onNavigate }: Props) {
         </div>
       </section>
 
-      <section className="section page-shell" data-scroll-section="expertise">
+      <section className="section page-shell expertise-section" data-scroll-section="expertise">
         <SectionHeading
           eyebrow="EXPERTISE"
-          title="One profile, seen through connected technical domains."
-          copy="This is the structural placeholder for the future layered optical map that combines Work and Education."
+          title="Where my education and technical work connect."
+          copy="A readable index of the domains that recur across my coursework, projects and systems."
         />
         <ExpertiseLayer />
       </section>
@@ -64,8 +64,8 @@ function HomePage({ onNavigate }: Props) {
       <section className="section page-shell" data-scroll-section="work">
         <SectionHeading
           eyebrow="SELECTED WORK"
-          title="Concrete evidence, not a skills wall."
-          copy="Three selected items on Home; the full Work page will support domain-driven exploration."
+          title="Selected technical work."
+          copy="Three representative projects and systems; the Work page carries the broader set."
           action={{ label: "View all work", href: "/work" }}
           onNavigate={onNavigate}
         />
@@ -82,18 +82,29 @@ function HomePage({ onNavigate }: Props) {
             </article>
           ))}
         </div>
-        <div className="continuation-cue" aria-hidden="true"><span /><span /><span /></div>
       </section>
 
-      <section className="trust-strip page-shell" aria-label="Selected institutions and organizations">
-        {trustSignals.map((signal) => <span key={signal}>{signal}</span>)}
+      <section className="affiliations-section page-shell" data-scroll-section="affiliations" aria-label="Selected affiliations and context">
+        <div className="affiliations-head">
+          <div className="eyebrow">AFFILIATIONS & CONTEXT</div>
+          <p>Selected institutions and organizations connected to my academic and technical path.</p>
+        </div>
+        <div className="affiliations-grid">
+          {affiliations.map((item) => (
+            <article className="affiliation-item" key={item.name}>
+              <strong>{item.name}</strong>
+              <span>{item.context}</span>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="contact-section page-shell" data-scroll-section="contact">
-        <div className="contact-card glass-panel">
-          <div>
+        <div className="contact-layout">
+          <div className="contact-copy">
             <div className="eyebrow">CONTACT</div>
             <h2>Open to technical conversations and industrial internships.</h2>
+            <p>For project details, collaboration or internship discussions, email is the fastest way to reach me.</p>
           </div>
           <div className="contact-actions">
             <a className="button primary" href="mailto:s.haghi.career@outlook.com">Email</a>
