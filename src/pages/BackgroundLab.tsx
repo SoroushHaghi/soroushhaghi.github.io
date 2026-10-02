@@ -11,7 +11,7 @@ function BackgroundLab(){
     <BackgroundModeGrid value={x.values.mode} onChange={x.mode}/>
     <div className="background-lab-layout">
       <BackgroundControls values={x.values} onChange={x.number}/>
-      <BackgroundStage mode={x.values.mode}/>
+      <BackgroundStage/>
     </div>
   </main>;
 }
