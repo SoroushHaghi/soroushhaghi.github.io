@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import SectionHeading from "../components/SectionHeading";
+import WorkArtifactPreview from "../components/WorkArtifactPreview";
 import { workTimeline, WorkTimelineItem } from "../portfolioContent";
 
 type Filter = "all" | WorkTimelineItem["kind"];
@@ -26,8 +27,8 @@ function WorkPage() {
     <main className="subpage page-shell work-timeline-page">
       <SectionHeading
         eyebrow="WORK"
-        title="Experience and projects, in one technical timeline."
-        copy="Professional roles, project work and public systems stay distinct by type, while the chronology shows how the work developed over time."
+        title="Experience and projects over time."
+        copy="One timeline. Different kinds of work stay visibly distinct."
       />
 
       <div className="timeline-filter-row" role="toolbar" aria-label="Filter work timeline">
@@ -45,7 +46,7 @@ function WorkPage() {
 
       <div className="work-timeline">
         {items.map((item) => (
-          <article className="timeline-item" key={item.id}>
+          <article className="timeline-item timeline-item-visual" key={item.id}>
             <div className="timeline-rail" aria-hidden="true">
               <span className="timeline-dot" />
             </div>
@@ -55,46 +56,54 @@ function WorkPage() {
               <small>{item.kind.toUpperCase()}</small>
             </div>
 
-            <div className="timeline-content">
+            <div className="timeline-content timeline-content-compact">
               <div className="timeline-heading">
                 <div>
                   <h2>{item.title}</h2>
                   {item.organization && <p className="timeline-org">{item.organization}</p>}
                 </div>
-                {item.scope && <span className="timeline-scope">{item.scope}</span>}
               </div>
 
               <p className="timeline-summary">{item.summary}</p>
 
-              {item.bullets && (
-                <ul className="timeline-bullets">
-                  {item.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
-                </ul>
-              )}
-
               <div className="timeline-tags">
-                {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                {item.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
               </div>
 
-              {item.links && (
-                <div className="timeline-links">
-                  {item.links.map((link) => (
-                    <a href={link.href} key={link.href} target="_blank" rel="noreferrer">
-                      {link.label} <span>↗</span>
-                    </a>
-                  ))}
-                </div>
+              {(item.bullets || item.scope || item.links) && (
+                <details className="timeline-details">
+                  <summary>Details</summary>
+                  <div className="timeline-details-body">
+                    {item.bullets && (
+                      <ul className="timeline-bullets">
+                        {item.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
+                      </ul>
+                    )}
+                    {item.scope && <p className="timeline-scope-note">{item.scope}</p>}
+                    {item.links && (
+                      <div className="timeline-links">
+                        {item.links.map((link) => (
+                          <a href={link.href} key={link.href} target="_blank" rel="noreferrer">
+                            {link.label} <span>↗</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </details>
               )}
+            </div>
+
+            <div className="timeline-artifact-column">
+              <WorkArtifactPreview artifact={item.artifact} title={item.title} />
             </div>
           </article>
         ))}
       </div>
 
       <div className="work-timeline-note">
-        <span>Scope note</span>
-        <p>
-          Timeline dates use verified role periods where available. For some projects, the public-repository publication date or broad coursework period is shown instead of inventing an unsupported project start date.
-        </p>
+        <span>Timeline rule</span>
+        <p>Verified role periods are used where available; project publication or coursework periods are used when a precise project date is not supported.</p>
       </div>
     </main>
   );
