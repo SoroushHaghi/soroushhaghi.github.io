@@ -49,6 +49,8 @@ jobs:
           cp build/index.html build/lab/work/index.html
           mkdir -p build/lab/education
           cp build/index.html build/lab/education/index.html
+          mkdir -p build/lab/background
+          cp build/index.html build/lab/background/index.html
 
       - name: Publish preview without changing production root
         run: |
