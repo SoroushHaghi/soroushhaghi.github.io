@@ -2,7 +2,7 @@ import React from "react";
 
 function VisualInterlude() {
   return (
-    <section className="visual-interlude" aria-label="Dynamic visual pause">
+    <section className="visual-interlude" data-scroll-section="visual-interlude" aria-label="Dynamic visual pause">
       <div className="interlude-field" aria-hidden="true">
         <div className="interlude-orbit interlude-orbit-a" />
         <div className="interlude-orbit interlude-orbit-b" />
