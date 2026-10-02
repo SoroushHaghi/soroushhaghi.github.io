@@ -2,3 +2,11 @@
 .background-preset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 
 .background-lab-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:6px}.background-lab-heading>div{max-width:760px}.background-lab-heading h1{font-size:clamp(42px,6vw,82px);margin:8px 0 12px}.background-lab-heading p{margin:0;color:var(--muted);line-height:1.6}.background-lab-link{color:var(--text);text-decoration:none;border-bottom:1px solid var(--hairline);padding-bottom:3px}.background-preset-grid button{padding:12px 14px;border:1px solid var(--hairline);border-radius:16px;background:rgba(255,255,255,.01);color:var(--text);text-align:left;display:grid;gap:6px;cursor:pointer}.background-preset-grid button span{color:var(--muted);font-size:9px;line-height:1.4}.background-control-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:22px}.background-control-head>div{display:grid;gap:4px}.background-control-head small{color:var(--muted);font-size:8px;letter-spacing:.14em}.background-control-head button{border:0;background:transparent;color:var(--muted);cursor:pointer}.background-control-note{display:grid;gap:5px;color:var(--muted);font-size:9px;line-height:1.45}@media(max-width:900px){.background-lab-heading{align-items:flex-start;flex-direction:column}.background-preset-grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.background-preset-grid{grid-template-columns:1fr}}
+
+.background-stage-preview{position:relative}
+.background-preview-note{position:absolute;z-index:6;left:20px;top:18px;display:grid;gap:3px;padding:8px 10px;border:1px solid var(--hairline);border-radius:12px;background:rgba(5,8,12,.62);backdrop-filter:blur(8px);pointer-events:none}
+.background-preview-note strong{font-size:8px;letter-spacing:.14em}
+.background-preview-note span{font-size:8px;color:var(--muted)}
+.background-stage-preview .bg-field{filter:blur(48px)}
+.background-stage-preview .bg-grazing-light{filter:blur(11px)}
+.background-stage-preview .bg-caustic{filter:blur(28px)}
