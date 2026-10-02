@@ -2,9 +2,8 @@ import React from "react";
 import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
-import SignaturePlaceholder from "../components/SignaturePlaceholder";
 import VisualInterlude from "../components/VisualInterlude";
-import Wordmark from "../components/Wordmark";
+import CinematicHero from "../components/CinematicHero";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 
@@ -15,21 +14,7 @@ function HomePage({ onNavigate }: Props) {
 
   return (
     <main>
-      <section className="hero page-shell" data-scroll-section="hero">
-        <div className="hero-copy">
-          <div className="eyebrow">COMPUTER ENGINEERING → QUANTUM TECHNOLOGIES</div>
-          <h1 className="hero-name"><Wordmark variant="hero" /></h1>
-          <p className="hero-lead">
-            Connecting software and computation with physical systems, communication, and quantum technologies.
-          </p>
-          <div className="hero-actions">
-            <a href={toPublicPath("/work")} className="button primary" onClick={(e) => { e.preventDefault(); onNavigate("/work"); }}>
-              View work <span>→</span>
-            </a>
-          </div>
-        </div>
-        <SignaturePlaceholder />
-      </section>
+      <CinematicHero />
 
       <section className="section page-shell" id="education-preview" data-scroll-section="education">
         <SectionHeading
