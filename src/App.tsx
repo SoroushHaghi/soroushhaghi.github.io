@@ -8,6 +8,7 @@ import HeroLab from "./pages/HeroLab";
 import WorkLab from "./pages/WorkLab";
 import EducationLab from "./pages/EducationLab";
 import BackgroundLab from "./pages/BackgroundLab";
+import ExpertiseLab from "./pages/ExpertiseLab";
 import DynamicBackground from "./components/DynamicBackground";
 import { backgroundDefaults, backgroundStorageKey } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
@@ -148,6 +149,9 @@ function App() {
     if (path === "/education") return <EducationPage />;
     if (path === "/lab/background" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <BackgroundLab />;
+    }
+    if (path === "/lab/expertise" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
+      return <ExpertiseLab />;
     }
     if (path === "/lab/education" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <EducationLab />;
