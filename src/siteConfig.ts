@@ -163,7 +163,8 @@ export const organizationMarks = [
     short: "INTEL",
     logo: "https://api.iconify.design/simple-icons/intel.svg?color=%230071C5",
     hue: "205",
-    scale: 1.30,
+    scale: 1.00,
+    variant: "wide",
   },
   {
     id: "texas-instruments",
@@ -204,6 +205,7 @@ export const organizationMarks = [
     short: "INFINEON",
     logo: "https://api.iconify.design/simple-icons/infineon.svg?color=%2300878F",
     hue: "184",
-    scale: 1.46,
+    scale: 1.10,
+    variant: "wide",
   },
 ] as const;
