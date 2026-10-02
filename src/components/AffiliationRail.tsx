@@ -20,6 +20,39 @@ function MarkVisual({ item }: { item: Mark }) {
     setFailed(false);
   }, [item.id]);
 
+  if (variant === "tubs-band") {
+    return (
+      <span className="organization-logo-frame organization-logo-frame-tubs-band">
+        <span className="tubs-band-mark">
+          <img src={item.logo} alt="" loading="eager" decoding="async" onError={() => setFailed(true)} />
+          <span>Technische Universität<br/>Braunschweig</span>
+        </span>
+      </span>
+    );
+  }
+
+  if (variant === "ti-signature") {
+    return (
+      <span className="organization-logo-frame organization-logo-frame-ti-signature">
+        <span className="ti-signature-mark">
+          <img src={item.logo} alt="" loading="eager" decoding="async" onError={() => setFailed(true)} />
+          <span>Texas<br/>Instruments</span>
+        </span>
+      </span>
+    );
+  }
+
+  if (variant === "ptb-signature") {
+    return (
+      <span className="organization-logo-frame organization-logo-frame-ptb-signature">
+        <span className="ptb-signature-mark">
+          <strong>PTB</strong>
+          <span>Physikalisch-Technische<br/>Bundesanstalt</span>
+        </span>
+      </span>
+    );
+  }
+
   return (
     <span
       className={`organization-logo-frame organization-logo-frame-${variant}`}
