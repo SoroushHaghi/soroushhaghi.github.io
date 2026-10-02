@@ -95,8 +95,17 @@ export const education = [
   },
 ];
 
-export const trustSignals = [
-  "TU Braunschweig",
-  "Iran Khodro",
-  "Azad University",
+export const affiliations = [
+  {
+    name: "TU Braunschweig",
+    context: "M.Sc. Quantum Technologies",
+  },
+  {
+    name: "Iran Khodro",
+    context: "University-industry project context",
+  },
+  {
+    name: "Azad University",
+    context: "B.Sc. Computer Engineering",
+  },
 ];
