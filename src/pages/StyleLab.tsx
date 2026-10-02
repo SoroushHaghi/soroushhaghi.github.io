@@ -133,7 +133,7 @@ function StyleLab() {
           <small>Use Focus when an effect is hard to distinguish.</small>
         </div>
 
-        <div className="lab-toolbar-actions"><a className="lab-reset" href={toPublicPath("/lab/hero")}>Hero Lab →</a><button className="lab-reset" type="button" onClick={resetAll}>Reset defaults</button></div>
+        <div className="lab-toolbar-actions"><a className="lab-reset" href={toPublicPath("/lab/hero")}>Hero Lab →</a><a className="lab-reset" href={toPublicPath("/lab/work")}>Work Lab →</a><button className="lab-reset" type="button" onClick={resetAll}>Reset defaults</button></div>
       </div>
 
       <div className="lab-layout">
