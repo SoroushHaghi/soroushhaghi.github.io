@@ -202,8 +202,6 @@ function CinematicHero() {
       ctx.fillRect(0, 0, W, H);
       ctx.restore();
 
-      const planeAlpha = planeFade * Math.max(xAxisIn, yAxisIn, planeIn);
-
       // 1) Hardware <-> Software appears first.
       const xLeft = project({ x: -112 * xAxisIn, y: 0, z: 0 });
       const xRight = project({ x: 112 * xAxisIn, y: 0, z: 0 });
