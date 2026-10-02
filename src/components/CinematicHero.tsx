@@ -501,7 +501,7 @@ function CinematicHero() {
 
           const start = projectState(baseOffset);
           const end = projectState(tip);
-          const color = item.K >= item.e ? KNOWLEDGE : EXPERIENCE;
+          const color = item.mode === "Knowledge" ? KNOWLEDGE : EXPERIENCE;
           const alpha = vectorResolve * (0.24 + recenter * 0.58);
 
           drawLine(
