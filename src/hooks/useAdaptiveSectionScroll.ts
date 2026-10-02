@@ -78,8 +78,8 @@ export default function useAdaptiveSectionScroll({
       // If a future section becomes taller than the viewport, keep ordinary
       // scrolling inside it. Snap only when the user reaches its boundary.
       const usableViewport = Math.max(1, viewportHeight - clearance);
-      const isTallSection = currentRect.height > usableViewport * 1.05;
-      const boundaryTolerance = Math.max(24, viewportHeight * 0.04);
+      const isTallSection = currentRect.height > usableViewport * 1.35;
+      const boundaryTolerance = Math.max(28, viewportHeight * 0.05);
 
       if (isTallSection) {
         const canScrollInsideDown =
