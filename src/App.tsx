@@ -36,26 +36,15 @@ function App() {
   }, []);
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem("portfolio-background-lab-v1");
-      const values = saved ? { ...backgroundDefaults, ...JSON.parse(saved) } : backgroundDefaults;
-      const root = document.documentElement;
-      root.dataset.backgroundMode = values.mode;
-      root.style.setProperty("--dynamic-hue", String(values.hue));
-      root.style.setProperty("--dynamic-intensity", String(values.intensity));
-      root.style.setProperty("--dynamic-edge", String(values.edge));
-      root.style.setProperty("--dynamic-speed", values.speed + "s");
-      root.style.setProperty("--dynamic-field-scale", String(values.scale));
-    } catch {
-      const root = document.documentElement;
-      root.dataset.backgroundMode = backgroundDefaults.mode;
-      root.style.setProperty("--dynamic-hue", String(backgroundDefaults.hue));
-      root.style.setProperty("--dynamic-intensity", String(backgroundDefaults.intensity));
-      root.style.setProperty("--dynamic-edge", String(backgroundDefaults.edge));
-      root.style.setProperty("--dynamic-speed", backgroundDefaults.speed + "s");
-      root.style.setProperty("--dynamic-field-scale", String(backgroundDefaults.scale));
-    }
-  }, []);
+    if (path === "/lab/background") return;
+    const root = document.documentElement;
+    root.dataset.backgroundMode = backgroundDefaults.mode;
+    root.style.setProperty("--dynamic-hue", String(backgroundDefaults.hue));
+    root.style.setProperty("--dynamic-intensity", String(backgroundDefaults.intensity));
+    root.style.setProperty("--dynamic-edge", String(backgroundDefaults.edge));
+    root.style.setProperty("--dynamic-speed", backgroundDefaults.speed + "s");
+    root.style.setProperty("--dynamic-field-scale", String(backgroundDefaults.scale));
+  }, [path]);
 
   useEffect(() => {
     try {
