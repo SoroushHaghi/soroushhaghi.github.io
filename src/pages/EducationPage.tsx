@@ -101,7 +101,7 @@ function EducationPage() {
                 <EducationArtifactPreview
                   compact
                   artifact={{
-                    label: item.status === "IN PROGRESS" ? "Presentation in preparation" : "Presentation / academic artifact",
+                    label: item.status.includes("PENDING") ? "Presentation in preparation" : "Presentation / academic artifact",
                     note: "Approved slide or document image can be added here later."
                   }}
                 />
