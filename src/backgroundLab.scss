@@ -10,3 +10,8 @@
 .background-stage-preview .bg-field{filter:blur(48px)}
 .background-stage-preview .bg-grazing-light{filter:blur(11px)}
 .background-stage-preview .bg-caustic{filter:blur(28px)}
+
+.background-stage-preview .bg-field{background:radial-gradient(circle,hsla(var(--dynamic-hue),92%,64%,.24),transparent 62%)}
+.background-stage-preview .bg-grazing-light{background:linear-gradient(90deg,transparent 6%,hsla(var(--dynamic-hue),96%,72%,.30) 50%,transparent 94%)}
+.background-stage-preview .bg-interference{background:linear-gradient(155deg,transparent 38%,hsla(var(--dynamic-hue),92%,72%,.20) 50%,transparent 62%);background-size:180% 180%}
+.background-stage-preview .bg-caustic{background:radial-gradient(ellipse,hsla(var(--dynamic-hue),100%,76%,.26),transparent 64%)}
