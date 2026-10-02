@@ -65,7 +65,9 @@ const timelineItems: EducationTimelineItem[] = [
   ...trainingAndCredentials.map((item, index): EducationTimelineItem => ({
     id: item.period + item.title,
     kind: "credential",
-    sort: Number(item.period) * 10000 + (99 - index),
+    sort: item.title === "TOEFL iBT"
+      ? 20240522
+      : Number(item.period) * 10000 + (99 - index),
     period: item.period,
     status: item.status,
     title: item.title,
