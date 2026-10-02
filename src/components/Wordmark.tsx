@@ -8,9 +8,11 @@ function Wordmark({ variant = "nav" }: WordmarkProps) {
   if (variant === "hero") {
     return (
       <span className="wordmark wordmark-hero" aria-label="Soroush Haghi">
-        <span className="wm-s">S</span>
-        <span className="wm-given-tail" aria-hidden="true">OROUSH</span>
-        <span className="wm-dot" aria-hidden="true">.</span>
+        <span className="wm-hero-given">
+          <span className="wm-s">S</span>
+          <span className="wm-given-tail" aria-hidden="true">OROUSH</span>
+          <span className="wm-dot" aria-hidden="true">.</span>
+        </span>
         <span className="wm-space" aria-hidden="true">&nbsp;</span>
         <span className="wm-surname">HAGHI</span>
       </span>
