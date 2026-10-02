@@ -1,0 +1,5 @@
+:root{--dynamic-hue:190;--dynamic-intensity:.36;--dynamic-edge:.22;--dynamic-speed:28s;--dynamic-field-scale:1}
+.dynamic-background{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:transparent}
+.site-root>main,.site-root>.site-footer{position:relative;z-index:1}
+.bg-field,.bg-grazing-light,.bg-interference,.bg-caustic{position:absolute;opacity:0;will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.dynamic-background *{animation:none!important}}
