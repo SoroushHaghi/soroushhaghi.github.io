@@ -201,28 +201,4 @@ export const organizationMarks = [
     hue: "184",
     scale: 0.92,
   },
-  {
-    id: "qvls",
-    name: "Quantum Valley Lower Saxony",
-    short: "QVLS",
-    logo: "https://img.logokit.com/qvls.de",
-    hue: "198",
-    scale: 0.94,
-  },
-  {
-    id: "hqs",
-    name: "HQS Quantum Simulations",
-    short: "HQS",
-    logo: "https://img.logokit.com/quantumsimulations.de",
-    hue: "188",
-    scale: 0.94,
-  },
-  {
-    id: "classiq",
-    name: "Classiq",
-    short: "CLASSIQ",
-    logo: "https://img.logokit.com/classiq.io",
-    hue: "265",
-    scale: 0.94,
-  },
 ] as const;
