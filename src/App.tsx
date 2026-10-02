@@ -6,6 +6,7 @@ import EducationPage from "./pages/EducationPage";
 import StyleLab from "./pages/StyleLab";
 import HeroLab from "./pages/HeroLab";
 import WorkLab from "./pages/WorkLab";
+import EducationLab from "./pages/EducationLab";
 import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
@@ -51,6 +52,21 @@ function App() {
       if (typeof values.backgroundDepth === "number") root.style.setProperty("--bg-depth-alpha", String(values.backgroundDepth));
     } catch {
       // Ignore malformed local preview state and keep repository defaults.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("portfolio-education-lab-v1");
+      if (!saved) return;
+      const values = JSON.parse(saved);
+      const root = document.documentElement;
+      if (typeof values.artifactWidth === "number") root.style.setProperty("--education-artifact-width", values.artifactWidth + "%");
+      if (typeof values.artifactHeight === "number") root.style.setProperty("--education-artifact-height", values.artifactHeight + "px");
+      if (typeof values.titleScale === "number") root.style.setProperty("--education-title-scale", String(values.titleScale));
+      if (typeof values.rowSpace === "number") root.style.setProperty("--education-row-space", values.rowSpace + "px");
+    } catch {
+      // Keep repository defaults if local Education Lab state is malformed.
     }
   }, []);
 
@@ -104,6 +120,9 @@ function App() {
   const renderPage = () => {
     if (path === "/work") return <WorkPage />;
     if (path === "/education") return <EducationPage />;
+    if (path === "/lab/education" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
+      return <EducationLab />;
+    }
     if (path === "/lab/work" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <WorkLab />;
     }
