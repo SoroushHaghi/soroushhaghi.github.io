@@ -1,9 +1,11 @@
 import React from "react";
+import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import SignaturePlaceholder from "../components/SignaturePlaceholder";
+import VisualInterlude from "../components/VisualInterlude";
 import Wordmark from "../components/Wordmark";
-import { affiliations, education, workItems } from "../siteConfig";
+import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 
 type Props = { onNavigate: (path: string) => void };
@@ -52,6 +54,8 @@ function HomePage({ onNavigate }: Props) {
         </div>
       </section>
 
+      <VisualInterlude />
+
       <section className="section page-shell expertise-section" data-scroll-section="expertise">
         <SectionHeading
           eyebrow="EXPERTISE"
@@ -84,27 +88,18 @@ function HomePage({ onNavigate }: Props) {
         </div>
       </section>
 
-      <section className="affiliations-section page-shell" data-scroll-section="affiliations" aria-label="Selected affiliations and context">
-        <div className="affiliations-head">
+      <section className="affiliations-section page-shell" data-scroll-section="affiliations" aria-label="Affiliations and context">
+        <div className="affiliations-head affiliations-head-compact">
           <div className="eyebrow">AFFILIATIONS & CONTEXT</div>
-          <p>Selected institutions and organizations connected to my academic and technical path.</p>
         </div>
-        <div className="affiliations-grid">
-          {affiliations.map((item) => (
-            <article className="affiliation-item" key={item.name}>
-              <strong>{item.name}</strong>
-              <span>{item.context}</span>
-            </article>
-          ))}
-        </div>
+        <AffiliationRail />
       </section>
 
       <section className="contact-section page-shell" data-scroll-section="contact">
         <div className="contact-layout">
           <div className="contact-copy">
             <div className="eyebrow">CONTACT</div>
-            <h2>Open to technical conversations and industrial internships.</h2>
-            <p>For project details, collaboration or internship discussions, email is the fastest way to reach me.</p>
+            <h2>Seeking an internship.</h2>
           </div>
           <div className="contact-actions">
             <a className="button primary" href="mailto:s.haghi.career@outlook.com">Email</a>
