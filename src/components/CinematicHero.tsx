@@ -327,7 +327,7 @@ function CinematicHero() {
             projectPlane(item.planeX, item.planeY, item.K * 0.9 * knowledgeGrow)
           );
           const eBottom = toScreen(
-            projectPlane(item.planeX, item.planeY, -item.e * 0.9 * experienceGrow)
+            projectPlane(item.planeX, item.planeY, -item.E * 0.9 * experienceGrow)
           );
           const barAlpha = (1 - vectorResolve) * 0.72;
 
