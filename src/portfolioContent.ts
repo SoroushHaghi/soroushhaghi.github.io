@@ -14,7 +14,7 @@ export type WorkArtifact = {
 
 export type WorkTimelineItem = {
   id: string;
-  kind: "experience" | "project" | "system";
+  kind: "experience" | "project" | "co-op";
   period: string;
   sort: number;
   title: string;
@@ -30,7 +30,7 @@ export type WorkTimelineItem = {
 export const workTimeline: WorkTimelineItem[] = [
   {
     id: "career-os",
-    kind: "system",
+    kind: "project",
     period: "Sep 2026 — Present",
     sort: 20260912,
     title: "Career OS",
@@ -140,7 +140,7 @@ export const workTimeline: WorkTimelineItem[] = [
     period: "Sep 2023 — Jan 2024",
     sort: 20230901,
     title: "Teaching Assistant — Theory of Formal Languages and Automata",
-    organization: "Islamic Azad University, Mashhad Branch",
+    organization: "Azad University, Mashhad Branch",
     summary: "Led supervised weekly exercise and problem-solving sessions for approximately 20 students and supported assignment/exam evaluation.",
     tags: ["Teaching", "Algorithms", "Technical communication"],
     artifact: {
@@ -169,11 +169,11 @@ export const workTimeline: WorkTimelineItem[] = [
   },
   {
     id: "ikco",
-    kind: "experience",
+    kind: "co-op",
     period: "Apr 2023 — Sep 2023",
     sort: 20230401,
-    title: "Pouyesh Scheme — University Project Member",
-    organization: "Iran Khodro (IKCO)",
+    title: "Iran Khodro (IKCO)",
+    organization: "Co-op — Pouyesh Scheme",
     summary: "University participation in a talent/industry context with personal work on a MATLAB day/night vehicle-detection project.",
     bullets: [
       "Participation led to an invitation to work from Iran Khodro.",
@@ -188,12 +188,12 @@ export const workTimeline: WorkTimelineItem[] = [
     scope: "User-confirmed context; not represented as formal employment"
   },
   {
-    id: "anodyne",
+    id: "ferdowsi-startup",
     kind: "experience",
     period: "Mar 2023 — Aug 2023",
     sort: 20230301,
-    title: "Project Contributor — Anodyne",
-    organization: "University-based startup at Ferdowsi University of Mashhad",
+    title: "Ferdowsi University Startup",
+    organization: "Project Contributor",
     summary: "Temporary project-based collaboration supporting coordination, external presentations, stakeholder communication, outreach, attendee coordination, on-site presentation, and professional networking.",
     tags: ["Project coordination", "Presentations", "Stakeholder communication"],
     artifact: {
@@ -209,7 +209,7 @@ export const workTimeline: WorkTimelineItem[] = [
     period: "Oct 2022 — Aug 2023",
     sort: 20221001,
     title: "Volunteer IT Support",
-    organization: "Islamic Azad University, Mashhad Branch",
+    organization: "Azad University, Mashhad Branch",
     summary: "Continued supporting the university IT team after the internship, progressing from central support to on-site troubleshooting and repair across internal university units.",
     tags: ["IT support", "Hardware", "Networks", "Windows"],
     artifact: {
@@ -225,7 +225,7 @@ export const workTimeline: WorkTimelineItem[] = [
     period: "Jul 2022 — Sep 2022",
     sort: 20220701,
     title: "IT Support Intern",
-    organization: "Islamic Azad University, Mashhad Branch",
+    organization: "Azad University, Mashhad Branch",
     summary: "Desktop troubleshooting and repair, component replacement/upgrades, Windows installation/configuration, physical rack/cabling work, and local network/Wi-Fi setup and troubleshooting.",
     tags: ["IT support", "Hardware", "Networking", "Windows"],
     artifact: {
