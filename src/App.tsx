@@ -5,6 +5,7 @@ import WorkPage from "./pages/WorkPage";
 import EducationPage from "./pages/EducationPage";
 import StyleLab from "./pages/StyleLab";
 import HeroLab from "./pages/HeroLab";
+import WorkLab from "./pages/WorkLab";
 import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
@@ -55,6 +56,21 @@ function App() {
 
   useEffect(() => {
     try {
+      const saved = window.localStorage.getItem("portfolio-work-lab-v1");
+      if (!saved) return;
+      const values = JSON.parse(saved);
+      const root = document.documentElement;
+      if (typeof values.artifactWidth === "number") root.style.setProperty("--work-artifact-width", values.artifactWidth + "%");
+      if (typeof values.artifactHeight === "number") root.style.setProperty("--work-artifact-height", values.artifactHeight + "px");
+      if (typeof values.rowSpace === "number") root.style.setProperty("--work-row-space", values.rowSpace + "px");
+      if (typeof values.titleScale === "number") root.style.setProperty("--work-title-scale", String(values.titleScale));
+    } catch {
+      // Keep repository defaults if local Work Lab state is malformed.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
       const saved = window.localStorage.getItem("portfolio-hero-lab-v1");
       if (!saved) return;
       const values = JSON.parse(saved);
@@ -88,6 +104,9 @@ function App() {
   const renderPage = () => {
     if (path === "/work") return <WorkPage />;
     if (path === "/education") return <EducationPage />;
+    if (path === "/lab/work" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
+      return <WorkLab />;
+    }
     if (path === "/lab/hero" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <HeroLab />;
     }
