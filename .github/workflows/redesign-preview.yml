@@ -67,6 +67,8 @@ jobs:
           cp build/index.html build/review-sphere-depth-v4-0ccee488/index.html
           mkdir -p build/review-wheel-snap-v5-b7c55abf
           cp build/index.html build/review-wheel-snap-v5-b7c55abf/index.html
+          mkdir -p build/review-soft-axis-v6-a4a71e32
+          cp build/index.html build/review-soft-axis-v6-a4a71e32/index.html
 
       - name: Publish preview without changing production root
         run: |
