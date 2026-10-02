@@ -117,6 +117,23 @@ function ExpertiseSphere() {
       };
     };
 
+    // Perspective visibility for a point on the sphere surface.
+    //
+    // With the camera at (0, 0, CAMERA_DISTANCE), a surface point is visible
+    // only when its outward normal faces the camera:
+    //
+    //   p · (camera - p) >= 0
+    //   CAMERA_DISTANCE * z - |p|^2 >= 0
+    //
+    // Using z >= 0 (the old rule) is only valid for orthographic projection.
+    // Under perspective it keeps a ring segment "front-facing" too long after
+    // it has already crossed the true silhouette.
+    const surfaceVisibilityMetric = (rotated: Point3) =>
+      CAMERA_DISTANCE * rotated.z -
+      (rotated.x * rotated.x + rotated.y * rotated.y + rotated.z * rotated.z);
+
+    const isSurfaceFront = (p: Point3) => surfaceVisibilityMetric(rotatePoint(p)) >= 0;
+
     /*
       Perspective-correct apparent radius of a sphere whose center lies on the
       camera axis. The old prototype used an arbitrary 0.34 * viewport value,
@@ -165,25 +182,55 @@ function ExpertiseSphere() {
     };
 
     const drawCircle3D = (plane: "xy" | "xz" | "yz", backAlpha: number, frontAlpha: number) => {
-      const points: Array<ProjectedPoint & { back: boolean }> = [];
-      for (let i = 0; i <= 280; i += 1) {
-        const a = (i / 280) * Math.PI * 2;
+      type CirclePoint = ProjectedPoint & { metric: number; back: boolean };
+      const points: CirclePoint[] = [];
+      const segments = 720;
+
+      for (let i = 0; i <= segments; i += 1) {
+        const a = (i / segments) * Math.PI * 2;
         let p: Point3;
         if (plane === "xy") p = { x: SPHERE_R * Math.cos(a), y: SPHERE_R * Math.sin(a), z: 0 };
         else if (plane === "xz") p = { x: SPHERE_R * Math.cos(a), y: 0, z: SPHERE_R * Math.sin(a) };
         else p = { x: 0, y: SPHERE_R * Math.cos(a), z: SPHERE_R * Math.sin(a) };
 
         const rotated = rotatePoint(p);
-        points.push({ ...project(p), back: rotated.z < 0 });
+        const metric = surfaceVisibilityMetric(rotated);
+        points.push({ ...project(p), metric, back: metric < 0 });
       }
+
+      const boundaryPoint = (a: CirclePoint, b: CirclePoint): ProjectedPoint => {
+        const denom = a.metric - b.metric;
+        const t = Math.abs(denom) < 1e-9 ? 0.5 : a.metric / denom;
+        const clamped = Math.max(0, Math.min(1, t));
+        return {
+          x: a.x + (b.x - a.x) * clamped,
+          y: a.y + (b.y - a.y) * clamped,
+          depth: a.depth + (b.depth - a.depth) * clamped,
+          persp: a.persp + (b.persp - a.persp) * clamped,
+        };
+      };
 
       ([true, false] as const).forEach((isBack) => {
         ctx.save();
         ctx.strokeStyle = `rgba(220,230,242,${isBack ? backAlpha : frontAlpha})`;
         ctx.lineWidth = 1;
         ctx.beginPath();
+
         let open = false;
-        for (const point of points) {
+        for (let i = 0; i < points.length; i += 1) {
+          const point = points[i];
+          const prev = i > 0 ? points[i - 1] : null;
+
+          if (prev && prev.back !== point.back) {
+            const edge = boundaryPoint(prev, point);
+            if (prev.back === isBack && open) ctx.lineTo(edge.x, edge.y);
+            open = false;
+            if (point.back === isBack) {
+              ctx.moveTo(edge.x, edge.y);
+              open = true;
+            }
+          }
+
           if (point.back === isBack) {
             if (!open) {
               ctx.moveTo(point.x, point.y);
@@ -191,10 +238,9 @@ function ExpertiseSphere() {
             } else {
               ctx.lineTo(point.x, point.y);
             }
-          } else {
-            open = false;
           }
         }
+
         ctx.stroke();
         ctx.restore();
       });
@@ -297,8 +343,7 @@ function ExpertiseSphere() {
     const drawTargets = () => {
       const rows = expertiseTargets
         .map((item) => {
-          const rotated = rotatePoint(item.pos);
-          return { item, p: project(item.pos), back: rotated.z < 0 };
+          return { item, p: project(item.pos), back: !isSurfaceFront(item.pos) };
         })
         .sort((a, b) => a.p.depth - b.p.depth);
 
