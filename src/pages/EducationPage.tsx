@@ -4,45 +4,25 @@ import EducationArtifactPreview from "../components/EducationArtifactPreview";
 import {
   academicWork,
   degreeArtifacts,
-  masterCourseAreas,
   trainingAndCredentials
 } from "../portfolioContent";
 
 type Filter = "all" | "degree" | "academic" | "credential";
 
-type EducationTimelineItem =
-  | {
-      id: string;
-      kind: "degree";
-      era: "master" | "bachelor";
-      period: string;
-      status: string;
-      title: string;
-      institution: string;
-      focus: string[];
-      achievement?: string;
-    }
-  | {
-      id: string;
-      kind: "academic";
-      era: "master";
-      period: string;
-      status: string;
-      title: string;
-      context: string;
-      summary: string;
-      tags: string[];
-    }
-  | {
-      id: string;
-      kind: "credential";
-      era: "master" | "bachelor";
-      period: string;
-      status: string;
-      title: string;
-      issuer: string;
-      artifact: string;
-    };
+type EducationTimelineItem = {
+  id: string;
+  kind: "degree" | "academic" | "credential";
+  sort: number;
+  period: string;
+  status?: string;
+  title: string;
+  subtitle?: string;
+  summary?: string;
+  tags?: string[];
+  artifactLabel: string;
+  artifactNote: string;
+  achievement?: string;
+};
 
 const filters: { id: Filter; label: string }[] = [
   { id: "all", label: "All" },
@@ -51,103 +31,80 @@ const filters: { id: Filter; label: string }[] = [
   { id: "credential", label: "Credentials" }
 ];
 
-const masterItems: EducationTimelineItem[] = [
+const timelineItems: EducationTimelineItem[] = [
   {
     id: "msc-qtec",
     kind: "degree",
-    era: "master",
+    sort: 20261001,
     period: "Oct 2024 — Present",
     status: "IN PROGRESS · 66/120 ECTS",
     title: "M.Sc. Quantum Technologies in Electrical and Computer Engineering",
-    institution: "Technische Universität Braunschweig",
-    focus: [
-      "Quantum Information & Computing",
-      "Communication & Information",
-      "Photonics, Devices & Fields"
-    ]
+    subtitle: "Technische Universität Braunschweig",
+    artifactLabel: degreeArtifacts.master.label,
+    artifactNote: degreeArtifacts.master.note
   },
-  ...academicWork.map((item): EducationTimelineItem => ({
+
+  ...academicWork.map((item, index): EducationTimelineItem => ({
     id: item.id,
     kind: "academic",
-    era: "master",
-    period: item.status.includes("PENDING") ? "M.Sc. · Current" : "M.Sc. academic work",
+    // Exact dates are not yet canonical. Keep them within the Master's period
+    // without inventing a specific month/day; pending work appears first.
+    sort: item.status.includes("PENDING") ? 20260900 - index : 20250800 - index,
+    period: item.status.includes("PENDING") ? "2026 · Current" : "2025–2026",
     status: item.status,
     title: item.title,
-    context: item.context,
+    subtitle: item.context,
     summary: item.summary,
-    tags: item.tags
+    tags: item.tags,
+    artifactLabel: item.status.includes("PENDING")
+      ? "Presentation in preparation"
+      : "Presentation / academic artifact",
+    artifactNote: "Approved slide or document image can be added here later."
   })),
-  ...trainingAndCredentials
-    .filter((item) => Number(item.period) >= 2024)
-    .map((item): EducationTimelineItem => ({
-      id: item.period + item.title,
-      kind: "credential",
-      era: "master",
-      period: item.period,
-      status: item.status,
-      title: item.title,
-      issuer: item.issuer,
-      artifact: item.artifact ?? "Credential"
-    }))
-];
 
-const bachelorItems: EducationTimelineItem[] = [
+  ...trainingAndCredentials.map((item, index): EducationTimelineItem => ({
+    id: item.period + item.title,
+    kind: "credential",
+    sort: Number(item.period) * 10000 + (99 - index),
+    period: item.period,
+    status: item.status,
+    title: item.title,
+    subtitle: item.issuer,
+    artifactLabel: item.artifact ?? "Credential",
+    artifactNote: "Approved credential image can be added here later."
+  })),
+
   {
     id: "bsc-computer-engineering",
     kind: "degree",
-    era: "bachelor",
+    sort: 20240201,
     period: "2018 — Feb 2024",
     status: "COMPLETED",
     title: "B.Sc. Computer Engineering — AI specialization",
-    institution: "Islamic Azad University, Mashhad Branch",
+    subtitle: "Islamic Azad University, Mashhad Branch",
     achievement: "Ranked 5th of 131 students",
-    focus: [
-      "Software & Algorithms",
-      "AI & Computer Vision",
-      "Embedded Systems & Hardware",
-      "Databases & Information Systems"
-    ]
-  },
-  ...trainingAndCredentials
-    .filter((item) => Number(item.period) < 2024)
-    .map((item): EducationTimelineItem => ({
-      id: item.period + item.title,
-      kind: "credential",
-      era: "bachelor",
-      period: item.period,
-      status: item.status,
-      title: item.title,
-      issuer: item.issuer,
-      artifact: item.artifact ?? "Credential"
-    }))
+    artifactLabel: degreeArtifacts.bachelor.label,
+    artifactNote: degreeArtifacts.bachelor.note
+  }
 ];
 
 function EducationPage() {
   const [filter, setFilter] = useState<Filter>("all");
 
-  const eras = useMemo(() => {
-    const include = (item: EducationTimelineItem) => filter === "all" || item.kind === filter;
-
-    return [
-      {
-        id: "master",
-        label: "MASTER'S ERA",
-        items: masterItems.filter(include)
-      },
-      {
-        id: "bachelor",
-        label: "BACHELOR'S ERA",
-        items: bachelorItems.filter(include)
-      }
-    ].filter((era) => era.items.length > 0);
-  }, [filter]);
+  const items = useMemo(
+    () =>
+      [...timelineItems]
+        .filter((item) => filter === "all" || item.kind === filter)
+        .sort((a, b) => b.sort - a.sort),
+    [filter]
+  );
 
   return (
     <main className="subpage page-shell education-journey-page">
       <SectionHeading
         eyebrow="EDUCATION"
-        title="Academic journey, in one timeline."
-        copy="Degrees anchor the path; selected academic work and credentials sit beneath them."
+        title="Academic journey over time."
+        copy="Degrees, academic work and credentials in one chronological view."
       />
 
       <div className="timeline-filter-row" role="toolbar" aria-label="Filter education timeline">
@@ -163,121 +120,51 @@ function EducationPage() {
         ))}
       </div>
 
-      <div className="education-journey">
-        {eras.map((era) => (
-          <section className="education-era" key={era.id}>
-            <div className="education-era-label">{era.label}</div>
-
-            <div className="education-timeline">
-              {era.items.map((item) => {
-                const isDegree = item.kind === "degree";
-
-                return (
-                  <article
-                    className={`education-timeline-item-v2${isDegree ? " education-degree-anchor" : ""}`}
-                    key={item.id}
-                  >
-                    <div className="education-timeline-rail" aria-hidden="true">
-                      <span className="education-timeline-dot" />
-                    </div>
-
-                    <div className="education-timeline-period">
-                      <span>{item.period}</span>
-                      <small>{item.kind === "degree" ? "DEGREE" : item.kind === "academic" ? "ACADEMIC WORK" : "CREDENTIAL"}</small>
-                    </div>
-
-                    <div className="education-timeline-content">
-                      <div className="education-timeline-meta">{item.status}</div>
-
-                      {item.kind === "degree" && (
-                        <>
-                          <h2>{item.title}</h2>
-                          <p className="education-institution">{item.institution}</p>
-
-                          {item.achievement && (
-                            <div className="education-achievement">{item.achievement}</div>
-                          )}
-
-                          <div className="education-focus-tags">
-                            {item.focus.map((focus) => <span key={focus}>{focus}</span>)}
-                          </div>
-
-                          {item.era === "master" && (
-                            <details className="education-details">
-                              <summary>Selected coursework</summary>
-                              <div className="course-area-list">
-                                {masterCourseAreas.map((area) => (
-                                  <div className="course-area" key={area.title}>
-                                    <strong>{area.title}</strong>
-                                    <ul>
-                                      {area.courses.map((course) => <li key={course}>{course}</li>)}
-                                    </ul>
-                                  </div>
-                                ))}
-                              </div>
-                            </details>
-                          )}
-                        </>
-                      )}
-
-                      {item.kind === "academic" && (
-                        <>
-                          <span className="education-context">{item.context}</span>
-                          <h3>{item.title}</h3>
-                          <p className="education-summary">{item.summary}</p>
-                          <div className="academic-work-tags">
-                            {item.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
-                          </div>
-                        </>
-                      )}
-
-                      {item.kind === "credential" && (
-                        <>
-                          <h3>{item.title}</h3>
-                          <p className="education-institution">{item.issuer}</p>
-                        </>
-                      )}
-                    </div>
-
-                    <div className="education-timeline-artifact-v2">
-                      {item.kind === "degree" && (
-                        <EducationArtifactPreview artifact={degreeArtifacts[item.era]} />
-                      )}
-
-                      {item.kind === "academic" && (
-                        <EducationArtifactPreview
-                          compact
-                          artifact={{
-                            label: item.status.includes("PENDING")
-                              ? "Presentation in preparation"
-                              : "Presentation / academic artifact",
-                            note: "Approved slide or document image can be added here later."
-                          }}
-                        />
-                      )}
-
-                      {item.kind === "credential" && (
-                        <EducationArtifactPreview
-                          compact
-                          artifact={{
-                            label: item.artifact,
-                            note: "Approved credential image can be added here later."
-                          }}
-                        />
-                      )}
-                    </div>
-                  </article>
-                );
-              })}
+      <div className="education-timeline-v3">
+        {items.map((item) => (
+          <article
+            className={`education-timeline-row${item.kind === "degree" ? " education-timeline-row-degree" : ""}`}
+            key={item.id}
+          >
+            <div className="education-timeline-rail" aria-hidden="true">
+              <span className="education-timeline-dot" />
             </div>
-          </section>
+
+            <div className="education-timeline-period">
+              <span>{item.period}</span>
+              <small>{item.kind === "degree" ? "DEGREE" : item.kind === "academic" ? "ACADEMIC WORK" : "CREDENTIAL"}</small>
+            </div>
+
+            <div className="education-timeline-content">
+              {item.status && <div className="education-timeline-meta">{item.status}</div>}
+              <h2>{item.title}</h2>
+              {item.subtitle && <p className="education-institution">{item.subtitle}</p>}
+              {item.achievement && <div className="education-achievement">{item.achievement}</div>}
+              {item.summary && <p className="education-summary">{item.summary}</p>}
+              {item.tags && (
+                <div className="academic-work-tags">
+                  {item.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
+              )}
+            </div>
+
+            <div className="education-timeline-artifact-v2">
+              <EducationArtifactPreview
+                compact={item.kind !== "degree"}
+                artifact={{
+                  label: item.artifactLabel,
+                  note: item.artifactNote
+                }}
+              />
+            </div>
+          </article>
         ))}
       </div>
 
       <div className="education-timeline-note">
         <span>Timeline rule</span>
         <p>
-          Academic work without a verified public date is grouped under its degree instead of being assigned a guessed date.
+          Exact dates are shown where verified. Academic work without a verified month/day stays within its known study period instead of receiving an invented date.
         </p>
       </div>
     </main>
