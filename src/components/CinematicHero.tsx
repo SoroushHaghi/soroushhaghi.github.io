@@ -494,9 +494,9 @@ function CinematicHero() {
           };
 
           const tip: Point3 = {
-            x: baseOffset.x + item.dir.x * item.length,
-            y: baseOffset.y + item.dir.y * item.length,
-            z: baseOffset.z + item.dir.z * item.length,
+            x: baseOffset.x + item.dir.x * item.strength,
+            y: baseOffset.y + item.dir.y * item.strength,
+            z: baseOffset.z + item.dir.z * item.strength,
           };
 
           const start = projectState(baseOffset);
@@ -508,14 +508,14 @@ function CinematicHero() {
             start,
             end,
             rgba(color, alpha),
-            1.5 + item.length * 2.2
+            1.5 + item.strength * 2.2
           );
 
           ctx.save();
           ctx.globalAlpha = vectorResolve * (0.42 + recenter * 0.48);
           ctx.fillStyle = color;
           ctx.beginPath();
-          ctx.arc(end.x, end.y, 2 + item.length * 1.8, 0, Math.PI * 2);
+          ctx.arc(end.x, end.y, 2 + item.strength * 1.8, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         }
