@@ -1,20 +1,9 @@
 import React, { useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import Wordmark from "../components/Wordmark";
-import DynamicBackground from "../components/DynamicBackground";
 import { toPublicPath } from "../routes";
 
 type FocusTarget = "all" | "glass" | "curves" | "shadow" | "accent" | "background";
-type BackgroundMode = "off" | "ambient" | "grazing" | "interference" | "caustic" | "layered";
-
-type BackgroundValues = {
-  mode: BackgroundMode;
-  hue: number;
-  intensity: number;
-  edgeResponse: number;
-  speed: number;
-  fieldScale: number;
-};
 
 type Values = {
   glass: number;
