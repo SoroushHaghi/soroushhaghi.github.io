@@ -4769,3 +4769,83 @@ html[data-theme="light"] .lab-token-readout strong {
     animation: none !important;
   }
 }
+
+
+/* Affiliation logo normalization: one fixed square canvas per brand. */
+.organization-mark {
+  height: 92px;
+  min-height: 92px;
+  display: grid;
+  place-items: center;
+}
+
+.organization-mark-content {
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+}
+
+.organization-logo-frame {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+}
+
+.organization-logo-frame img {
+  width: 64px;
+  height: 64px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  transform: scale(var(--logo-scale, 1)) !important;
+  transform-origin: center;
+  animation: none !important;
+}
+
+.organization-mark-caption {
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  transform: translateX(-50%);
+  color: #9ba5af;
+  font-size: 8px;
+  font-weight: 760;
+  letter-spacing: .14em;
+  line-height: 1;
+}
+
+.organization-mark-fallback {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .organization-mark,
+  .organization-mark-content {
+    height: 78px;
+    min-height: 78px;
+  }
+
+  .organization-logo-frame {
+    width: 62px;
+    height: 62px;
+  }
+
+  .organization-logo-frame img,
+  .organization-mark-fallback {
+    width: 54px;
+    height: 54px;
+  }
+
+  .organization-mark-caption {
+    bottom: -9px;
+    font-size: 7px;
+  }
+}
