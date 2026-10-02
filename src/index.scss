@@ -4542,3 +4542,124 @@ html[data-theme="light"] .lab-token-readout strong {
     box-sizing: border-box;
   }
 }
+
+
+/* Restore original six-domain Expertise layout. */
+.expertise-index {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.expertise-domain {
+  min-height: 172px;
+}
+
+.expertise-domain:nth-child(4n) {
+  border-right: 1px solid var(--hairline);
+}
+
+.expertise-domain:nth-child(3n) {
+  border-right: 0;
+}
+
+.expertise-domain:nth-last-child(-n + 4) {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.expertise-domain:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+
+@media (max-width: 980px) {
+  .expertise-index {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  .expertise-domain,
+  .expertise-domain:nth-child(3n),
+  .expertise-domain:nth-child(4n) {
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .expertise-domain:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .expertise-domain:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .expertise-index {
+    grid-template-columns: 1fr;
+  }
+
+  .expertise-domain,
+  .expertise-domain:nth-child(2n),
+  .expertise-domain:nth-child(3n),
+  .expertise-domain:nth-child(4n),
+  .expertise-domain:nth-last-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .expertise-domain:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Brand marks: no cards/boxes; keep the logo itself as the visual object. */
+.organization-rail {
+  width: min(100%, 980px);
+  gap: clamp(24px, 4vw, 54px);
+}
+
+.organization-mark {
+  min-height: 78px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.organization-mark:hover,
+.organization-mark:focus-visible {
+  transform: translateY(-2px);
+  border-color: transparent;
+  background: transparent;
+}
+
+.organization-mark-glow {
+  display: none;
+}
+
+.organization-mark img {
+  width: auto;
+  height: 48px;
+  max-width: min(126px, 100%);
+  object-fit: contain;
+  filter: saturate(1.04) contrast(1.05);
+}
+
+@media (max-width: 780px) {
+  .organization-rail {
+    gap: 20px;
+  }
+
+  .organization-mark {
+    min-height: 66px;
+  }
+}
+
+@media (max-width: 560px) {
+  .organization-mark {
+    min-height: 58px;
+  }
+
+  .organization-mark img {
+    height: 40px;
+    max-width: 92px;
+  }
+}
