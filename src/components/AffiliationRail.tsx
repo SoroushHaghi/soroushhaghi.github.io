@@ -19,19 +19,27 @@ function MarkVisual({ item }: { item: Mark }) {
     setFailed(false);
   }, [item.id]);
 
-  if (failed) {
-    return <span className="organization-mark-fallback">{item.short}</span>;
-  }
-
   return (
-    <img
-      key={item.id}
-      src={item.logo}
-      alt=""
-      loading="eager"
-      decoding="async"
-      onError={() => setFailed(true)}
-    />
+    <span
+      className="organization-logo-frame"
+      style={{ "--logo-scale": String(item.scale) } as React.CSSProperties}
+    >
+      {failed ? (
+        <span className="organization-mark-fallback">{item.short}</span>
+      ) : (
+        <img
+          key={item.id}
+          src={item.logo}
+          alt=""
+          loading="eager"
+          decoding="async"
+          onError={() => setFailed(true)}
+        />
+      )}
+      {"caption" in item && item.caption && (
+        <span className="organization-mark-caption">{item.caption}</span>
+      )}
+    </span>
   );
 }
 
@@ -45,7 +53,8 @@ function AffiliationRail() {
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 900px)");
-    const onChange = () => setVisibleCount(media.matches ? mobileVisibleCount : desktopVisibleCount);
+    const onChange = () =>
+      setVisibleCount(media.matches ? mobileVisibleCount : desktopVisibleCount);
 
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
@@ -58,7 +67,6 @@ function AffiliationRail() {
   }, [visibleCount]);
 
   useEffect(() => {
-    // Warm the cache so a mark is ready before it rotates into view.
     organizationMarks.forEach((item) => {
       const image = new Image();
       image.decoding = "async";
@@ -84,11 +92,8 @@ function AffiliationRail() {
   return (
     <div className="organization-rail" aria-label="Affiliations and organizational context">
       {visible.map((item, index) => (
-        <a
+        <div
           className="organization-mark"
-          href={item.href}
-          target="_blank"
-          rel="noreferrer"
           aria-label={item.name}
           title={item.name}
           key={index}
@@ -97,7 +102,7 @@ function AffiliationRail() {
           <span className="organization-mark-content" key={item.id}>
             <MarkVisual item={item} />
           </span>
-        </a>
+        </div>
       ))}
     </div>
   );
