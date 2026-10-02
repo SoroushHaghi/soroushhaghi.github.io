@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SiteNav from "./components/SiteNav";
 import HomePage from "./pages/HomePage";
-import WorkPage from "./pages/WorkPage";
-import EducationPage from "./pages/EducationPage";
 import TriDrawerShell from "./pages/TriDrawerShell";
 import StyleLab from "./pages/StyleLab";
 import HeroLab from "./pages/HeroLab";
@@ -14,6 +12,7 @@ import { backgroundDefaults } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
 import "./index.scss";
 import "./dynamicBackground.scss";
+import "./triDrawer.scss";
 
 
 const normalizePath = (path: string) => {
