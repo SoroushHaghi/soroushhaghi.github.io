@@ -7,7 +7,7 @@ export type WorkItem = {
   id: string;
   title: string;
   subtitle: string;
-  type: "project" | "experience" | "system" | "academic";
+  type: "project" | "experience" | "academic";
   domains: string[];
   featured?: boolean;
 };
@@ -48,7 +48,7 @@ export const workItems: WorkItem[] = [
     id: "career-os",
     title: "Career OS",
     subtitle: "Structured software and automation system",
-    type: "system",
+    type: "project",
     domains: ["software-systems"],
     featured: true,
   },
