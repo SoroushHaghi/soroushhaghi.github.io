@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 function DynamicBackground() {
+  useEffect(() => { document.documentElement.style.setProperty("--dynamic-ready", "1"); }, []);
   return (
     <div className="dynamic-background" aria-hidden="true">
       <div className="bg-field bg-field-a" />
