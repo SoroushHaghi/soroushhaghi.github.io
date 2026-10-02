@@ -5,11 +5,35 @@ type Options = {
   selector?: string;
 };
 
+const WHEEL_IDLE_MS = 150;
+const SMOOTH_SCROLL_MS = 560;
+const RESIZE_SETTLE_MS = 140;
+const MIN_VERTICAL_DELTA = 0.5;
+
 const getNavClearance = () => {
   const nav = document.querySelector<HTMLElement>(".site-nav-shell");
   if (!nav) return 0;
   const rect = nav.getBoundingClientRect();
   return Math.max(0, rect.bottom + 12);
+};
+
+const getVisibleSections = (selector: string) =>
+  Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(
+    (section) => section.offsetParent !== null
+  );
+
+const getSectionTops = (sections: HTMLElement[]) =>
+  sections.map((section) => window.scrollY + section.getBoundingClientRect().top);
+
+const getCurrentSectionIndex = (tops: number[], anchorY: number) => {
+  let current = 0;
+
+  for (let index = 0; index < tops.length; index += 1) {
+    if (tops[index] <= anchorY + 2) current = index;
+    else break;
+  }
+
+  return current;
 };
 
 export default function useAdaptiveSectionScroll({
@@ -22,13 +46,51 @@ export default function useAdaptiveSectionScroll({
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
-    if (reducedMotion.matches || !finePointer.matches) return;
+    // Touch/coarse-pointer scrolling remains native. This hook normalizes
+    // mouse-wheel and trackpad gestures on desktop/responsive desktop layouts.
+    if (!finePointer.matches) return;
 
-    let wheelTotal = 0;
-    let lockedUntil = 0;
+    let gestureActive = false;
+    let lastWheelAt = 0;
+    let animationUntil = 0;
+    let releaseTimer = 0;
+    let resizeTimer = 0;
+
+    const releaseWhenIdle = () => {
+      window.clearTimeout(releaseTimer);
+
+      const now = performance.now();
+      const wheelWait = Math.max(0, WHEEL_IDLE_MS - (now - lastWheelAt));
+      const animationWait = Math.max(0, animationUntil - now);
+      const wait = Math.max(wheelWait, animationWait);
+
+      if (wait > 0) {
+        releaseTimer = window.setTimeout(releaseWhenIdle, Math.max(24, wait));
+        return;
+      }
+
+      gestureActive = false;
+    };
+
+    const scrollToSection = (section: HTMLElement) => {
+      const clearance = getNavClearance();
+      const targetTop =
+        window.scrollY + section.getBoundingClientRect().top - clearance;
+
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+      });
+    };
 
     const onWheel = (event: WheelEvent) => {
-      if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+      if (
+        event.ctrlKey ||
+        Math.abs(event.deltaX) > Math.abs(event.deltaY) ||
+        Math.abs(event.deltaY) < MIN_VERTICAL_DELTA
+      ) {
+        return;
+      }
 
       const source = event.target as HTMLElement | null;
       if (
@@ -39,94 +101,70 @@ export default function useAdaptiveSectionScroll({
         return;
       }
 
-      const sections = Array.from(
-        document.querySelectorAll<HTMLElement>(selector)
-      ).filter((section) => section.offsetParent !== null);
+      const now = performance.now();
+      lastWheelAt = now;
 
+      // All events belonging to the same physical wheel/trackpad gesture are
+      // consumed after the first navigation. The next section can only fire
+      // after both the gesture and the scroll animation have settled.
+      if (gestureActive) {
+        event.preventDefault();
+        releaseWhenIdle();
+        return;
+      }
+
+      const sections = getVisibleSections(selector);
       if (sections.length < 2) return;
 
       const direction = Math.sign(event.deltaY);
       if (!direction) return;
 
-      const now = performance.now();
-      if (now < lockedUntil) {
-        event.preventDefault();
-        return;
-      }
-
       const clearance = getNavClearance();
-      const viewportHeight = window.innerHeight;
-      const tolerance = Math.max(24, viewportHeight * 0.035);
-      const usableViewport = Math.max(1, viewportHeight - clearance);
+      const anchorY = window.scrollY + clearance;
+      const tops = getSectionTops(sections);
+      const currentIndex = getCurrentSectionIndex(tops, anchorY);
+      const targetIndex = currentIndex + direction;
 
-      const active = sections.find((section) => {
-        const rect = section.getBoundingClientRect();
-        return rect.top <= clearance + tolerance && rect.bottom > clearance + tolerance;
-      });
-
-      if (active) {
-        const rect = active.getBoundingClientRect();
-        const isTall = rect.height > usableViewport * 1.25;
-
-        if (isTall) {
-          const canContinueDown =
-            direction > 0 && rect.bottom > viewportHeight + tolerance;
-          const canContinueUp =
-            direction < 0 && rect.top < clearance - tolerance;
-
-          if (canContinueDown || canContinueUp) {
-            wheelTotal = 0;
-            return;
-          }
-        }
-      }
-
-      wheelTotal += event.deltaY;
-      const trigger = Math.max(24, Math.min(72, viewportHeight * 0.045));
-
-      if (Math.abs(wheelTotal) < trigger) {
-        event.preventDefault();
-        return;
-      }
-
-      const currentY = clearance;
-      const rects = sections.map((section) => ({
-        section,
-        rect: section.getBoundingClientRect(),
-      }));
-
-      let target: HTMLElement | undefined;
-
-      if (direction > 0) {
-        target = rects
-          .filter(({ rect }) => rect.top > currentY + tolerance)
-          .sort((a, b) => a.rect.top - b.rect.top)[0]?.section;
-      } else {
-        target = rects
-          .filter(({ rect }) => rect.top < currentY - tolerance)
-          .sort((a, b) => b.rect.top - a.rect.top)[0]?.section;
-      }
-
-      wheelTotal = 0;
-      if (!target) return;
+      // Keep native scrolling available beyond the first/last managed section
+      // (for example, to reach the footer).
+      if (targetIndex < 0 || targetIndex >= sections.length) return;
 
       event.preventDefault();
+      gestureActive = true;
+      animationUntil = now + (reducedMotion.matches ? 0 : SMOOTH_SCROLL_MS);
 
-      const targetTop =
-        window.scrollY + target.getBoundingClientRect().top - getNavClearance();
+      scrollToSection(sections[targetIndex]);
+      releaseWhenIdle();
+    };
 
-      window.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior: "smooth",
-      });
+    // When the viewport changes size, realign the current section after layout
+    // settles. No viewport percentage thresholds are used.
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (gestureActive) return;
 
-      const distance = Math.abs(targetTop - window.scrollY);
-      const viewportUnits = distance / Math.max(1, viewportHeight);
-      lockedUntil =
-        now + Math.max(420, Math.min(880, 400 + viewportUnits * 170));
+        const sections = getVisibleSections(selector);
+        if (!sections.length) return;
+
+        const clearance = getNavClearance();
+        const anchorY = window.scrollY + clearance;
+        const tops = getSectionTops(sections);
+        const currentIndex = getCurrentSectionIndex(tops, anchorY);
+        scrollToSection(sections[currentIndex]);
+      }, RESIZE_SETTLE_MS);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("orientationchange", onResize);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      window.clearTimeout(releaseTimer);
+      window.clearTimeout(resizeTimer);
+    };
   }, [enabled, selector]);
 }
