@@ -1,5 +1,5 @@
 import React from "react";
-import { domains, education, expertiseTerms, workItems } from "../siteConfig";
+import { domains, education, workItems } from "../siteConfig";
 
 function ExpertiseLayer() {
   return (
@@ -13,9 +13,6 @@ function ExpertiseLayer() {
           <article className="expertise-domain" key={domain.id}>
             <span className="expertise-domain-source">{source}</span>
             <strong>{domain.label}</strong>
-            <div className="expertise-domain-terms">
-              {expertiseTerms[domain.id].map((term) => <span key={term}>{term}</span>)}
-            </div>
             <span className="expertise-domain-line" aria-hidden="true" />
           </article>
         );
