@@ -15,16 +15,15 @@ function HomePage({ onNavigate }: Props) {
     <main>
       <section className="hero page-shell" data-scroll-section="hero">
         <div className="hero-copy">
-          <div className="eyebrow">B.SC. COMPUTER ENGINEERING → M.SC. QUANTUM TECHNOLOGIES</div>
+          <div className="eyebrow">COMPUTER ENGINEERING → QUANTUM TECHNOLOGIES</div>
           <h1 className="hero-name"><Wordmark variant="hero" /></h1>
           <p className="hero-lead">
-            From computer engineering to quantum technologies, connecting software, sensing, communication, and computation.
+            Connecting software and computation with physical systems, communication, and quantum technologies.
           </p>
           <div className="hero-actions">
             <a href={toPublicPath("/work")} className="button primary" onClick={(e) => { e.preventDefault(); onNavigate("/work"); }}>
               View work <span>→</span>
             </a>
-            <a href={toPublicPath("/cv")} className="button secondary">CV</a>
           </div>
         </div>
         <SignaturePlaceholder />
