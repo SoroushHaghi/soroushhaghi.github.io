@@ -324,7 +324,7 @@ function CinematicHero() {
 
         if (zIn > 0 && vectorResolve < 0.999) {
           const kTop = toScreen(
-            projectPlane(item.planeX, item.planeY, item.k * 0.9 * knowledgeGrow)
+            projectPlane(item.planeX, item.planeY, item.K * 0.9 * knowledgeGrow)
           );
           const eBottom = toScreen(
             projectPlane(item.planeX, item.planeY, -item.e * 0.9 * experienceGrow)
@@ -501,7 +501,7 @@ function CinematicHero() {
 
           const start = projectState(baseOffset);
           const end = projectState(tip);
-          const color = item.k >= item.e ? KNOWLEDGE : EXPERIENCE;
+          const color = item.K >= item.e ? KNOWLEDGE : EXPERIENCE;
           const alpha = vectorResolve * (0.24 + recenter * 0.58);
 
           drawLine(
