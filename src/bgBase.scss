@@ -3,3 +3,4 @@
 .site-root>main,.site-root>.site-footer{position:relative;z-index:1}
 .bg-field,.bg-grazing-light,.bg-interference,.bg-caustic{position:absolute;opacity:0;will-change:transform,opacity}
 @media(prefers-reduced-motion:reduce){.dynamic-background *{animation:none!important}}
+html[data-background-mode="caustic"] .bg-caustic,html[data-background-mode="layered"] .bg-caustic{opacity:var(--dynamic-intensity)}
