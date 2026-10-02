@@ -25,23 +25,25 @@ function MarkVisual({ item }: { item: Mark }) {
       className={`organization-logo-frame organization-logo-frame-${variant}`}
       style={{ "--logo-scale": String(item.scale) } as React.CSSProperties}
     >
-      {failed ? (
-        <span className="organization-mark-fallback">{item.short}</span>
-      ) : (
-        <span className={`organization-logo-asset organization-logo-asset-${variant}`}>
-          <img
-            key={item.id}
-            src={item.logo}
-            alt=""
-            loading="eager"
-            decoding="async"
-            onError={() => setFailed(true)}
-          />
-        </span>
-      )}
-      {"caption" in item && item.caption && (
-        <span className="organization-mark-caption">{item.caption}</span>
-      )}
+      <>
+        {failed ? (
+          <span className="organization-mark-fallback">{item.short}</span>
+        ) : (
+          <span className={`organization-logo-asset organization-logo-asset-${variant}`}>
+            <img
+              key={item.id}
+              src={item.logo}
+              alt=""
+              loading="eager"
+              decoding="async"
+              onError={() => setFailed(true)}
+            />
+          </span>
+        )}
+        {"caption" in item && item.caption && (
+          <span className="organization-mark-caption">{item.caption}</span>
+        )}
+      </>
     </span>
   );
 }
