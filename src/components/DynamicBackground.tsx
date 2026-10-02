@@ -1,9 +1,17 @@
 import React, { useEffect } from "react";
+import { BackgroundMode } from "../backgroundConfig";
 
-function DynamicBackground() {
-  useEffect(() => { document.documentElement.style.setProperty("--dynamic-ready", "1"); }, []);
+type Props = {
+  mode?: BackgroundMode;
+};
+
+function DynamicBackground({ mode }: Props) {
+  useEffect(() => {
+    document.documentElement.style.setProperty("--dynamic-ready", "1");
+  }, []);
+
   return (
-    <div className="dynamic-background" aria-hidden="true">
+    <div className="dynamic-background" data-mode={mode} aria-hidden="true">
       <div className="bg-field bg-field-a" />
       <div className="bg-field bg-field-b" />
       <div className="bg-grazing-light" />
