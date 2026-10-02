@@ -103,7 +103,7 @@ function HomePage({ onNavigate }: Props) {
           </div>
           <div className="contact-actions">
             <a className="button primary" href="mailto:s.haghi.career@outlook.com">Email</a>
-            <a className="button secondary" href={toPublicPath("/cv")}>Open CV</a>
+            <a className="button secondary" href="/cv/">Open CV</a>
           </div>
         </div>
       </section>
