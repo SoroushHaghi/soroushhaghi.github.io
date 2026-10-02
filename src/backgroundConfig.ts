@@ -14,7 +14,7 @@ export const backgroundDefaults: BackgroundValues = {
   hue: 210,
   intensity: 0.72,
   edge: 0.04,
-  speed: 12,
+  speed: 6,
   scale: 1.45,
 };
 
@@ -66,7 +66,7 @@ export const backgroundPresets = [
   },
 ] satisfies Array<{ id: string; title: string; copy: string; values: BackgroundValues }>;
 
-export const backgroundStorageKey = "portfolio-background-lab-v1";
+export const backgroundStorageKey = "portfolio-background-lab-v2";
 
 export function applyBackground(values: BackgroundValues) {
   const root = document.documentElement;
