@@ -5,9 +5,9 @@ type Options = {
   selector?: string;
 };
 
-const WHEEL_IDLE_MS = 150;
-const SMOOTH_SCROLL_MS = 560;
-const RESIZE_SETTLE_MS = 140;
+const STEP_COOLDOWN_MS = 160;
+const GESTURE_RESET_MS = 240;
+const RESIZE_SETTLE_MS = 120;
 const MIN_VERTICAL_DELTA = 0.5;
 
 const getNavClearance = () => {
@@ -47,10 +47,10 @@ export default function useAdaptiveSectionScroll({
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
-    let gestureActive = false;
-    let lastWheelAt = 0;
-    let animationUntil = 0;
-    let releaseTimer = 0;
+    let lastStepAt = -Infinity;
+    let lastWheelAt = -Infinity;
+    let virtualIndex: number | null = null;
+    let lastDirection = 0;
     let resizeTimer = 0;
 
     const syncClearance = () => {
@@ -71,22 +71,6 @@ export default function useAdaptiveSectionScroll({
       });
     };
 
-    const releaseWhenIdle = () => {
-      window.clearTimeout(releaseTimer);
-
-      const now = performance.now();
-      const wheelWait = Math.max(0, WHEEL_IDLE_MS - (now - lastWheelAt));
-      const animationWait = Math.max(0, animationUntil - now);
-      const wait = Math.max(wheelWait, animationWait);
-
-      if (wait > 0) {
-        releaseTimer = window.setTimeout(releaseWhenIdle, Math.max(24, wait));
-        return;
-      }
-
-      gestureActive = false;
-    };
-
     const onWheel = (event: WheelEvent) => {
       if (
         event.ctrlKey ||
@@ -105,45 +89,53 @@ export default function useAdaptiveSectionScroll({
         return;
       }
 
-      const now = performance.now();
-      lastWheelAt = now;
-
-      // A physical wheel/trackpad gesture can emit many wheel events.
-      // Consume all events after the first so one gesture always means one section.
-      if (gestureActive) {
-        event.preventDefault();
-        releaseWhenIdle();
-        return;
-      }
-
       const sections = getVisibleSections(selector);
       if (sections.length < 2) return;
 
       const direction = Math.sign(event.deltaY);
       if (!direction) return;
 
+      const now = performance.now();
+      const newGesture = now - lastWheelAt > GESTURE_RESET_MS;
+      lastWheelAt = now;
+
+      // Keep the section system, but only add a short throttle. A user who
+      // keeps scrolling can move through several sections quickly instead of
+      // being locked until the previous smooth animation fully settles.
+      if (!newGesture && now - lastStepAt < STEP_COOLDOWN_MS) {
+        event.preventDefault();
+        return;
+      }
+
       const clearance = getNavClearance();
       const anchorY = window.scrollY + clearance;
       const tops = getSectionTops(sections);
-      const currentIndex = getCurrentSectionIndex(tops, anchorY);
-      const targetIndex = currentIndex + direction;
+      const actualIndex = getCurrentSectionIndex(tops, anchorY);
 
-      // Leave native scrolling available outside the managed section range,
-      // e.g. below Contact so the footer remains reachable.
-      if (targetIndex < 0 || targetIndex >= sections.length) return;
+      if (newGesture || virtualIndex === null || direction !== lastDirection) {
+        virtualIndex = actualIndex;
+      }
+
+      const targetIndex = virtualIndex + direction;
+
+      // Keep native scrolling outside the managed range so the footer and page
+      // boundaries remain naturally reachable.
+      if (targetIndex < 0 || targetIndex >= sections.length) {
+        virtualIndex = null;
+        return;
+      }
 
       event.preventDefault();
-      gestureActive = true;
-      animationUntil = now + (reducedMotion.matches ? 0 : SMOOTH_SCROLL_MS);
-
+      lastStepAt = now;
+      lastDirection = direction;
+      virtualIndex = targetIndex;
       scrollToSection(sections[targetIndex]);
-      releaseWhenIdle();
     };
 
     const realignAfterResize = () => {
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
-        if (gestureActive) return;
+        virtualIndex = null;
 
         const sections = getVisibleSections(selector);
         if (!sections.length) return;
@@ -153,7 +145,6 @@ export default function useAdaptiveSectionScroll({
         const tops = getSectionTops(sections);
         const currentIndex = getCurrentSectionIndex(tops, anchorY);
 
-        // Viewport resizing must not invent a new threshold or animation.
         scrollToSection(sections[currentIndex], "auto");
       }, RESIZE_SETTLE_MS);
     };
@@ -169,8 +160,7 @@ export default function useAdaptiveSectionScroll({
     window.addEventListener("resize", onViewportChange, { passive: true });
     window.addEventListener("orientationchange", onViewportChange);
 
-    // Touch/coarse-pointer devices use native scrolling plus CSS scroll-snap.
-    // Fine pointers use the deterministic wheel state machine above.
+    // Touch/coarse-pointer devices remain native and use light CSS snap assist.
     if (!finePointer.matches) {
       return () => {
         root.classList.remove("home-section-scroll");
@@ -188,7 +178,6 @@ export default function useAdaptiveSectionScroll({
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", onViewportChange);
       window.removeEventListener("orientationchange", onViewportChange);
-      window.clearTimeout(releaseTimer);
       window.clearTimeout(resizeTimer);
     };
   }, [enabled, selector]);
