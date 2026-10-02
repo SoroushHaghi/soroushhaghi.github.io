@@ -20,12 +20,17 @@ export const navItems = [
 
 export const domains: Domain[] = [
   { id: "quantum", label: "Quantum" },
-  { id: "communication", label: "Communication" },
-  { id: "photonics", label: "Photonics" },
-  { id: "ai-perception", label: "AI & Perception" },
-  { id: "devices-sensing", label: "Devices & Sensing" },
-  { id: "software-systems", label: "Software & Systems" },
+  { id: "software", label: "Software" },
+  { id: "hardware", label: "Hardware" },
+  { id: "classical", label: "Classical" },
 ];
+
+export const expertiseTerms: Record<string, string[]> = {
+  quantum: ["Quantum information", "QKD", "Photonics", "Quantum computing"],
+  software: ["AI & perception", "Python", "Scientific computing", "Software systems"],
+  hardware: ["Embedded systems", "Sensing", "Electronics", "Devices"],
+  classical: ["Communication", "Signals & systems", "Electromagnetics", "Engineering foundations"],
+};
 
 export const workItems: WorkItem[] = [
   {
@@ -33,7 +38,7 @@ export const workItems: WorkItem[] = [
     title: "Vehicle Detection",
     subtitle: "Automotive computer vision",
     type: "project",
-    domains: ["ai-perception", "software-systems"],
+    domains: ["software", "classical"],
     featured: true,
   },
   {
@@ -41,7 +46,7 @@ export const workItems: WorkItem[] = [
     title: "MRI Segmentation",
     subtitle: "Medical imaging inference workflow",
     type: "project",
-    domains: ["ai-perception", "software-systems"],
+    domains: ["software", "classical"],
     featured: true,
   },
   {
@@ -49,7 +54,7 @@ export const workItems: WorkItem[] = [
     title: "Career OS",
     subtitle: "Structured software and automation system",
     type: "system",
-    domains: ["software-systems"],
+    domains: ["software"],
     featured: true,
   },
   {
@@ -57,21 +62,21 @@ export const workItems: WorkItem[] = [
     title: "Gas Classification",
     subtitle: "Sensor-data classification and simulation",
     type: "project",
-    domains: ["devices-sensing", "ai-perception"],
+    domains: ["hardware", "software"],
   },
   {
     id: "activity-recognition",
     title: "Activity Recognition",
     subtitle: "Sensor ML workflow and CI",
     type: "project",
-    domains: ["ai-perception", "software-systems"],
+    domains: ["software", "classical"],
   },
   {
     id: "quantum-communication",
     title: "Quantum Communication",
     subtitle: "Academic focus in communication and QKD",
     type: "academic",
-    domains: ["quantum", "communication", "photonics"],
+    domains: ["quantum", "classical"],
   },
 ];
 
@@ -82,7 +87,7 @@ export const education = [
     institution: "TU Braunschweig",
     period: "2024 — Present",
     focus: ["Quantum information & computing", "Communication & photonics", "Semiconductor & device technologies"],
-    domains: ["quantum", "communication", "photonics", "devices-sensing"],
+    domains: ["quantum", "hardware", "classical"],
   },
   {
     id: "bsc",
@@ -91,21 +96,65 @@ export const education = [
     period: "2018 — 2024",
     focus: ["AI & computer vision", "Embedded systems", "Software & computer engineering"],
     achievement: "Ranked 5th of 131 students",
-    domains: ["ai-perception", "devices-sensing", "software-systems"],
+    domains: ["software", "hardware", "classical"],
   },
 ];
 
-export const affiliations = [
+export const organizationMarks = [
   {
+    id: "tu-braunschweig",
     name: "TU Braunschweig",
-    context: "M.Sc. Quantum Technologies",
+    href: "https://www.tu-braunschweig.de/",
+    logo: "https://www.google.com/s2/favicons?domain=tu-braunschweig.de&sz=128",
+    hue: "354",
   },
   {
+    id: "iran-khodro",
     name: "Iran Khodro",
-    context: "University-industry project context",
+    href: "https://www.ikco.ir/",
+    logo: "https://www.google.com/s2/favicons?domain=ikco.ir&sz=128",
+    hue: "205",
   },
   {
-    name: "Azad University",
-    context: "B.Sc. Computer Engineering",
+    id: "azad-university",
+    name: "Islamic Azad University",
+    href: "https://iau.ir/",
+    logo: "https://www.google.com/s2/favicons?domain=iau.ir&sz=128",
+    hue: "199",
   },
-];
+  {
+    id: "intel",
+    name: "Intel",
+    href: "https://www.intel.com/",
+    logo: "https://www.google.com/s2/favicons?domain=intel.com&sz=128",
+    hue: "205",
+  },
+  {
+    id: "ptb",
+    name: "Physikalisch-Technische Bundesanstalt",
+    href: "https://www.ptb.de/",
+    logo: "https://www.google.com/s2/favicons?domain=ptb.de&sz=128",
+    hue: "216",
+  },
+  {
+    id: "texas-instruments",
+    name: "Texas Instruments",
+    href: "https://www.ti.com/",
+    logo: "https://www.google.com/s2/favicons?domain=ti.com&sz=128",
+    hue: "353",
+  },
+  {
+    id: "sharif",
+    name: "Sharif University of Technology",
+    href: "https://www.sharif.edu/",
+    logo: "https://www.google.com/s2/favicons?domain=sharif.edu&sz=128",
+    hue: "210",
+  },
+  {
+    id: "ferdowsi",
+    name: "Ferdowsi University of Mashhad",
+    href: "https://www.um.ac.ir/",
+    logo: "https://www.google.com/s2/favicons?domain=um.ac.ir&sz=128",
+    hue: "160",
+  },
+] as const;
