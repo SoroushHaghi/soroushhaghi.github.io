@@ -95,7 +95,7 @@ function WorkPage() {
             </div>
 
             <div className="timeline-artifact-column">
-              <WorkArtifactPreview artifact={item.artifact} title={item.title} />
+              <WorkArtifactPreview artifact={item.artifact} title={item.title} tags={item.tags} />
             </div>
           </article>
         ))}
