@@ -5661,3 +5661,124 @@ html[data-theme="light"] .lab-token-readout strong {
     transform:translateY(-3px) !important;
   }
 }
+
+
+/* University asset replacements — stable cropping and no white cards */
+.organization-logo-frame-tubs-source{
+  width:136px !important;
+  height:58px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-tubs-source .organization-logo-asset{
+  position:absolute !important;
+  inset:0 !important;
+  width:136px !important;
+  height:58px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-tubs-source .organization-logo-asset > img{
+  position:absolute !important;
+  width:136px !important;
+  height:136px !important;
+  max-width:none !important;
+  max-height:none !important;
+  left:0 !important;
+  top:-39px !important;
+  object-fit:fill !important;
+  transform:none !important;
+  filter:none !important;
+}
+
+.organization-logo-frame-ferdowsi-symbol{
+  width:92px !important;
+  height:92px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-ferdowsi-symbol .organization-logo-asset{
+  position:absolute !important;
+  width:92px !important;
+  height:92px !important;
+  inset:0 !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-ferdowsi-symbol .organization-logo-asset > img{
+  position:absolute !important;
+  width:118px !important;
+  height:118px !important;
+  left:-13px !important;
+  top:-1px !important;
+  object-fit:cover !important;
+  object-position:50% 0 !important;
+  transform:none !important;
+  filter:invert(1) grayscale(1) brightness(1.16) !important;
+  mix-blend-mode:screen;
+}
+
+.organization-logo-frame-azad-clean{
+  width:92px !important;
+  height:92px !important;
+  overflow:visible !important;
+}
+
+.organization-logo-frame-azad-clean .organization-logo-asset{
+  width:82px !important;
+  height:82px !important;
+  display:grid !important;
+  place-items:center !important;
+}
+
+.organization-logo-frame-azad-clean .organization-logo-asset > img{
+  width:82px !important;
+  height:82px !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:none !important;
+  filter:
+    drop-shadow(0 0 1px rgba(255,255,255,.03))
+    drop-shadow(0 0 3px hsla(201,82%,62%,.018)) !important;
+}
+
+@media(max-width:560px){
+  .organization-logo-frame-tubs-source{
+    width:106px !important;
+    height:46px !important;
+  }
+
+  .organization-logo-frame-tubs-source .organization-logo-asset{
+    width:106px !important;
+    height:46px !important;
+  }
+
+  .organization-logo-frame-tubs-source .organization-logo-asset > img{
+    width:106px !important;
+    height:106px !important;
+    top:-30px !important;
+  }
+
+  .organization-logo-frame-ferdowsi-symbol,
+  .organization-logo-frame-azad-clean{
+    width:74px !important;
+    height:74px !important;
+  }
+
+  .organization-logo-frame-ferdowsi-symbol .organization-logo-asset{
+    width:74px !important;
+    height:74px !important;
+  }
+
+  .organization-logo-frame-ferdowsi-symbol .organization-logo-asset > img{
+    width:96px !important;
+    height:96px !important;
+    left:-11px !important;
+  }
+
+  .organization-logo-frame-azad-clean .organization-logo-asset,
+  .organization-logo-frame-azad-clean .organization-logo-asset > img{
+    width:68px !important;
+    height:68px !important;
+  }
+}
