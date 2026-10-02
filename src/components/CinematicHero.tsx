@@ -357,46 +357,12 @@ function CinematicHero() {
         drawLabel("KNOWLEDGE", knowledge, zAxisIn * 0.9, 0, -10);
       }
 
-      // Stage 7 — rods grow clearly positive OR negative along the Z axis.
+      // Stages 7–9 — one continuous rod object per capability.
+      // Rods first grow signed along Z. After point removal, the SAME rods
+      // translate from their plane bases to the shared origin while their
+      // direction resolves to the final Career OS direction. No duplicate
+      // rod set is created at any point.
       if (rodsGrow > 0.001) {
-        capabilities.forEach((item) => {
-          const base = item.base2D;
-
-          const tip: Point3 = {
-            x: base.x,
-            y: base.y,
-            z:
-              base.z +
-              item.initialDirection.z * item.rodLength * rodsGrow,
-          };
-
-          const a = project(base);
-          const b = project(tip);
-
-          drawLine(
-            a,
-            b,
-            item.color === BLUE
-              ? "rgba(75,134,216,.90)"
-              : "rgba(207,90,90,.86)",
-            1.45 + (item.rodLength / SPHERE_R) * 2
-          );
-
-          drawDot(
-            b,
-            2.25 + (item.rodLength / SPHERE_R) * 1.55,
-            item.color,
-            0.95
-          );
-        });
-      }
-
-      // Stage 8 — the plane points disappear completely before centering.
-      // pointsOut is handled above.
-
-      // Stage 9 — the SAME rods move from their bases on the plane to the
-      // origin. Length is fixed. Direction resolves during the same motion.
-      if (centering > 0.001) {
         capabilities.forEach((item) => {
           const base: Point3 = {
             x: lerp(item.base2D.x, 0, centering),
@@ -410,10 +376,12 @@ function CinematicHero() {
             centering
           );
 
+          const visibleLength = item.rodLength * rodsGrow;
+
           const tip: Point3 = {
-            x: base.x + direction.x * item.rodLength,
-            y: base.y + direction.y * item.rodLength,
-            z: base.z + direction.z * item.rodLength,
+            x: base.x + direction.x * visibleLength,
+            y: base.y + direction.y * visibleLength,
+            z: base.z + direction.z * visibleLength,
           };
 
           const a = project(base);
@@ -436,6 +404,9 @@ function CinematicHero() {
           );
         });
       }
+
+      // Stage 8 — the original plane points disappear completely before
+      // centering. pointsOut is handled in the point-rendering stage above.
 
       // During centering, fade only the grid. Principal axes remain.
       if (centering > 0.001) {
@@ -554,46 +525,95 @@ function CinematicHero() {
           });
         };
 
+        // Glass body: asymmetric highlight + subtle edge density makes the
+        // shell read as a volume rather than a flat circle.
         ctx.save();
         const glass = ctx.createRadialGradient(
-          centerX - shellRadius * 0.18,
-          centerY - shellRadius * 0.22,
-          shellRadius * 0.06,
+          centerX - shellRadius * 0.24,
+          centerY - shellRadius * 0.28,
+          shellRadius * 0.04,
           centerX,
           centerY,
           Math.max(1, shellRadius)
         );
-        glass.addColorStop(0, "rgba(218,226,238,.045)");
-        glass.addColorStop(0.68, "rgba(179,193,211,.020)");
-        glass.addColorStop(1, "rgba(120,142,172,.006)");
-
+        glass.addColorStop(0, "rgba(226,235,247,.075)");
+        glass.addColorStop(0.34, "rgba(185,202,224,.032)");
+        glass.addColorStop(0.72, "rgba(125,148,178,.018)");
+        glass.addColorStop(1, "rgba(58,76,101,.030)");
         ctx.fillStyle = glass;
         ctx.beginPath();
         ctx.arc(centerX, centerY, shellRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
 
-        // Longitude family.
-        for (let i = 0; i < 8; i += 1) {
-          const phi = (i / 8) * Math.PI;
+        // A soft edge-density pass gives the eye a clear curved volume cue.
+        ctx.save();
+        const edgeShade = ctx.createRadialGradient(
+          centerX,
+          centerY,
+          shellRadius * 0.46,
+          centerX,
+          centerY,
+          shellRadius
+        );
+        edgeShade.addColorStop(0, "rgba(0,0,0,0)");
+        edgeShade.addColorStop(0.74, "rgba(96,120,151,.006)");
+        edgeShade.addColorStop(1, "rgba(188,207,232,.040)");
+        ctx.fillStyle = edgeShade;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, shellRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Three orthogonal great circles are the primary depth scaffold.
+        drawSurfacePath(
+          (t) => ({
+            x: radius * Math.cos(t),
+            y: radius * Math.sin(t),
+            z: 0,
+          }),
+          0.012,
+          0.065
+        );
+
+        drawSurfacePath(
+          (t) => ({
+            x: radius * Math.cos(t),
+            y: 0,
+            z: radius * Math.sin(t),
+          }),
+          0.012,
+          0.060
+        );
+
+        drawSurfacePath(
+          (t) => ({
+            x: 0,
+            y: radius * Math.cos(t),
+            z: radius * Math.sin(t),
+          }),
+          0.012,
+          0.056
+        );
+
+        // Additional meridians. Front halves are intentionally stronger than
+        // rear halves to make occlusion and curvature immediately legible.
+        for (let i = 0; i < 10; i += 1) {
+          const phi = (i / 10) * Math.PI;
 
           drawSurfacePath(
-            (t) => {
-              const latitude = t - Math.PI;
-              const c = Math.cos(latitude);
-              return {
-                x: radius * c * Math.cos(phi),
-                y: radius * c * Math.sin(phi),
-                z: radius * Math.sin(latitude),
-              };
-            },
+            (t) => ({
+              x: radius * Math.cos(t) * Math.cos(phi),
+              y: radius * Math.cos(t) * Math.sin(phi),
+              z: radius * Math.sin(t),
+            }),
             0.006,
-            0.022
+            0.030
           );
         }
 
-        // Latitude family.
-        [-60, -35, 0, 35, 60].forEach((degrees) => {
+        // Latitude rings provide the missing foreshortening cue.
+        [-70, -50, -30, 0, 30, 50, 70].forEach((degrees) => {
           const latitude = (degrees * Math.PI) / 180;
           const ringRadius = radius * Math.cos(latitude);
           const z = radius * Math.sin(latitude);
@@ -604,10 +624,25 @@ function CinematicHero() {
               y: ringRadius * Math.sin(t),
               z,
             }),
-            0.006,
-            degrees === 0 ? 0.026 : 0.018
+            0.005,
+            degrees === 0 ? 0.040 : 0.024
           );
         });
+
+        // Curved specular arc on the near rim.
+        ctx.save();
+        ctx.strokeStyle = "rgba(235,243,252,.18)";
+        ctx.lineWidth = 1.35;
+        ctx.beginPath();
+        ctx.arc(
+          centerX,
+          centerY,
+          shellRadius - 1.2,
+          Math.PI * 1.08,
+          Math.PI * 1.72
+        );
+        ctx.stroke();
+        ctx.restore();
 
         // Principal axes stay visible through the sphere.
         const left = project({ x: -radius, y: 0, z: 0 });
@@ -622,8 +657,8 @@ function CinematicHero() {
         drawLine(experience, knowledge, "rgba(230,236,245,.17)", 1);
 
         ctx.save();
-        ctx.strokeStyle = "rgba(229,236,246,.28)";
-        ctx.lineWidth = 1.25;
+        ctx.strokeStyle = "rgba(229,236,246,.42)";
+        ctx.lineWidth = 1.45;
         ctx.beginPath();
         ctx.arc(centerX, centerY, shellRadius, 0, Math.PI * 2);
         ctx.stroke();
