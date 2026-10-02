@@ -4939,3 +4939,114 @@ html[data-theme="light"] .lab-token-readout strong {
     top:-86px;
   }
 }
+
+
+/* Affiliation visibility pass: brand-color underglow + strict centering */
+.organization-logo-frame{
+  isolation:isolate;
+  overflow:visible;
+}
+
+.organization-logo-frame::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      hsla(var(--brand-hue),92%,64%,.34) 0%,
+      hsla(var(--brand-hue),88%,58%,.18) 38%,
+      transparent 72%);
+  filter:blur(13px);
+  opacity:.92;
+  pointer-events:none;
+}
+
+.organization-logo-frame > img,
+.organization-special-logo,
+.organization-mark-fallback{
+  position:relative;
+  z-index:1;
+}
+
+.organization-logo-frame > img{
+  display:block;
+  margin:auto;
+  filter:
+    drop-shadow(0 0 7px hsla(var(--brand-hue),90%,68%,.24))
+    saturate(1.06)
+    contrast(1.04);
+}
+
+.organization-mark-caption{
+  z-index:2;
+  text-shadow:0 0 10px hsla(var(--brand-hue),88%,66%,.32);
+}
+
+/* The Hannover crop experiment was removed; any stale rule must not alter the full mark. */
+.organization-special-logo-luh{
+  overflow:visible;
+}
+
+.organization-special-logo-luh img{
+  position:static !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  transform:none !important;
+}
+
+/* Wide wordmarks need more perceived area while remaining centered in the same slot. */
+.organization-mark[title="Physikalisch-Technische Bundesanstalt"] .organization-logo-frame > img{
+  width:108px;
+  height:72px;
+}
+
+.organization-mark[title="Intel"] .organization-logo-frame > img{
+  width:106px;
+  height:76px;
+}
+
+.organization-mark[title="Infineon"] .organization-logo-frame > img{
+  width:112px;
+  height:74px;
+}
+
+.organization-mark[title="Leibniz Universität Hannover"] .organization-logo-frame > img{
+  width:112px;
+  height:78px;
+}
+
+.organization-mark[title="Texas Instruments"] .organization-logo-frame > img{
+  width:82px;
+  height:82px;
+}
+
+.organization-mark[title="TU Braunschweig"] .organization-logo-frame > img{
+  width:88px;
+  height:88px;
+}
+
+@media(max-width:560px){
+  .organization-logo-frame::before{
+    width:62px;
+    height:62px;
+    filter:blur(11px);
+  }
+
+  .organization-mark[title="Physikalisch-Technische Bundesanstalt"] .organization-logo-frame > img,
+  .organization-mark[title="Intel"] .organization-logo-frame > img,
+  .organization-mark[title="Infineon"] .organization-logo-frame > img,
+  .organization-mark[title="Leibniz Universität Hannover"] .organization-logo-frame > img{
+    width:82px;
+    height:60px;
+  }
+
+  .organization-mark[title="Texas Instruments"] .organization-logo-frame > img,
+  .organization-mark[title="TU Braunschweig"] .organization-logo-frame > img{
+    width:70px;
+    height:70px;
+  }
+}
