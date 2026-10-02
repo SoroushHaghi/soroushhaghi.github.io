@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import Wordmark from "../components/Wordmark";
+import { toPublicPath } from "../routes";
 
 type FocusTarget = "all" | "glass" | "curves" | "shadow" | "accent" | "background";
 
@@ -20,12 +21,12 @@ const defaultValues: Values = {
   glass: 0.04,
   blur: 4,
   border: 0.04,
-  navRadius: 34,
-  surfaceRadius: 42,
-  shadow: 0.36,
-  accentHue: 231,
-  backgroundLightness: 4,
-  backgroundDepth: 0.14,
+  navRadius: 40,
+  surfaceRadius: 48,
+  shadow: 0.4,
+  accentHue: 221,
+  backgroundLightness: 7,
+  backgroundDepth: 0.07,
 };
 
 const minimalValues: Values = {
@@ -132,7 +133,7 @@ function StyleLab() {
           <small>Use Focus when an effect is hard to distinguish.</small>
         </div>
 
-        <button className="lab-reset" type="button" onClick={resetAll}>Reset to current defaults</button>
+        <div className="lab-toolbar-actions"><a className="lab-reset" href={toPublicPath("/lab/hero")}>Hero Lab →</a><button className="lab-reset" type="button" onClick={resetAll}>Reset defaults</button></div>
       </div>
 
       <div className="lab-layout">
