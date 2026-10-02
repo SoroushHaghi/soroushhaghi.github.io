@@ -5,11 +5,11 @@ import "./cinematicHero.scss";
 type Point3 = { x: number; y: number; z: number };
 
 const SPHERE_R = 115;
-const AXIS_R = 132;
+const AXIS_R = 142;
 const CAMERA_DISTANCE = 430;
 const VIEW_SPIN = -0.35;
 const VIEW_PITCH = (-68 * Math.PI) / 180;
-const VIEW_ROLL = (20 * Math.PI) / 180;
+const VIEW_ROLL = (-7 * Math.PI) / 180;
 
 const BLUE = "#4b86d8";
 const RED = "#cf5a5a";
@@ -39,6 +39,7 @@ function CinematicHero() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
   const wheelLockUntilRef = useRef(0);
+  const wheelAnimationRef = useRef<number | null>(null);
 
   const capabilities = useMemo(
     () =>
@@ -86,20 +87,63 @@ function CinematicHero() {
   }, []);
 
   useEffect(() => {
-    const stageStops = [0, 0.08, 0.16, 0.25, 0.35, 0.53, 0.63, 0.76, 0.81, 0.92, 1];
+    const stageStops = [
+      0,
+      0.08,
+      0.16,
+      0.25,
+      0.35,
+      0.53,
+      0.63,
+      0.76,
+      0.81,
+      0.92,
+      1,
+    ];
+
+    const animateTo = (targetY: number) => {
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      const duration = 1450;
+      const startedAt = performance.now();
+
+      if (wheelAnimationRef.current !== null) {
+        cancelAnimationFrame(wheelAnimationRef.current);
+      }
+
+      const tick = (now: number) => {
+        const t = clamp01((now - startedAt) / duration);
+        const eased = 0.5 - Math.cos(Math.PI * t) / 2;
+
+        window.scrollTo(0, startY + distance * eased);
+
+        if (t < 1) {
+          wheelAnimationRef.current = requestAnimationFrame(tick);
+        } else {
+          wheelAnimationRef.current = null;
+        }
+      };
+
+      wheelAnimationRef.current = requestAnimationFrame(tick);
+    };
 
     const onWheel = (event: WheelEvent) => {
       const root = rootRef.current;
       if (!root) return;
 
       const rect = root.getBoundingClientRect();
-      const active = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
+      const active =
+        rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
+
       if (!active || Math.abs(event.deltaY) < 4) return;
 
       const direction = event.deltaY > 0 ? 1 : -1;
       const current = progressRef.current;
 
-      if ((direction < 0 && current <= 0.001) || (direction > 0 && current >= 0.999)) {
+      if (
+        (direction < 0 && current <= 0.001) ||
+        (direction > 0 && current >= 0.999)
+      ) {
         return;
       }
 
@@ -125,15 +169,27 @@ function CinematicHero() {
       );
 
       const sectionTop = window.scrollY + rect.top;
-      const travel = Math.max(1, root.offsetHeight - window.innerHeight);
-      const targetY = sectionTop + stageStops[nextIndex] * travel;
+      const travel = Math.max(
+        1,
+        root.offsetHeight - window.innerHeight
+      );
+      const targetY =
+        sectionTop + stageStops[nextIndex] * travel;
 
-      wheelLockUntilRef.current = now + 760;
-      window.scrollTo({ top: targetY, behavior: "smooth" });
+      wheelLockUntilRef.current = now + 1520;
+      animateTo(targetY);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+
+      if (wheelAnimationRef.current !== null) {
+        cancelAnimationFrame(wheelAnimationRef.current);
+        wheelAnimationRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -349,12 +405,26 @@ function CinematicHero() {
         const extent = AXIS_R * xAxisIn;
         const left = project({ x: -extent, y: 0, z: 0 });
         const right = project({ x: extent, y: 0, z: 0 });
-        const stroke = "rgba(224,232,242," + 0.30 * xAxisIn + ")";
+        const preCamera = 1 - cameraMove;
+        const stroke =
+          "rgba(224,232,242," +
+          0.30 * xAxisIn * preCamera +
+          ")";
 
         drawAxis(left, right, stroke);
 
-        drawAxisLabel("HARDWARE", left, xAxisIn * 0.88, 27);
-        drawAxisLabel("SOFTWARE", right, xAxisIn * 0.88, 27);
+        drawAxisLabel(
+          "HARDWARE",
+          left,
+          xAxisIn * 0.88 * preCamera,
+          38
+        );
+        drawAxisLabel(
+          "SOFTWARE",
+          right,
+          xAxisIn * 0.88 * preCamera,
+          38
+        );
       }
 
       // Stage 2 — Classical / Quantum, only after X is complete.
@@ -362,12 +432,26 @@ function CinematicHero() {
         const extent = AXIS_R * yAxisIn;
         const classical = project({ x: 0, y: -extent, z: 0 });
         const quantum = project({ x: 0, y: extent, z: 0 });
-        const stroke = "rgba(224,232,242," + 0.28 * yAxisIn + ")";
+        const preCamera = 1 - cameraMove;
+        const stroke =
+          "rgba(224,232,242," +
+          0.28 * yAxisIn * preCamera +
+          ")";
 
         drawAxis(classical, quantum, stroke);
 
-        drawAxisLabel("CLASSICAL", classical, yAxisIn * 0.88, 27);
-        drawAxisLabel("QUANTUM", quantum, yAxisIn * 0.88, 27);
+        drawAxisLabel(
+          "CLASSICAL",
+          classical,
+          yAxisIn * 0.88 * preCamera,
+          38
+        );
+        drawAxisLabel(
+          "QUANTUM",
+          quantum,
+          yAxisIn * 0.88 * preCamera,
+          38
+        );
       }
 
       // Stage 3 — 2D plane appears after both axes are finished.
@@ -415,37 +499,60 @@ function CinematicHero() {
       // calibrated 3D perspective. No rods or Z axis yet.
       // The transform is handled by cameraMove above.
 
-      // Keep the original X/Y axes fully visible after the camera settles.
+      // Keep the original X/Y axes visible after the camera settles.
+      // Labels cross-fade out before the sphere labels take over, avoiding
+      // duplicate words.
       if (cameraMove > 0.001) {
-        const axisAlpha = 0.26 + cameraMove * 0.06;
+        const axisAlpha = 0.30 * cameraMove;
+        const labelAlpha =
+          0.64 * cameraMove * (1 - sphereGrow);
+
         const left = project({ x: -AXIS_R, y: 0, z: 0 });
         const right = project({ x: AXIS_R, y: 0, z: 0 });
         const classical = project({ x: 0, y: -AXIS_R, z: 0 });
         const quantum = project({ x: 0, y: AXIS_R, z: 0 });
-        const xStroke = "rgba(224,232,242," + axisAlpha + ")";
+        const xStroke =
+          "rgba(224,232,242," + axisAlpha + ")";
         const yStroke =
-          "rgba(224,232,242," + (axisAlpha - 0.02) + ")";
+          "rgba(224,232,242," +
+          Math.max(0, axisAlpha - 0.02) +
+          ")";
 
         drawAxis(left, right, xStroke);
         drawAxis(classical, quantum, yStroke);
 
-        drawAxisLabel("HARDWARE", left, 0.58, 28);
-        drawAxisLabel("SOFTWARE", right, 0.58, 28);
-        drawAxisLabel("CLASSICAL", classical, 0.58, 28);
-        drawAxisLabel("QUANTUM", quantum, 0.58, 28);
+        drawAxisLabel("HARDWARE", left, labelAlpha, 42);
+        drawAxisLabel("SOFTWARE", right, labelAlpha, 42);
+        drawAxisLabel("CLASSICAL", classical, labelAlpha, 42);
+        drawAxisLabel("QUANTUM", quantum, labelAlpha, 42);
       }
 
       // Stage 6 — Knowledge / Experience axis only after camera movement ends.
+      // This pre-sphere label set fades out before the sphere label set appears.
       if (zAxisIn > 0.001) {
+        const preSphere = 1 - sphereGrow;
         const extent = AXIS_R * zAxisIn;
         const experience = project({ x: 0, y: 0, z: -extent });
         const knowledge = project({ x: 0, y: 0, z: extent });
-        const stroke = "rgba(224,232,242," + 0.28 * zAxisIn + ")";
+        const stroke =
+          "rgba(224,232,242," +
+          0.28 * zAxisIn * preSphere +
+          ")";
 
         drawAxis(experience, knowledge, stroke);
 
-        drawAxisLabel("EXPERIENCE", experience, zAxisIn * 0.9, 28);
-        drawAxisLabel("KNOWLEDGE", knowledge, zAxisIn * 0.9, 28);
+        drawAxisLabel(
+          "EXPERIENCE",
+          experience,
+          zAxisIn * 0.9 * preSphere,
+          42
+        );
+        drawAxisLabel(
+          "KNOWLEDGE",
+          knowledge,
+          zAxisIn * 0.9 * preSphere,
+          42
+        );
       }
 
       // Stages 7–9 — one continuous rod object per capability.
@@ -749,12 +856,12 @@ function CinematicHero() {
         drawAxis(experience, knowledge, "rgba(230,236,245,.20)", 1);
 
         const finalLabelAlpha = smooth(0.35, 1, sphereGrow) * 0.68;
-        drawAxisLabel("HARDWARE", left, finalLabelAlpha, 30);
-        drawAxisLabel("SOFTWARE", right, finalLabelAlpha, 30);
-        drawAxisLabel("CLASSICAL", classical, finalLabelAlpha, 30);
-        drawAxisLabel("QUANTUM", quantum, finalLabelAlpha, 30);
-        drawAxisLabel("EXPERIENCE", experience, finalLabelAlpha, 30);
-        drawAxisLabel("KNOWLEDGE", knowledge, finalLabelAlpha, 30);
+        drawAxisLabel("HARDWARE", left, finalLabelAlpha, 46);
+        drawAxisLabel("SOFTWARE", right, finalLabelAlpha, 46);
+        drawAxisLabel("CLASSICAL", classical, finalLabelAlpha, 46);
+        drawAxisLabel("QUANTUM", quantum, finalLabelAlpha, 46);
+        drawAxisLabel("EXPERIENCE", experience, finalLabelAlpha, 46);
+        drawAxisLabel("KNOWLEDGE", knowledge, finalLabelAlpha, 46);
 
         ctx.save();
         ctx.strokeStyle = "rgba(229,236,246,.42)";
