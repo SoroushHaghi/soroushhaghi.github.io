@@ -29,14 +29,16 @@ function App() {
 
   const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
     const saved = window.localStorage.getItem("portfolio-theme-mode");
-    return saved === "light" || saved === "dark" || saved === "system" ? saved : "system";
+    return saved === "light" || saved === "dark" ? saved : "dark";
   });
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: light)");
 
     const applyTheme = () => {
-      const resolved = themeMode === "system" ? (media.matches ? "light" : "dark") : themeMode;
+      // Dark-first release phase: System intentionally resolves to dark until
+      // the separate light-theme calibration pass is complete.
+      const resolved = themeMode === "system" ? "dark" : themeMode;
       document.documentElement.dataset.theme = resolved;
       document.documentElement.dataset.themeMode = themeMode;
       window.localStorage.setItem("portfolio-theme-mode", themeMode);
