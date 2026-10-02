@@ -27,6 +27,33 @@ export const backgroundModes = [
   ["layered", "Layered optics", "Ambient, edge light and subtle interference"],
 ] as const;
 
+export const backgroundPresets = [
+  {
+    id: "quiet",
+    title: "Quiet ambient",
+    copy: "Low-contrast field for recruiter-first pages",
+    values: { mode: "ambient", hue: 190, intensity: 0.22, edge: 0.14, speed: 44, scale: 0.92 },
+  },
+  {
+    id: "edge",
+    title: "Glass edge",
+    copy: "Directional light with stronger material response",
+    values: { mode: "grazing", hue: 188, intensity: 0.28, edge: 0.36, speed: 38, scale: 1 },
+  },
+  {
+    id: "refractive",
+    title: "Refractive drift",
+    copy: "Soft caustic light without a visible image layer",
+    values: { mode: "caustic", hue: 194, intensity: 0.26, edge: 0.24, speed: 42, scale: 1.08 },
+  },
+  {
+    id: "layered",
+    title: "Layered optics",
+    copy: "Combined field for testing the full material system",
+    values: { mode: "layered", hue: 190, intensity: 0.24, edge: 0.24, speed: 48, scale: 0.96 },
+  },
+] satisfies Array<{ id: string; title: string; copy: string; values: BackgroundValues }>;
+
 export const backgroundStorageKey = "portfolio-background-lab-v1";
 
 export function applyBackground(values: BackgroundValues) {
