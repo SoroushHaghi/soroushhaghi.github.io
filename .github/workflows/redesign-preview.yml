@@ -10,8 +10,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: redesign-preview
-  cancel-in-progress: true
+  group: gh-pages-publish
+  cancel-in-progress: false
 
 jobs:
   build-and-publish-preview:
@@ -36,6 +36,10 @@ jobs:
           REACT_APP_BASE_PATH: /redesign-preview
           REACT_APP_ENABLE_LAB: "true"
         run: npm run build
+
+      - name: Remove duplicated CV artifact from preview build
+        run: |
+          rm -rf build/cv
 
       - name: Add direct-route HTML fallbacks
         run: |
