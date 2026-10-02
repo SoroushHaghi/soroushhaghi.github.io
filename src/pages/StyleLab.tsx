@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import Wordmark from "../components/Wordmark";
 
-type ThemeMode = "system" | "light" | "dark";
 type FocusTarget = "all" | "glass" | "curves" | "shadow" | "accent" | "background";
 
 type Values = {
@@ -15,11 +14,6 @@ type Values = {
   accentHue: number;
   backgroundLightness: number;
   backgroundDepth: number;
-};
-
-type Props = {
-  themeMode: ThemeMode;
-  onThemeModeChange: (mode: ThemeMode) => void;
 };
 
 const defaultValues: Values = {
@@ -70,7 +64,7 @@ const cssVarFor = (key: keyof Values, value: number) => {
   return ["--bg-depth-alpha", String(value)] as const;
 };
 
-function StyleLab({ themeMode, onThemeModeChange }: Props) {
+function StyleLab() {
   const [values, setValues] = useState<Values>(() => {
     try {
       const saved = window.localStorage.getItem("portfolio-style-lab-v1");
@@ -81,11 +75,6 @@ function StyleLab({ themeMode, onThemeModeChange }: Props) {
   });
 
   const [focus, setFocus] = useState<FocusTarget>("all");
-
-  const resolvedTheme = useMemo(() => {
-    if (themeMode !== "system") return themeMode;
-    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-  }, [themeMode]);
 
   const apply = (next: Values) => {
     setValues(next);
@@ -116,25 +105,14 @@ function StyleLab({ themeMode, onThemeModeChange }: Props) {
       <SectionHeading
         eyebrow="DEV ONLY"
         title="Style Lab"
-        copy="Tune one visual system at a time. Values are saved in this browser automatically and also affect the real preview pages."
+        copy="Dark-mode tuning only. Values are saved in this browser automatically and also affect the real preview pages."
       />
 
       <div className="lab-toolbar glass-panel">
         <div className="lab-toolbar-group">
-          <span className="lab-toolbar-label">THEME</span>
-          <div className="lab-segmented" role="group" aria-label="Theme preview">
-            {(["system", "light", "dark"] as ThemeMode[]).map((mode) => (
-              <button
-                key={mode}
-                className={themeMode === mode ? "active" : ""}
-                onClick={() => onThemeModeChange(mode)}
-                type="button"
-              >
-                {mode}
-              </button>
-            ))}
-          </div>
-          <small>System currently resolves to <strong>{resolvedTheme}</strong>.</small>
+          <span className="lab-toolbar-label">MODE</span>
+          <div className="lab-mode-lock">DARK ONLY</div>
+          <small>Light mode is intentionally deferred. Everything here is calibrated for the dark site.</small>
         </div>
 
         <div className="lab-toolbar-group">
@@ -226,7 +204,7 @@ function StyleLab({ themeMode, onThemeModeChange }: Props) {
 
               <div className="lab-sample lab-sample-background">
                 <div className="lab-background-swatch">
-                  <span>{resolvedTheme.toUpperCase()}</span>
+                  <span>DARK</span>
                   <strong>{values.backgroundLightness}%</strong>
                 </div>
               </div>
