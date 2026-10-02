@@ -3,6 +3,7 @@ import BackgroundControls from "../components/BackgroundControls";
 import BackgroundModeGrid from "../components/BackgroundModeGrid";
 import BackgroundStage from "../components/BackgroundStage";
 import { useBackgroundLab } from "../useBackgroundLab";
+import "../backgroundLab.scss";
 
 function BackgroundLab(){
   const x=useBackgroundLab();
