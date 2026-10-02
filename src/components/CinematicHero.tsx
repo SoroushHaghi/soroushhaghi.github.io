@@ -25,8 +25,6 @@ const TARGET = "#e4c449";
 function CinematicHero() {
   const rootRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const pointerRef = useRef({ x: 0 });
-  const targetPointerRef = useRef({ x: 0 });
   const progressRef = useRef(0);
   const [progress, setProgress] = useState(0);
 
@@ -184,13 +182,10 @@ function CinematicHero() {
       ctx.clearRect(0, 0, W, H);
 
       const p = progressRef.current;
-      pointerRef.current.x += (targetPointerRef.current.x - pointerRef.current.x) * 0.055;
-
       const centerX = W * 0.5;
       const centerY = H * 0.5;
       const planeScale = Math.min(W * 0.34, H * 0.34);
       const sphereR = Math.min(W, H) * (W < 760 ? 0.31 : 0.285);
-      const mouseYaw = pointerRef.current.x * 0.14;
 
       const stage2d = smooth(0.035, 0.13, p);
       const planeIn = smooth(0.18, 0.30, p);
@@ -226,7 +221,7 @@ function CinematicHero() {
 
       const projectPlane = (x: number, y: number, z = 0): Point3 => {
         const tiltX = mix(0, -0.50, planeIn);
-        const tiltZ = mix(0, -0.12 + mouseYaw, planeIn);
+        const tiltZ = mix(0, -0.12, planeIn);
         const cz = Math.cos(tiltZ);
         const sz = Math.sin(tiltZ);
         const x1 = cz * x - sz * y;
@@ -371,7 +366,7 @@ function CinematicHero() {
       // Shared 3D camera for rods and sphere. The same mathematical state is
       // viewed throughout the resolve/centering/sphere transition.
       const cameraDistance = 430 / 115;
-      const spin = -0.35 + pointerRef.current.x * 0.18;
+      const spin = -0.35;
       const pitch = (-68 * Math.PI) / 180;
       const roll = (20 * Math.PI) / 180;
 
@@ -720,24 +715,11 @@ function CinematicHero() {
       ? "future"
       : "measurement";
 
-  const updatePointerX = (clientX: number) => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const rect = root.getBoundingClientRect();
-    targetPointerRef.current.x =
-      ((clientX - rect.left) / Math.max(1, rect.width) - 0.5) * 2;
-  };
-
   return (
     <section
       ref={rootRef}
       className="cinematic-hero"
-      aria-label="Interactive technical profile narrative"
-      onPointerMove={(event) => updatePointerX(event.clientX)}
-      onPointerLeave={() => {
-        targetPointerRef.current.x = 0;
-      }}
+      aria-label="Scroll-driven technical profile narrative"
     >
       <div className="cinematic-hero-sticky">
         <canvas
@@ -842,7 +824,7 @@ function CinematicHero() {
         </div>
 
         <div className="cinematic-scroll-cue" aria-hidden="true">
-          <span>SCROLL DOWN TO RESOLVE · SCROLL UP TO REWIND</span>
+          <span>SCROLL TO RESOLVE THE STATE</span>
         </div>
       </div>
     </section>
