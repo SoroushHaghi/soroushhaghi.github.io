@@ -5050,3 +5050,335 @@ html[data-theme="light"] .lab-token-readout strong {
     height:70px;
   }
 }
+
+
+/* Final affiliation-logo calibration: quiet glow, stable optical boxes, correct wide marks. */
+.organization-mark-content{
+  width:136px !important;
+  height:104px !important;
+  min-height:104px !important;
+}
+
+.organization-mark{
+  height:104px !important;
+  min-height:104px !important;
+}
+
+.organization-logo-frame{
+  position:relative;
+  width:92px !important;
+  height:92px !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:visible !important;
+  isolation:isolate;
+}
+
+.organization-logo-frame::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  width:64px !important;
+  height:64px !important;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    hsla(var(--brand-hue),88%,62%,.11) 0%,
+    hsla(var(--brand-hue),82%,56%,.045) 42%,
+    transparent 74%
+  ) !important;
+  filter:blur(11px) !important;
+  opacity:.56 !important;
+  pointer-events:none;
+}
+
+.organization-logo-asset{
+  position:relative;
+  z-index:1;
+  display:grid;
+  place-items:center;
+}
+
+.organization-logo-frame-standard .organization-logo-asset{
+  width:88px;
+  height:88px;
+}
+
+.organization-logo-frame-wide{
+  width:130px !important;
+  height:68px !important;
+}
+
+.organization-logo-frame-wide::before,
+.organization-logo-frame-tubs-rect::before,
+.organization-logo-frame-luh-rect::before,
+.organization-logo-frame-ikco-new::before{
+  width:106px !important;
+  height:46px !important;
+  border-radius:50%;
+}
+
+.organization-logo-frame-wide .organization-logo-asset{
+  width:126px;
+  height:58px;
+}
+
+.organization-logo-frame .organization-logo-asset > img{
+  position:static !important;
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:scale(var(--logo-scale,1)) !important;
+  transform-origin:center !important;
+  animation:none !important;
+  filter:
+    drop-shadow(0 0 4px hsla(var(--brand-hue),84%,66%,.10))
+    saturate(1.02)
+    contrast(1.02) !important;
+}
+
+/* TU Braunschweig: official red rectangular seal band, cropped from a square source. */
+.organization-logo-frame-tubs-rect{
+  width:130px !important;
+  height:68px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-tubs-rect .organization-logo-asset{
+  position:absolute;
+  inset:0;
+  width:130px;
+  height:68px;
+  overflow:hidden;
+}
+
+.organization-logo-frame-tubs-rect .organization-logo-asset > img{
+  position:absolute !important;
+  width:130px !important;
+  height:130px !important;
+  left:0 !important;
+  top:-29px !important;
+  object-fit:fill !important;
+  transform:none !important;
+  filter:none !important;
+}
+
+/* Leibniz Universität Hannover: official blue rectangular word-image mark. */
+.organization-logo-frame-luh-rect{
+  width:130px !important;
+  height:48px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-luh-rect .organization-logo-asset{
+  position:absolute;
+  inset:0;
+  width:130px;
+  height:48px;
+  overflow:hidden;
+}
+
+.organization-logo-frame-luh-rect .organization-logo-asset > img{
+  position:absolute !important;
+  width:134px !important;
+  height:134px !important;
+  left:-2px !important;
+  top:-48px !important;
+  object-fit:fill !important;
+  transform:none !important;
+  filter:none !important;
+}
+
+/* Azad: retain only the symbol, omitting the lower calligraphic line. */
+.organization-logo-frame-azad-symbol{
+  width:92px !important;
+  height:92px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-azad-symbol .organization-logo-asset{
+  position:absolute;
+  top:2px;
+  left:50%;
+  width:80px;
+  height:88px;
+  transform:translateX(-50%);
+  overflow:hidden;
+}
+
+.organization-logo-frame-azad-symbol .organization-logo-asset > img{
+  position:absolute !important;
+  width:78px !important;
+  height:auto !important;
+  left:1px !important;
+  top:0 !important;
+  object-fit:initial !important;
+  transform:none !important;
+}
+
+/* IKCO 2025 identity: crop the new mark from the verified new-vs-old comparison.
+   White source background is neutralized by invert+screen while preserving blue hue. */
+.organization-logo-frame-ikco-new{
+  width:130px !important;
+  height:70px !important;
+  overflow:hidden !important;
+}
+
+.organization-logo-frame-ikco-new .organization-logo-asset{
+  position:absolute;
+  inset:0;
+  width:130px;
+  height:70px;
+  overflow:hidden;
+}
+
+.organization-logo-frame-ikco-new .organization-logo-asset > img{
+  position:absolute !important;
+  width:197px !important;
+  height:197px !important;
+  left:-31px !important;
+  top:-4px !important;
+  object-fit:fill !important;
+  transform:none !important;
+  filter:invert(1) hue-rotate(180deg) saturate(1.16) brightness(1.12) !important;
+  mix-blend-mode:screen;
+}
+
+/* Per-brand final optical size tuning. */
+.organization-mark[data-brand="ptb"] .organization-logo-frame-wide{
+  width:132px !important;
+}
+.organization-mark[data-brand="ptb"] .organization-logo-asset{
+  width:130px !important;
+  height:54px !important;
+}
+.organization-mark[data-brand="texas-instruments"] .organization-logo-asset{
+  width:128px !important;
+  height:50px !important;
+}
+.organization-mark[data-brand="intel"] .organization-logo-asset{
+  width:122px !important;
+  height:54px !important;
+}
+.organization-mark[data-brand="infineon"] .organization-logo-asset{
+  width:132px !important;
+  height:58px !important;
+}
+.organization-mark[data-brand="volkswagen"] .organization-logo-asset{
+  width:86px !important;
+  height:86px !important;
+}
+
+/* Remove legacy strong-glow and special-LUH crop effects. */
+.organization-special-logo,
+.organization-special-logo-luh{
+  all:unset;
+}
+
+@media(max-width:560px){
+  .organization-mark,
+  .organization-mark-content{
+    height:88px !important;
+    min-height:88px !important;
+  }
+
+  .organization-mark-content{
+    width:104px !important;
+  }
+
+  .organization-logo-frame{
+    width:76px !important;
+    height:76px !important;
+  }
+
+  .organization-logo-frame::before{
+    width:52px !important;
+    height:52px !important;
+    filter:blur(9px) !important;
+    opacity:.48 !important;
+  }
+
+  .organization-logo-frame-wide,
+  .organization-logo-frame-tubs-rect,
+  .organization-logo-frame-ikco-new{
+    width:102px !important;
+  }
+
+  .organization-logo-frame-wide{
+    height:58px !important;
+  }
+
+  .organization-logo-frame-wide .organization-logo-asset{
+    width:100px !important;
+    height:48px !important;
+  }
+
+  .organization-logo-frame-tubs-rect{
+    height:54px !important;
+  }
+
+  .organization-logo-frame-tubs-rect .organization-logo-asset{
+    width:102px !important;
+    height:54px !important;
+  }
+
+  .organization-logo-frame-tubs-rect .organization-logo-asset > img{
+    width:102px !important;
+    height:102px !important;
+    top:-23px !important;
+  }
+
+  .organization-logo-frame-luh-rect{
+    width:104px !important;
+    height:39px !important;
+  }
+
+  .organization-logo-frame-luh-rect .organization-logo-asset{
+    width:104px !important;
+    height:39px !important;
+  }
+
+  .organization-logo-frame-luh-rect .organization-logo-asset > img{
+    width:107px !important;
+    height:107px !important;
+    top:-38px !important;
+  }
+
+  .organization-logo-frame-azad-symbol .organization-logo-asset{
+    width:68px;
+    height:74px;
+  }
+
+  .organization-logo-frame-azad-symbol .organization-logo-asset > img{
+    width:66px !important;
+  }
+
+  .organization-logo-frame-ikco-new{
+    height:56px !important;
+  }
+
+  .organization-logo-frame-ikco-new .organization-logo-asset{
+    width:102px !important;
+    height:56px !important;
+  }
+
+  .organization-logo-frame-ikco-new .organization-logo-asset > img{
+    width:155px !important;
+    height:155px !important;
+    left:-25px !important;
+    top:-3px !important;
+  }
+
+  .organization-mark[data-brand="ptb"] .organization-logo-asset,
+  .organization-mark[data-brand="texas-instruments"] .organization-logo-asset,
+  .organization-mark[data-brand="intel"] .organization-logo-asset,
+  .organization-mark[data-brand="infineon"] .organization-logo-asset{
+    width:102px !important;
+    height:46px !important;
+  }
+}
