@@ -68,7 +68,7 @@ a { color: inherit; text-decoration: none; }
 button, input { font: inherit; }
 button { color: inherit; }
 
-.site-root { min-height: 100vh; overflow: clip; }
+.site-root { min-height: 100vh; overflow: visible; }
 .page-shell { width: 100%; padding-inline: var(--page-x); }
 
 .glass-surface,
