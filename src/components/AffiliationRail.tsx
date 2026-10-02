@@ -14,6 +14,7 @@ const getVisibleCount = () =>
 
 function MarkVisual({ item }: { item: Mark }) {
   const [failed, setFailed] = useState(false);
+  const variant = "variant" in item ? item.variant : "standard";
 
   useEffect(() => {
     setFailed(false);
@@ -21,13 +22,13 @@ function MarkVisual({ item }: { item: Mark }) {
 
   return (
     <span
-      className="organization-logo-frame"
+      className={`organization-logo-frame organization-logo-frame-${variant}`}
       style={{ "--logo-scale": String(item.scale) } as React.CSSProperties}
     >
       {failed ? (
         <span className="organization-mark-fallback">{item.short}</span>
-      ) : "variant" in item && item.variant === "luh-mark" ? (
-        <span className="organization-special-logo organization-special-logo-luh" aria-hidden="true">
+      ) : (
+        <span className={`organization-logo-asset organization-logo-asset-${variant}`}>
           <img
             key={item.id}
             src={item.logo}
@@ -37,15 +38,6 @@ function MarkVisual({ item }: { item: Mark }) {
             onError={() => setFailed(true)}
           />
         </span>
-      ) : (
-        <img
-          key={item.id}
-          src={item.logo}
-          alt=""
-          loading="eager"
-          decoding="async"
-          onError={() => setFailed(true)}
-        />
       )}
       {"caption" in item && item.caption && (
         <span className="organization-mark-caption">{item.caption}</span>
@@ -105,6 +97,7 @@ function AffiliationRail() {
       {visible.map((item, index) => (
         <div
           className="organization-mark"
+          data-brand={item.id}
           aria-label={item.name}
           title={item.name}
           key={index}
