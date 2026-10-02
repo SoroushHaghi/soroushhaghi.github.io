@@ -111,6 +111,7 @@ export const organizationMarks = [
     logo: "https://www.uni-hannover.de/fileadmin/luh/images/eulist/foerderung/luh-logo-w-16x9.jpg",
     hue: "188",
     scale: 1.00,
+    variant: "luh-mark",
   },
   {
     id: "sharif",
@@ -141,9 +142,9 @@ export const organizationMarks = [
     name: "Iran Khodro",
     short: "IKCO",
     caption: "IKCO",
-    logo: "https://www.carlogos.org/logo/Iran-Khodro-logo-3000x3000.png",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/66/Iran_Khodro_symbol.svg",
     hue: "205",
-    scale: 0.92,
+    scale: 1.00,
   },
   {
     id: "ptb",
