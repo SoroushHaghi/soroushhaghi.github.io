@@ -65,6 +65,8 @@ jobs:
           cp build/index.html build/review-staged-v3-496645f9/index.html
           mkdir -p build/review-sphere-depth-v4-0ccee488
           cp build/index.html build/review-sphere-depth-v4-0ccee488/index.html
+          mkdir -p build/review-wheel-snap-v5-b7c55abf
+          cp build/index.html build/review-wheel-snap-v5-b7c55abf/index.html
 
       - name: Publish preview without changing production root
         run: |
