@@ -177,6 +177,14 @@ export type AcademicWorkItem = {
 
 export const academicWork: AcademicWorkItem[] = [
   {
+    id: "qkd-satellite",
+    status: "COMPLETED",
+    title: "QKD Satellite Communication — Academic Work",
+    context: "Master's selected academic work",
+    summary: "Source-approved academic work in QKD satellite communication; represented here at academic-work scope without implying experimental or deployment experience.",
+    tags: ["QKD", "Satellite communication", "Quantum communication"]
+  },
+  {
     id: "qkd-seminar",
     status: "IN PROGRESS",
     title: "Seminar 22 — Co-propagation of QKD Signals with the Next Generation of Optical Networks",
