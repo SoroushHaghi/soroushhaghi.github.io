@@ -26,6 +26,17 @@ function MarkVisual({ item }: { item: Mark }) {
     >
       {failed ? (
         <span className="organization-mark-fallback">{item.short}</span>
+      ) : "variant" in item && item.variant === "luh-mark" ? (
+        <span className="organization-special-logo organization-special-logo-luh" aria-hidden="true">
+          <img
+            key={item.id}
+            src={item.logo}
+            alt=""
+            loading="eager"
+            decoding="async"
+            onError={() => setFailed(true)}
+          />
+        </span>
       ) : (
         <img
           key={item.id}
