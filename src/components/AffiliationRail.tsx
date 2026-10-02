@@ -129,7 +129,6 @@ function AffiliationRail() {
           className="organization-mark"
           data-brand={item.id}
           aria-label={item.name}
-          title={item.name}
           key={index}
           style={{ "--brand-hue": item.hue } as React.CSSProperties}
         >
