@@ -171,7 +171,7 @@ function App() {
       {renderPage()}
       <footer className="site-footer page-shell">
         <span>© {new Date().getFullYear()} S. Haghi</span>
-        <span>Built as a modular portfolio system.</span>
+        <span>All rights reserved.</span>
       </footer>
     </div>
   );
