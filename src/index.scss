@@ -4665,18 +4665,19 @@ html[data-theme="light"] .lab-token-readout strong {
 }
 
 
-/* Deterministic Home section snapping.
-   Desktop wheel/trackpad is controlled by useAdaptiveSectionScroll.
-   Touch devices use native momentum plus mandatory snap-stop. */
+/* Home section snap assist.
+   Desktop wheel/trackpad is lightly throttled in useAdaptiveSectionScroll.
+   Touch devices keep native momentum; snap is proximity-only so fast swipes
+   are never trapped one section at a time. */
 @media (hover: none), (pointer: coarse) {
   html.home-section-scroll {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-padding-top: var(--section-scroll-clearance, 0px);
   }
 
   html.home-section-scroll [data-scroll-section] {
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 }
 
