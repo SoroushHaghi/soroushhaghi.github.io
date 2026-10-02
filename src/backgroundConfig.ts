@@ -10,12 +10,12 @@ export type BackgroundValues = {
 };
 
 export const backgroundDefaults: BackgroundValues = {
-  mode: "ambient",
-  hue: 190,
-  intensity: 0.36,
-  edge: 0.22,
-  speed: 28,
-  scale: 1,
+  mode: "caustic",
+  hue: 210,
+  intensity: 0.72,
+  edge: 0.04,
+  speed: 12,
+  scale: 1.45,
 };
 
 export const backgroundModes = [
