@@ -3,6 +3,15 @@ export type PortfolioLink = {
   href: string;
 };
 
+export type WorkArtifact = {
+  kind: "live" | "gif" | "repo" | "evidence";
+  label: string;
+  href?: string;
+  image?: string;
+  repo?: string;
+  note?: string;
+};
+
 export type WorkTimelineItem = {
   id: string;
   kind: "experience" | "project" | "system";
@@ -14,6 +23,7 @@ export type WorkTimelineItem = {
   bullets?: string[];
   tags: string[];
   links?: PortfolioLink[];
+  artifact?: WorkArtifact;
   scope?: string;
 };
 
@@ -32,6 +42,12 @@ export const workTimeline: WorkTimelineItem[] = [
     ],
     tags: ["Systems", "Automation", "AI tooling", "Provenance", "GitHub"],
     links: [{ label: "GitHub", href: "https://github.com/SoroushHaghi/career-os" }],
+    artifact: {
+      kind: "repo",
+      label: "Public repository",
+      href: "https://github.com/SoroushHaghi/career-os",
+      repo: "SoroushHaghi/career-os"
+    },
     scope: "Demonstrated · AI-assisted co-development"
   },
   {
@@ -46,6 +62,12 @@ export const workTimeline: WorkTimelineItem[] = [
       { label: "GitHub", href: "https://github.com/SoroushHaghi/MRI-tumor-detection" },
       { label: "Live demo", href: "https://ptb-mri-detection.streamlit.app" }
     ],
+    artifact: {
+      kind: "live",
+      label: "MRI segmentation demo",
+      href: "https://ptb-mri-detection.streamlit.app/?embed=true",
+      note: "Load the live Streamlit preview"
+    },
     scope: "Demonstrated inference integration; no model-training authorship claim"
   },
   {
@@ -60,6 +82,12 @@ export const workTimeline: WorkTimelineItem[] = [
       { label: "GitHub", href: "https://github.com/SoroushHaghi/gas-detection" },
       { label: "Live demo", href: "https://gas-detection-tubs.streamlit.app" }
     ],
+    artifact: {
+      kind: "live",
+      label: "Gas classification demo",
+      href: "https://gas-detection-tubs.streamlit.app/?embed=true",
+      note: "Load the live Streamlit preview"
+    },
     scope: "Demonstrated project scope; unsupported performance claims omitted"
   },
   {
@@ -71,13 +99,19 @@ export const workTimeline: WorkTimelineItem[] = [
     summary: "Structured sensor-ML project comparing RandomForest and 1D-CNN approaches with Poetry-managed dependencies and GitLab CI lint/test stages.",
     tags: ["Python", "PyTorch", "scikit-learn", "CI", "Sensor ML"],
     links: [{ label: "GitHub", href: "https://github.com/SoroushHaghi/Activity_Recognition" }],
+    artifact: {
+      kind: "gif",
+      label: "Pipeline demo",
+      image: "https://raw.githubusercontent.com/SoroushHaghi/Activity_Recognition/main/docs/demo.gif",
+      href: "https://github.com/SoroushHaghi/Activity_Recognition"
+    },
     scope: "Demonstrated ML/CI scope; accuracy and Docker claims intentionally omitted"
   },
   {
     id: "bachelor-projects",
     kind: "project",
     period: "Undergraduate work · 2018 — 2024",
-    sort: 202402,
+    sort: 201800,
     title: "Bachelor Engineering Projects",
     organization: "Computer Engineering coursework",
     summary: "Curated undergraduate work spanning computer vision, embedded systems, image processing, and signal processing.",
@@ -92,6 +126,12 @@ export const workTimeline: WorkTimelineItem[] = [
       { label: "Project collection", href: "https://soroushhaghi.github.io/bachelor-engineering-projects/" },
       { label: "GitHub", href: "https://github.com/SoroushHaghi/bachelor-engineering-projects" }
     ],
+    artifact: {
+      kind: "live",
+      label: "Bachelor project collection",
+      href: "https://soroushhaghi.github.io/bachelor-engineering-projects/",
+      note: "Load the interactive project collection"
+    },
     scope: "Coursework / demonstrated and user-confirmed items; boundaries preserved per project"
   },
   {
@@ -103,6 +143,11 @@ export const workTimeline: WorkTimelineItem[] = [
     organization: "Islamic Azad University, Mashhad Branch",
     summary: "Led supervised weekly exercise and problem-solving sessions for approximately 20 students and supported assignment/exam evaluation.",
     tags: ["Teaching", "Algorithms", "Technical communication"],
+    artifact: {
+      kind: "evidence",
+      label: "Signed university certification",
+      note: "Evidence on file · public document preview not published yet"
+    },
     scope: "Demonstrated role; supervised course responsibility"
   },
   {
@@ -114,6 +159,12 @@ export const workTimeline: WorkTimelineItem[] = [
     summary: "Public repository structured around noise simulation, denoising, and PSNR-based image-quality evaluation.",
     tags: ["Python", "Image processing", "Denoising", "PSNR"],
     links: [{ label: "GitHub", href: "https://github.com/SoroushHaghi/RD_denoising" }],
+    artifact: {
+      kind: "repo",
+      label: "Public repository",
+      href: "https://github.com/SoroushHaghi/RD_denoising",
+      repo: "SoroushHaghi/RD_denoising"
+    },
     scope: "Public repository scope only; no stronger authorship or benchmark claim"
   },
   {
@@ -129,6 +180,11 @@ export const workTimeline: WorkTimelineItem[] = [
       "Ranked 1st among 50 participants in the relevant context."
     ],
     tags: ["Computer vision", "MATLAB", "Industry-university"],
+    artifact: {
+      kind: "evidence",
+      label: "Project / ranking evidence",
+      note: "Evidence on file · public document preview not published yet"
+    },
     scope: "User-confirmed context; not represented as formal employment"
   },
   {
@@ -140,6 +196,11 @@ export const workTimeline: WorkTimelineItem[] = [
     organization: "University-based startup at Ferdowsi University of Mashhad",
     summary: "Temporary project-based collaboration supporting coordination, external presentations, stakeholder communication, outreach, attendee coordination, on-site presentation, and professional networking.",
     tags: ["Project coordination", "Presentations", "Stakeholder communication"],
+    artifact: {
+      kind: "evidence",
+      label: "Signed reference letter",
+      note: "Evidence on file · public document preview not published yet"
+    },
     scope: "Demonstrated by signed reference; no software/model implementation claim"
   },
   {
@@ -151,6 +212,11 @@ export const workTimeline: WorkTimelineItem[] = [
     organization: "Islamic Azad University, Mashhad Branch",
     summary: "Continued supporting the university IT team after the internship, progressing from central support to on-site troubleshooting and repair across internal university units.",
     tags: ["IT support", "Hardware", "Networks", "Windows"],
+    artifact: {
+      kind: "evidence",
+      label: "Role evidence",
+      note: "Private evidence retained in Career OS"
+    },
     scope: "User-confirmed volunteer continuation"
   },
   {
@@ -162,6 +228,11 @@ export const workTimeline: WorkTimelineItem[] = [
     organization: "Islamic Azad University, Mashhad Branch",
     summary: "Desktop troubleshooting and repair, component replacement/upgrades, Windows installation/configuration, physical rack/cabling work, and local network/Wi-Fi setup and troubleshooting.",
     tags: ["IT support", "Hardware", "Networking", "Windows"],
+    artifact: {
+      kind: "evidence",
+      label: "Internship evidence",
+      note: "Private evidence retained in Career OS"
+    },
     scope: "User-confirmed internship scope"
   }
 ];
