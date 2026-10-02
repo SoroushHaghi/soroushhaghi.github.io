@@ -58,7 +58,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
   const currentLabel =
     currentPath === "/work" ? "WORK" :
     currentPath === "/education" ? "EDUCATION" :
-    currentPath === "/" ? "HOME" : "";
+    "";
 
   const go = (event: React.MouseEvent<HTMLAnchorElement>, href: string, external?: boolean) => {
     setMobileOpen(false);
