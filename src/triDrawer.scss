@@ -497,3 +497,27 @@ html[data-theme="neutral"] body {
     transition: none !important;
   }
 }
+
+
+@media (min-width: 861px) {
+  .nav-island-shell,
+  .nav-island-shell.is-scrolled {
+    width: min(720px, calc(100% - 28px));
+  }
+
+  .nav-island-row {
+    position: relative;
+    display: block;
+  }
+
+  .main-nav-island {
+    width: 560px;
+    margin: 0 auto;
+  }
+
+  .cv-nav-island {
+    position: absolute;
+    top: 0;
+    left: calc(50% + 292px);
+  }
+}
