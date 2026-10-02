@@ -1,18 +1,18 @@
 :root {
   --bg: #101216;
   --bg-soft: #15181d;
-  --bg-lightness: 4%;
-  --bg-depth-alpha: .14;
+  --bg-lightness: 7%;
+  --bg-depth-alpha: .07;
   --text: #f4f6f8;
   --muted: #9da5af;
   --hairline: rgba(255,255,255,.08);
   --glass-alpha: .04;
   --glass-blur: 4px;
   --glass-border-alpha: .04;
-  --surface-radius: 42px;
-  --nav-radius: 34px;
-  --shadow-alpha: .36;
-  --accent-hue: 231;
+  --surface-radius: 48px;
+  --nav-radius: 40px;
+  --shadow-alpha: .40;
+  --accent-hue: 221;
   --accent: hsl(var(--accent-hue) 72% 64%);
   --page-x: clamp(20px, 4vw, 72px);
   --section-y: clamp(72px, 9vw, 140px);
@@ -1731,4 +1731,17 @@ html[data-theme="light"] .lab-token-readout strong {
   .hero-lab-preview {
     min-height: 0;
   }
+}
+
+
+.lab-mode-lock {
+  width: fit-content;
+  padding: 7px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: rgba(255,255,255,.045);
+  color: var(--text);
+  font-size: 9px;
+  font-weight: 760;
+  letter-spacing: .12em;
 }
