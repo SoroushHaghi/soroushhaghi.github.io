@@ -43,6 +43,8 @@ jobs:
             mkdir -p "build/$route"
             cp build/index.html "build/$route/index.html"
           done
+          mkdir -p build/lab/hero
+          cp build/index.html build/lab/hero/index.html
 
       - name: Publish preview without changing production root
         run: |
