@@ -3434,3 +3434,76 @@ html[data-theme="light"] .lab-token-readout strong {
     gap: 8px;
   }
 }
+
+
+/* Education layout lab */
+.education-lab-preview {
+  display: grid;
+  gap: var(--education-row-space);
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--hairline);
+  border-radius: 28px;
+  background: rgba(255,255,255,.01);
+}
+
+.education-lab-degree {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(260px, var(--education-artifact-width));
+  gap: 28px;
+  align-items: stretch;
+}
+
+.education-lab-degree > div:first-child {
+  min-height: var(--education-artifact-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.education-lab-degree span {
+  color: #68717c;
+  font-size: 8px;
+  letter-spacing: .13em;
+}
+
+.education-lab-degree strong {
+  margin: 14px 0 10px;
+  font-size: calc(clamp(28px, 3.5vw, 50px) * var(--education-title-scale));
+  line-height: 1;
+  letter-spacing: -.045em;
+  font-weight: 590;
+}
+
+.education-lab-degree p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.education-lab-doc {
+  height: var(--education-artifact-height);
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 24px;
+  background:
+    radial-gradient(72% 90% at 78% 12%, hsla(var(--accent-hue),64%,60%,.07), transparent 62%),
+    rgba(255,255,255,.012);
+  color: #66707a;
+  font-size: 8px;
+  letter-spacing: .13em;
+}
+
+.education-lab-degree-muted {
+  opacity: .6;
+}
+
+@media (max-width: 900px) {
+  .education-lab-degree {
+    grid-template-columns: 1fr;
+  }
+
+  .education-lab-degree > div:first-child {
+    min-height: 0;
+  }
+}
