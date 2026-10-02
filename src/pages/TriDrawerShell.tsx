@@ -42,6 +42,11 @@ function TriDrawerShell({ currentPath, resetVersion, onNavigate }: Props) {
   };
 
   const onTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.closest("a,button,input,summary,.timeline-filter-row")) {
+      touchStart.current = null;
+      return;
+    }
     const touch = event.touches[0];
     touchStart.current = { x: touch.clientX, y: touch.clientY };
   };
@@ -74,7 +79,6 @@ function TriDrawerShell({ currentPath, resetVersion, onNavigate }: Props) {
         className={`tri-drawer drawer-education ${currentPath === "/education" ? "is-active" : ""}`}
         data-drawer="education"
         aria-label="Education drawer"
-        onDoubleClick={() => activate("/education", true)}
       >
         <EducationPage />
       </section>
@@ -84,7 +88,6 @@ function TriDrawerShell({ currentPath, resetVersion, onNavigate }: Props) {
         className={`tri-drawer drawer-home ${currentPath === "/" ? "is-active" : ""}`}
         data-drawer="home"
         aria-label="Home drawer"
-        onDoubleClick={() => activate("/", true)}
       >
         <HomePage onNavigate={(path) => onNavigate(path as MainPath, false)} />
       </section>
@@ -94,7 +97,6 @@ function TriDrawerShell({ currentPath, resetVersion, onNavigate }: Props) {
         className={`tri-drawer drawer-work ${currentPath === "/work" ? "is-active" : ""}`}
         data-drawer="work"
         aria-label="Work drawer"
-        onDoubleClick={() => activate("/work", true)}
       >
         <WorkPage />
       </section>
