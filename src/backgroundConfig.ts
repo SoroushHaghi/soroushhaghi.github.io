@@ -58,6 +58,12 @@ export const backgroundPresets = [
     copy: "Higher glass response with slow optical bands",
     values: { mode: "layered", hue: 199, intensity: 0.49, edge: 0.47, speed: 35, scale: 0.96 },
   },
+  {
+    id: "interference-ribbon",
+    title: "Interference ribbon",
+    copy: "High-contrast cyan wave band with strong glass response",
+    values: { mode: "interference", hue: 178, intensity: 0.72, edge: 0.44, speed: 14, scale: 1.45 },
+  },
 ] satisfies Array<{ id: string; title: string; copy: string; values: BackgroundValues }>;
 
 export const backgroundStorageKey = "portfolio-background-lab-v1";
