@@ -17,6 +17,9 @@
   --page-x: clamp(20px, 4vw, 72px);
   --section-y: clamp(72px, 9vw, 140px);
   --text-max: 720px;
+  --hero-min-height: 100svh;
+  --hero-gap: clamp(36px, 6vw, 110px);
+  --hero-name-scale: 1;
 }
 
 * { box-sizing: border-box; }
@@ -223,6 +226,8 @@ button { color: inherit; }
   transition:
     max-width 440ms cubic-bezier(.2,.8,.2,1),
     opacity 220ms ease;
+  padding-inline: .035em .065em;
+  margin-left: .015em;
 }
 
 .hero-name:hover .wm-given-tail,
@@ -260,13 +265,13 @@ button { color: inherit; }
 .mobile-nav-panel { display: none; }
 
 .hero {
-  min-height: 100svh;
+  min-height: var(--hero-min-height);
   padding-top: 128px;
   padding-bottom: 72px;
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(460px, 1.1fr);
   align-items: center;
-  gap: clamp(36px, 6vw, 110px);
+  gap: var(--hero-gap);
 }
 
 .hero-copy { max-width: 760px; position: relative; z-index: 2; }
@@ -283,7 +288,7 @@ h1, h2, h3, p { margin-top: 0; }
 
 h1 {
   margin-bottom: 24px;
-  font-size: clamp(54px, 7.2vw, 126px);
+  font-size: calc(clamp(54px, 7.2vw, 126px) * var(--hero-name-scale));
   line-height: .91;
   letter-spacing: -.065em;
   font-weight: 620;
