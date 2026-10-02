@@ -31,52 +31,104 @@ function CinematicHero() {
   const progressRef = useRef(0);
   const [progress, setProgress] = useState(0);
 
-  const capabilities = useMemo(
-    () =>
-      expertiseCapabilities.map((item) => {
-        const x = item.x / 100;
-        const y = item.y / 100;
-        const k = item.K;
-        const e = item.E;
+  const capabilities = useMemo(() => {
+    const projected = expertiseCapabilities.map((item) => {
+      const zCoordinate =
+        70 * ((item.K - item.E) / (item.K + item.E + 1e-6));
+      const directionLength =
+        Math.hypot(item.x, item.y, zCoordinate) || 1;
+      const strength = Math.max(0, Math.min(1, item.score / 5));
+      const azimuth = Math.atan2(item.y, item.x);
+      const elevation = Math.atan2(
+        zCoordinate,
+        Math.hypot(item.x, item.y)
+      );
 
-        // Vertical balance is derived from the two normalized evidence
-        // components. It is not a new visual-only score.
-        const zBalance = 0.72 * ((k - e) / Math.max(0.001, k + e));
+      return {
+        ...item,
+        planeX: item.x / 100,
+        planeY: item.y / 100,
+        zCoordinate,
+        strength,
+        azimuth,
+        elevation,
+        dir: {
+          x: item.x / directionLength,
+          y: item.y / directionLength,
+          z: zCoordinate / directionLength,
+        },
+      };
+    });
 
-        // Preserve the original normalized rod length. Only direction changes
-        // during the in-place centering stage.
-        const length = Math.max(0, Math.min(0.94, item.score * 0.2));
+    const amplitudeNorm =
+      Math.sqrt(
+        projected.reduce(
+          (sum, item) => sum + item.strength * item.strength,
+          0
+        )
+      ) || 1;
 
-        // Direction is expressed explicitly through spherical angles so the
-        // same Career OS record always maps to the same final orientation.
-        const azimuth = Math.atan2(y, x);
-        const elevation = Math.atan2(zBalance, Math.hypot(x, y));
-        const cosElevation = Math.cos(elevation);
+    return projected.map((item) => ({
+      ...item,
+      amplitude: item.strength / amplitudeNorm,
+    }));
+  }, []);
 
-        return {
-          ...item,
-          px: x,
-          py: y,
-          k,
-          e,
-          zBalance,
-          length,
-          azimuth,
-          elevation,
-          dir: {
-            x: cosElevation * Math.cos(azimuth),
-            y: cosElevation * Math.sin(azimuth),
-            z: Math.sin(elevation),
-          },
-        };
-      }),
-    []
-  );
+  const targetStates = useMemo(() => {
+    const norm =
+      Math.sqrt(
+        expertiseTargets.reduce(
+          (sum, item) => sum + item.support * item.support,
+          0
+        )
+      ) || 1;
 
-  const selectedTarget = useMemo(
-    () => [...expertiseTargets].sort((a, b) => b.support - a.support)[0],
-    []
-  );
+    return expertiseTargets.map((item) => {
+      const length =
+        Math.hypot(item.pos.x, item.pos.y, item.pos.z) || 1;
+      const amplitude = item.support / norm;
+
+      return {
+        ...item,
+        direction: {
+          x: item.pos.x / length,
+          y: item.pos.y / length,
+          z: item.pos.z / length,
+        },
+        amplitude,
+        probability: amplitude * amplitude,
+      };
+    });
+  }, []);
+
+  const selectedTarget = useMemo(() => {
+    let hash = 2166136261;
+    const source = capabilities
+      .map(
+        (item) =>
+          item.id +
+          ":" +
+          item.strength.toFixed(4) +
+          ":" +
+          item.zCoordinate.toFixed(3)
+      )
+      .join("|");
+
+    for (let i = 0; i < source.length; i += 1) {
+      hash ^= source.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+
+    const sample = ((hash >>> 0) % 1000003) / 1000003;
+    let cumulative = 0;
+
+    for (const target of targetStates) {
+      cumulative += target.probability;
+      if (sample <= cumulative) return target;
+    }
+
+    return targetStates[targetStates.length - 1];
+  }, [capabilities, targetStates]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -124,18 +176,18 @@ function CinematicHero() {
       const sphereR = Math.min(W, H) * (W < 760 ? 0.31 : 0.285);
       const mouseYaw = pointerRef.current.x * 0.14;
 
-      const stage2d = smooth(0.05, 0.16, p);
-      const planeIn = smooth(0.17, 0.29, p);
-      const pointsIn = smooth(0.25, 0.40, p);
-      const zIn = smooth(0.38, 0.47, p);
-      const knowledgeGrow = smooth(0.43, 0.51, p);
+      const stage2d = smooth(0.035, 0.13, p);
+      const planeIn = smooth(0.18, 0.30, p);
+      const pointsIn = smooth(0.27, 0.42, p);
+      const zIn = smooth(0.40, 0.48, p);
+      const knowledgeGrow = smooth(0.44, 0.52, p);
       const experienceGrow = smooth(0.50, 0.58, p);
-      const vectorResolve = smooth(0.57, 0.66, p);
-      const recenter = smooth(0.64, 0.76, p);
-      const sphereIn = smooth(0.75, 0.84, p);
-      const targetsIn = smooth(0.83, 0.90, p);
-      const collapse = smooth(0.93, 0.995, p);
-      const planeFade = 1 - smooth(0.61, 0.74, p);
+      const vectorResolve = smooth(0.58, 0.66, p);
+      const recenter = smooth(0.65, 0.76, p);
+      const sphereIn = smooth(0.76, 0.84, p);
+      const targetsIn = smooth(0.85, 0.92, p);
+      const collapse = smooth(0.94, 0.995, p);
+      const planeFade = 1 - smooth(0.62, 0.75, p);
 
       ctx.save();
       ctx.fillStyle = "#020406";
@@ -220,7 +272,7 @@ function CinematicHero() {
         ctx.restore();
 
         // 02 — Classical / Quantum.
-        const yAxis = smooth(0.10, 0.21, p);
+        const yAxis = smooth(0.115, 0.22, p);
         if (yAxis > 0) {
           drawLine(
             { x: centerX, y: centerY - axisLen * yAxis },
@@ -258,7 +310,7 @@ function CinematicHero() {
       for (let i = 0; i < capabilities.length; i += 1) {
         const item = capabilities[i];
         const stagger = clamp01((pointsIn * capabilities.length - i) / 4);
-        const base = toScreen(projectPlane(item.px, item.py, 0));
+        const base = toScreen(projectPlane(item.planeX, item.planeY, 0));
 
         if (stagger > 0 && planeFade > 0) {
           ctx.save();
@@ -272,10 +324,10 @@ function CinematicHero() {
 
         if (zIn > 0 && vectorResolve < 0.999) {
           const kTop = toScreen(
-            projectPlane(item.px, item.py, item.k * 0.9 * knowledgeGrow)
+            projectPlane(item.planeX, item.planeY, item.k * 0.9 * knowledgeGrow)
           );
           const eBottom = toScreen(
-            projectPlane(item.px, item.py, -item.e * 0.9 * experienceGrow)
+            projectPlane(item.planeX, item.planeY, -item.e * 0.9 * experienceGrow)
           );
           const barAlpha = (1 - vectorResolve) * 0.72;
 
@@ -300,45 +352,134 @@ function CinematicHero() {
         ctx.restore();
       }
 
-      // Shared 3D camera for the resolved rods and the final sphere. This is
-      // what makes the transition in-place rather than moving the state to a
-      // second location.
-      const yaw = -0.34 + mouseYaw * 0.55;
-      const pitch = -0.46;
-      const roll = 0.18;
+      // Shared 3D camera for rods and sphere. The same mathematical state is
+      // viewed throughout the resolve/centering/sphere transition.
+      const cameraDistance = 430 / 115;
+      const spin = -0.35 + pointerRef.current.x * 0.18;
+      const pitch = (-68 * Math.PI) / 180;
+      const roll = (20 * Math.PI) / 180;
 
       const rotateState = (v: Point3) => {
-        const cy = Math.cos(yaw);
-        const sy = Math.sin(yaw);
-        const x1 = cy * v.x + sy * v.z;
-        const z1 = -sy * v.x + cy * v.z;
+        const cs = Math.cos(spin);
+        const ss = Math.sin(spin);
+        const x1 = cs * v.x - ss * v.y;
+        const y1 = ss * v.x + cs * v.y;
+        const z1 = v.z;
 
         const cp = Math.cos(pitch);
         const sp = Math.sin(pitch);
-        const y2 = cp * v.y - sp * z1;
-        const z2 = sp * v.y + cp * z1;
+        const x2 = x1;
+        const y2 = cp * y1 - sp * z1;
+        const z2 = sp * y1 + cp * z1;
 
         const cr = Math.cos(roll);
         const sr = Math.sin(roll);
 
         return {
-          x: cr * x1 - sr * y2,
-          y: sr * x1 + cr * y2,
+          x: cr * x2 - sr * y2,
+          y: sr * x2 + cr * y2,
           z: z2,
         };
       };
 
       const projectState = (v: Point3) => {
-        const r = rotateState(v);
-        const camera = 3.7;
-        const persp = camera / (camera - r.z * 0.62);
+        const rotated = rotateState(v);
+        const persp =
+          cameraDistance / (cameraDistance - rotated.z);
 
         return {
-          x: centerX + r.x * sphereR * persp,
-          y: centerY - r.y * sphereR * persp,
-          z: r.z,
+          x: centerX + rotated.x * sphereR * persp,
+          y: centerY - rotated.y * sphereR * persp,
+          z: rotated.z,
           persp,
         };
+      };
+
+      const shellRadius =
+        sphereR *
+        (cameraDistance /
+          Math.sqrt(cameraDistance * cameraDistance - 1));
+
+      const visibilityMetric = (rotated: Point3) =>
+        cameraDistance * rotated.z -
+        (rotated.x * rotated.x +
+          rotated.y * rotated.y +
+          rotated.z * rotated.z);
+
+      const drawGreatCircle = (
+        plane: "xy" | "xz" | "yz",
+        alpha: number
+      ) => {
+        const samples = 420;
+        const points: Array<{
+          x: number;
+          y: number;
+          metric: number;
+          back: boolean;
+        }> = [];
+
+        for (let i = 0; i <= samples; i += 1) {
+          const angle = (i / samples) * Math.PI * 2;
+          let point: Point3;
+
+          if (plane === "xy") {
+            point = {
+              x: Math.cos(angle),
+              y: Math.sin(angle),
+              z: 0,
+            };
+          } else if (plane === "xz") {
+            point = {
+              x: Math.cos(angle),
+              y: 0,
+              z: Math.sin(angle),
+            };
+          } else {
+            point = {
+              x: 0,
+              y: Math.cos(angle),
+              z: Math.sin(angle),
+            };
+          }
+
+          const rotated = rotateState(point);
+          const projected = projectState(point);
+          const metric = visibilityMetric(rotated);
+
+          points.push({
+            x: projected.x,
+            y: projected.y,
+            metric,
+            back: metric < 0,
+          });
+        }
+
+        ([true, false] as const).forEach((drawBack) => {
+          ctx.save();
+          ctx.strokeStyle = drawBack
+            ? "rgba(220,230,242," + alpha * 0.24 + ")"
+            : "rgba(220,230,242," + alpha + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+
+          let open = false;
+          for (let i = 0; i < points.length; i += 1) {
+            const point = points[i];
+            if (point.back === drawBack) {
+              if (!open) {
+                ctx.moveTo(point.x, point.y);
+                open = true;
+              } else {
+                ctx.lineTo(point.x, point.y);
+              }
+            } else {
+              open = false;
+            }
+          }
+
+          ctx.stroke();
+          ctx.restore();
+        });
       };
 
       // 06 — Resolve each evidence column into its final rod. The canonical
@@ -347,8 +488,8 @@ function CinematicHero() {
       if (vectorResolve > 0.001) {
         for (const item of capabilities) {
           const baseOffset: Point3 = {
-            x: item.px * 0.68 * (1 - recenter),
-            y: item.py * 0.68 * (1 - recenter),
+            x: item.planeX * 0.68 * (1 - recenter),
+            y: item.planeY * 0.68 * (1 - recenter),
             z: 0,
           };
 
@@ -399,7 +540,7 @@ function CinematicHero() {
       // 07 — Only after the same rods are centered does the shell form around
       // the same origin.
       if (sphereIn > 0.001) {
-        const easedR = sphereR * sphereIn;
+        const easedR = shellRadius * sphereIn;
 
         const inner = ctx.createRadialGradient(
           centerX - easedR * 0.18,
@@ -426,17 +567,37 @@ function CinematicHero() {
         ctx.stroke();
         ctx.restore();
 
-        // 08 — Target states are generated on the shell.
-        const targetRows = expertiseTargets.map((target) => {
-          const n = Math.hypot(target.pos.x, target.pos.y, target.pos.z) || 1;
-          const point = projectState({
-            x: target.pos.x / n,
-            y: target.pos.y / n,
-            z: target.pos.z / n,
-          });
+        if (sphereIn > 0.18) {
+          drawGreatCircle("xy", 0.050 * sphereIn);
+          drawGreatCircle("xz", 0.036 * sphereIn);
+          drawGreatCircle("yz", 0.032 * sphereIn);
 
-          return { target, point };
-        });
+          const knowledge = projectState({ x: 0, y: 0, z: 1 });
+          const experience = projectState({ x: 0, y: 0, z: -1 });
+          const hardware = projectState({ x: -1, y: 0, z: 0 });
+          const software = projectState({ x: 1, y: 0, z: 0 });
+          const classical = projectState({ x: 0, y: -1, z: 0 });
+          const quantum = projectState({ x: 0, y: 1, z: 0 });
+
+          ctx.save();
+          ctx.globalAlpha = sphereIn * 0.62;
+          ctx.fillStyle = "rgba(229,235,244,.72)";
+          ctx.font = "600 9px Inter, system-ui, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText("KNOWLEDGE", knowledge.x, knowledge.y - 10);
+          ctx.fillText("EXPERIENCE", experience.x, experience.y + 18);
+          ctx.fillText("HARDWARE", hardware.x, hardware.y - 7);
+          ctx.fillText("SOFTWARE", software.x, software.y - 7);
+          ctx.fillText("CLASSICAL", classical.x, classical.y - 7);
+          ctx.fillText("QUANTUM", quantum.x, quantum.y - 7);
+          ctx.restore();
+        }
+
+        // 08 — Target states are generated on the shell.
+        const targetRows = targetStates.map((target) => ({
+          target,
+          point: projectState(target.direction),
+        }));
 
         for (const row of targetRows) {
           const isChosen = row.target.id === selectedTarget.id;
@@ -482,6 +643,32 @@ function CinematicHero() {
             ctx.restore();
           }
         }
+
+        if (collapse > 0.52) {
+          const measured = projectState(selectedTarget.direction);
+          ctx.save();
+          ctx.globalAlpha = smooth(0.52, 1, collapse);
+          ctx.strokeStyle = "rgba(255,240,170,.94)";
+          ctx.fillStyle = "rgba(255,244,193,.96)";
+          ctx.lineWidth = 1.25;
+          ctx.beginPath();
+          ctx.arc(measured.x, measured.y, 8 + collapse * 4, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.font = "700 10px Inter, system-ui, sans-serif";
+          ctx.textAlign = "left";
+          ctx.fillText("YOUR COMPANY", measured.x + 14, measured.y - 8);
+          ctx.restore();
+        }
+
+        // Redraw the true outer silhouette last.
+        ctx.save();
+        ctx.globalAlpha = sphereIn;
+        ctx.strokeStyle = "rgba(229,236,246,.22)";
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, shellRadius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
       }
 
       // Stable fine grain. It does not carry semantic state.
@@ -498,21 +685,23 @@ function CinematicHero() {
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [capabilities, selectedTarget]);
+  }, [capabilities, selectedTarget, targetStates]);
 
   const phase =
-    progress < 0.10
-      ? "identity"
+    progress < 0.035
+      ? "void"
       : progress < 0.24
       ? "basis"
       : progress < 0.40
       ? "evidence"
       : progress < 0.59
       ? "knowledge-experience"
-      : progress < 0.77
+      : progress < 0.78
       ? "centering"
-      : progress < 0.91
+      : progress < 0.88
       ? "state"
+      : progress < 0.94
+      ? "future"
       : "measurement";
 
   const advanceNarrative = (
@@ -572,36 +761,20 @@ function CinematicHero() {
         />
 
         <div className={`cinematic-copy cinematic-copy-${phase}`}>
-          {phase === "identity" && (
-            <div className="cinematic-card centered">
-              <div className="cinematic-kicker">SOROUSH HAGHI</div>
-              <h1>
-                Computer Engineering <span>→</span> Quantum Technologies
-              </h1>
-              <p>
-                Move the cursor downward to resolve the state. Move upward to
-                rewind it.
-              </p>
-            </div>
-          )}
-
           {phase === "basis" && (
-            <div className="cinematic-card side">
+            <div className="cinematic-card micro">
               <div className="cinematic-kicker">01 / BASIS</div>
-              <h2>First, place the work.</h2>
-              <p>Hardware ↔ Software. Classical ↔ Quantum.</p>
+              <p>Hardware ↔ Software · Classical ↔ Quantum</p>
             </div>
           )}
 
           {phase === "evidence" && (
             <div className="cinematic-card side">
-              <div className="cinematic-kicker">02 / EVIDENCE</div>
-              <h2>
-                The plane fills with what I have actually studied and built.
-              </h2>
+              <div className="cinematic-kicker">02 / LIVE EVIDENCE PLANE</div>
+              <h2>Evidence finds a position.</h2>
               <p>
-                Each point is generated from the current public-safe Career OS
-                state.
+                The same public-safe state can regenerate this map whenever
+                the underlying Career OS evidence changes.
               </p>
             </div>
           )}
@@ -611,19 +784,21 @@ function CinematicHero() {
               <div className="cinematic-kicker">03 / DEPTH</div>
               <h2>Knowledge rises. Experience extends below.</h2>
               <p>
-                The same evidence acquires a third dimension without changing
-                its source.
+                K and E are independent evidence components. They add depth
+                without replacing the original Hardware/Software and
+                Classical/Quantum coordinates.
               </p>
             </div>
           )}
 
           {phase === "centering" && (
             <div className="cinematic-card side">
-              <div className="cinematic-kicker">04 / RESOLVE</div>
-              <h2>Same lengths. Same evidence. One origin.</h2>
+              <div className="cinematic-kicker">04 / ONE ORIGIN</div>
+              <h2>The state centers in place.</h2>
               <p>
-                Each rod keeps its normalized length while its angle is derived
-                from the same coordinates and the whole state centers in place.
+                Rod lengths stay normalized and unchanged. Their angles come
+                from the same deterministic transform; only their origins
+                converge to the center of this 3D space.
               </p>
             </div>
           )}
@@ -634,11 +809,25 @@ function CinematicHero() {
                 CURRENT TECHNICAL STATE
               </div>
               <div className="cinematic-equation">
-                |ψ<sub>current</sub>⟩ = Σ α<sub>i</sub>|c<sub>i</sub>⟩
+                |ψ<sub>profile</sub>⟩ = Σ α<sub>i</sub>|c<sub>i</sub>⟩
               </div>
               <p>
-                Blue: knowledge-dominant. Red: experience-dominant. Yellow:
-                possible career directions.
+                α<sub>i</sub> = S<sub>i</sub> / √ΣS<sub>j</sub>² ·
+                the sphere is a quantum-inspired representation of the same
+                live evidence state.
+              </p>
+            </div>
+          )}
+
+          {phase === "future" && (
+            <div className="cinematic-card equation-card future-card">
+              <div className="cinematic-kicker">POSSIBLE FUTURE STATES</div>
+              <div className="cinematic-equation">
+                |ψ<sub>future</sub>⟩ = Σ β<sub>j</sub>|t<sub>j</sub>⟩
+              </div>
+              <p>
+                P(t<sub>j</sub>) = |β<sub>j</sub>|² · yellow points are
+                evidence-supported directions on the same state space.
               </p>
             </div>
           )}
@@ -650,7 +839,8 @@ function CinematicHero() {
                 |ψ<sub>future</sub>⟩ → |Your Company⟩
               </div>
               <p>
-                Other possible target states fade as one measured state remains.
+                The other possible yellow states collapse away. This build's
+                deterministic sample resolves through {selectedTarget.name}.
               </p>
               <div className="cinematic-cta">Seeking an internship.</div>
             </div>
@@ -666,7 +856,7 @@ function CinematicHero() {
         </div>
 
         <div className="cinematic-scroll-cue" aria-hidden="true">
-          <span>MOVE CURSOR DOWN · UP TO REWIND</span>
+          <span>MOVE DOWN TO RESOLVE · MOVE UP TO REWIND</span>
         </div>
       </div>
     </section>
