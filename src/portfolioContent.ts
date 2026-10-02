@@ -257,7 +257,7 @@ export const academicWork: AcademicWorkItem[] = [
   },
   {
     id: "qkd-seminar",
-    status: "IN PROGRESS",
+    status: "PRESENTATION PENDING",
     title: "Co-propagation of QKD Signals with Next-Generation Optical Networks",
     context: "Master's seminar",
     summary: "Seminar work on coexistence of QKD signals with next-generation optical-network infrastructure; final presentation is still pending.",
