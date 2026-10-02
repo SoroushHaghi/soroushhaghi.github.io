@@ -5,6 +5,7 @@ import "./cinematicHero.scss";
 type Point3 = { x: number; y: number; z: number };
 
 const SPHERE_R = 115;
+const AXIS_R = 132;
 const CAMERA_DISTANCE = 430;
 const VIEW_SPIN = -0.35;
 const VIEW_PITCH = (-68 * Math.PI) / 180;
@@ -37,6 +38,7 @@ function CinematicHero() {
   const rootRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
+  const wheelLockUntilRef = useRef(0);
 
   const capabilities = useMemo(
     () =>
@@ -81,6 +83,57 @@ function CinematicHero() {
       window.removeEventListener("scroll", updateProgress);
       window.removeEventListener("resize", updateProgress);
     };
+  }, []);
+
+  useEffect(() => {
+    const stageStops = [0, 0.08, 0.16, 0.25, 0.35, 0.53, 0.63, 0.76, 0.81, 0.92, 1];
+
+    const onWheel = (event: WheelEvent) => {
+      const root = rootRef.current;
+      if (!root) return;
+
+      const rect = root.getBoundingClientRect();
+      const active = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
+      if (!active || Math.abs(event.deltaY) < 4) return;
+
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const current = progressRef.current;
+
+      if ((direction < 0 && current <= 0.001) || (direction > 0 && current >= 0.999)) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const now = performance.now();
+      if (now < wheelLockUntilRef.current) return;
+
+      let nearest = 0;
+      let nearestDistance = Infinity;
+
+      stageStops.forEach((stop, index) => {
+        const distance = Math.abs(stop - current);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearest = index;
+        }
+      });
+
+      const nextIndex = Math.max(
+        0,
+        Math.min(stageStops.length - 1, nearest + direction)
+      );
+
+      const sectionTop = window.scrollY + rect.top;
+      const travel = Math.max(1, root.offsetHeight - window.innerHeight);
+      const targetY = sectionTop + stageStops[nextIndex] * travel;
+
+      wheelLockUntilRef.current = now + 760;
+      window.scrollTo({ top: targetY, behavior: "smooth" });
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
   }, []);
 
   useEffect(() => {
@@ -220,6 +273,58 @@ function CinematicHero() {
         ctx.restore();
       };
 
+      const drawArrowHead = (
+        tip: { x: number; y: number },
+        from: { x: number; y: number },
+        stroke: string,
+        size = 8
+      ) => {
+        const angle = Math.atan2(tip.y - from.y, tip.x - from.x);
+        const spread = 0.48;
+
+        const left = {
+          x: tip.x - size * Math.cos(angle - spread),
+          y: tip.y - size * Math.sin(angle - spread),
+        };
+        const right = {
+          x: tip.x - size * Math.cos(angle + spread),
+          y: tip.y - size * Math.sin(angle + spread),
+        };
+
+        drawLine(tip, left, stroke, 1);
+        drawLine(tip, right, stroke, 1);
+      };
+
+      const drawAxis = (
+        negative: { x: number; y: number },
+        positive: { x: number; y: number },
+        stroke: string,
+        width = 1
+      ) => {
+        drawLine(negative, positive, stroke, width);
+        drawArrowHead(negative, positive, stroke);
+        drawArrowHead(positive, negative, stroke);
+      };
+
+      const drawAxisLabel = (
+        text: string,
+        endpoint: { x: number; y: number },
+        alpha: number,
+        gap = 25
+      ) => {
+        const dx = endpoint.x - centerX;
+        const dy = endpoint.y - centerY;
+        const n = Math.hypot(dx, dy) || 1;
+
+        drawLabel(
+          text,
+          endpoint,
+          alpha,
+          (dx / n) * gap,
+          (dy / n) * gap
+        );
+      };
+
       ctx.save();
       ctx.fillStyle = "#020406";
       ctx.fillRect(0, 0, W, H);
@@ -241,34 +346,28 @@ function CinematicHero() {
 
       // Stage 1 — Hardware / Software only.
       if (xAxisIn > 0.001) {
-        const extent = SPHERE_R * xAxisIn;
+        const extent = AXIS_R * xAxisIn;
         const left = project({ x: -extent, y: 0, z: 0 });
         const right = project({ x: extent, y: 0, z: 0 });
+        const stroke = "rgba(224,232,242," + 0.30 * xAxisIn + ")";
 
-        drawLine(
-          left,
-          right,
-          "rgba(224,232,242," + 0.30 * xAxisIn + ")"
-        );
+        drawAxis(left, right, stroke);
 
-        drawLabel("HARDWARE", left, xAxisIn * 0.88, -24, 4);
-        drawLabel("SOFTWARE", right, xAxisIn * 0.88, 26, 4);
+        drawAxisLabel("HARDWARE", left, xAxisIn * 0.88, 27);
+        drawAxisLabel("SOFTWARE", right, xAxisIn * 0.88, 27);
       }
 
       // Stage 2 — Classical / Quantum, only after X is complete.
       if (yAxisIn > 0.001) {
-        const extent = SPHERE_R * yAxisIn;
+        const extent = AXIS_R * yAxisIn;
         const classical = project({ x: 0, y: -extent, z: 0 });
         const quantum = project({ x: 0, y: extent, z: 0 });
+        const stroke = "rgba(224,232,242," + 0.28 * yAxisIn + ")";
 
-        drawLine(
-          classical,
-          quantum,
-          "rgba(224,232,242," + 0.28 * yAxisIn + ")"
-        );
+        drawAxis(classical, quantum, stroke);
 
-        drawLabel("CLASSICAL", classical, yAxisIn * 0.88, 0, 18);
-        drawLabel("QUANTUM", quantum, yAxisIn * 0.88, 0, -12);
+        drawAxisLabel("CLASSICAL", classical, yAxisIn * 0.88, 27);
+        drawAxisLabel("QUANTUM", quantum, yAxisIn * 0.88, 27);
       }
 
       // Stage 3 — 2D plane appears after both axes are finished.
@@ -319,42 +418,34 @@ function CinematicHero() {
       // Keep the original X/Y axes fully visible after the camera settles.
       if (cameraMove > 0.001) {
         const axisAlpha = 0.26 + cameraMove * 0.06;
-        const left = project({ x: -SPHERE_R, y: 0, z: 0 });
-        const right = project({ x: SPHERE_R, y: 0, z: 0 });
-        const classical = project({ x: 0, y: -SPHERE_R, z: 0 });
-        const quantum = project({ x: 0, y: SPHERE_R, z: 0 });
+        const left = project({ x: -AXIS_R, y: 0, z: 0 });
+        const right = project({ x: AXIS_R, y: 0, z: 0 });
+        const classical = project({ x: 0, y: -AXIS_R, z: 0 });
+        const quantum = project({ x: 0, y: AXIS_R, z: 0 });
+        const xStroke = "rgba(224,232,242," + axisAlpha + ")";
+        const yStroke =
+          "rgba(224,232,242," + (axisAlpha - 0.02) + ")";
 
-        drawLine(
-          left,
-          right,
-          "rgba(224,232,242," + axisAlpha + ")"
-        );
-        drawLine(
-          classical,
-          quantum,
-          "rgba(224,232,242," + (axisAlpha - 0.02) + ")"
-        );
+        drawAxis(left, right, xStroke);
+        drawAxis(classical, quantum, yStroke);
 
-        drawLabel("HARDWARE", left, 0.58, -24, 4);
-        drawLabel("SOFTWARE", right, 0.58, 26, 4);
-        drawLabel("CLASSICAL", classical, 0.58, 0, 18);
-        drawLabel("QUANTUM", quantum, 0.58, 0, -12);
+        drawAxisLabel("HARDWARE", left, 0.58, 28);
+        drawAxisLabel("SOFTWARE", right, 0.58, 28);
+        drawAxisLabel("CLASSICAL", classical, 0.58, 28);
+        drawAxisLabel("QUANTUM", quantum, 0.58, 28);
       }
 
       // Stage 6 — Knowledge / Experience axis only after camera movement ends.
       if (zAxisIn > 0.001) {
-        const extent = SPHERE_R * zAxisIn;
+        const extent = AXIS_R * zAxisIn;
         const experience = project({ x: 0, y: 0, z: -extent });
         const knowledge = project({ x: 0, y: 0, z: extent });
+        const stroke = "rgba(224,232,242," + 0.28 * zAxisIn + ")";
 
-        drawLine(
-          experience,
-          knowledge,
-          "rgba(224,232,242," + 0.28 * zAxisIn + ")"
-        );
+        drawAxis(experience, knowledge, stroke);
 
-        drawLabel("EXPERIENCE", experience, zAxisIn * 0.9, 0, 16);
-        drawLabel("KNOWLEDGE", knowledge, zAxisIn * 0.9, 0, -10);
+        drawAxisLabel("EXPERIENCE", experience, zAxisIn * 0.9, 28);
+        drawAxisLabel("KNOWLEDGE", knowledge, zAxisIn * 0.9, 28);
       }
 
       // Stages 7–9 — one continuous rod object per capability.
@@ -410,16 +501,16 @@ function CinematicHero() {
 
       // During centering, fade only the grid. Principal axes remain.
       if (centering > 0.001) {
-        const left = project({ x: -SPHERE_R, y: 0, z: 0 });
-        const right = project({ x: SPHERE_R, y: 0, z: 0 });
-        const classical = project({ x: 0, y: -SPHERE_R, z: 0 });
-        const quantum = project({ x: 0, y: SPHERE_R, z: 0 });
-        const experience = project({ x: 0, y: 0, z: -SPHERE_R });
-        const knowledge = project({ x: 0, y: 0, z: SPHERE_R });
+        const left = project({ x: -AXIS_R, y: 0, z: 0 });
+        const right = project({ x: AXIS_R, y: 0, z: 0 });
+        const classical = project({ x: 0, y: -AXIS_R, z: 0 });
+        const quantum = project({ x: 0, y: AXIS_R, z: 0 });
+        const experience = project({ x: 0, y: 0, z: -AXIS_R });
+        const knowledge = project({ x: 0, y: 0, z: AXIS_R });
 
-        drawLine(left, right, "rgba(224,232,242,.20)");
-        drawLine(classical, quantum, "rgba(224,232,242,.18)");
-        drawLine(experience, knowledge, "rgba(224,232,242,.18)");
+        drawAxis(left, right, "rgba(224,232,242,.20)");
+        drawAxis(classical, quantum, "rgba(224,232,242,.18)");
+        drawAxis(experience, knowledge, "rgba(224,232,242,.18)");
       }
 
       // Stage 10 — sphere appears only after centering is complete.
@@ -645,16 +736,25 @@ function CinematicHero() {
         ctx.restore();
 
         // Principal axes stay visible through the sphere.
-        const left = project({ x: -radius, y: 0, z: 0 });
-        const right = project({ x: radius, y: 0, z: 0 });
-        const classical = project({ x: 0, y: -radius, z: 0 });
-        const quantum = project({ x: 0, y: radius, z: 0 });
-        const experience = project({ x: 0, y: 0, z: -radius });
-        const knowledge = project({ x: 0, y: 0, z: radius });
+        const axisRadius = AXIS_R * sphereGrow;
+        const left = project({ x: -axisRadius, y: 0, z: 0 });
+        const right = project({ x: axisRadius, y: 0, z: 0 });
+        const classical = project({ x: 0, y: -axisRadius, z: 0 });
+        const quantum = project({ x: 0, y: axisRadius, z: 0 });
+        const experience = project({ x: 0, y: 0, z: -axisRadius });
+        const knowledge = project({ x: 0, y: 0, z: axisRadius });
 
-        drawLine(left, right, "rgba(230,236,245,.19)", 1);
-        drawLine(classical, quantum, "rgba(230,236,245,.17)", 1);
-        drawLine(experience, knowledge, "rgba(230,236,245,.17)", 1);
+        drawAxis(left, right, "rgba(230,236,245,.22)", 1);
+        drawAxis(classical, quantum, "rgba(230,236,245,.20)", 1);
+        drawAxis(experience, knowledge, "rgba(230,236,245,.20)", 1);
+
+        const finalLabelAlpha = smooth(0.35, 1, sphereGrow) * 0.68;
+        drawAxisLabel("HARDWARE", left, finalLabelAlpha, 30);
+        drawAxisLabel("SOFTWARE", right, finalLabelAlpha, 30);
+        drawAxisLabel("CLASSICAL", classical, finalLabelAlpha, 30);
+        drawAxisLabel("QUANTUM", quantum, finalLabelAlpha, 30);
+        drawAxisLabel("EXPERIENCE", experience, finalLabelAlpha, 30);
+        drawAxisLabel("KNOWLEDGE", knowledge, finalLabelAlpha, 30);
 
         ctx.save();
         ctx.strokeStyle = "rgba(229,236,246,.42)";
