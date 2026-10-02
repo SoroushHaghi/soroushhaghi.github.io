@@ -27,7 +27,6 @@ function CinematicHero() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pointerRef = useRef({ x: 0 });
   const targetPointerRef = useRef({ x: 0 });
-  const lastPointerYRef = useRef<number | null>(null);
   const progressRef = useRef(0);
   const [progress, setProgress] = useState(0);
 
@@ -131,15 +130,32 @@ function CinematicHero() {
   }, [capabilities, targetStates]);
 
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
-      const delta = event.key === "ArrowDown" ? 0.06 : -0.06;
-      const next = clamp01(progressRef.current + delta);
+    const updateProgressFromScroll = () => {
+      const root = rootRef.current;
+      if (!root) return;
+
+      const rect = root.getBoundingClientRect();
+      const travel = Math.max(1, root.offsetHeight - window.innerHeight);
+      const next = clamp01(-rect.top / travel);
+
       progressRef.current = next;
-      setProgress(next);
+      setProgress((current) =>
+        Math.abs(current - next) > 0.0005 ? next : current
+      );
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+
+    updateProgressFromScroll();
+    window.addEventListener("scroll", updateProgressFromScroll, {
+      passive: true,
+    });
+    window.addEventListener("resize", updateProgressFromScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", updateProgressFromScroll);
+      window.removeEventListener("resize", updateProgressFromScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -704,36 +720,13 @@ function CinematicHero() {
       ? "future"
       : "measurement";
 
-  const advanceNarrative = (
-    clientY: number,
-    clientX: number,
-    pointerType: string
-  ) => {
+  const updatePointerX = (clientX: number) => {
     const root = rootRef.current;
     if (!root) return;
 
     const rect = root.getBoundingClientRect();
     targetPointerRef.current.x =
       ((clientX - rect.left) / Math.max(1, rect.width) - 0.5) * 2;
-
-    if (lastPointerYRef.current === null) {
-      lastPointerYRef.current = clientY;
-      return;
-    }
-
-    const dy = clientY - lastPointerYRef.current;
-    lastPointerYRef.current = clientY;
-
-    // One deliberate downward sweep through roughly half the viewport resolves
-    // the full story. Moving upward rewinds the same deterministic sequence.
-    const travel = Math.max(
-      260,
-      window.innerHeight * (pointerType === "touch" ? 0.72 : 0.48)
-    );
-
-    const next = clamp01(progressRef.current + dy / travel);
-    progressRef.current = next;
-    setProgress(next);
   };
 
   return (
@@ -741,15 +734,8 @@ function CinematicHero() {
       ref={rootRef}
       className="cinematic-hero"
       aria-label="Interactive technical profile narrative"
-      onPointerMove={(event) =>
-        advanceNarrative(
-          event.clientY,
-          event.clientX,
-          event.pointerType || "mouse"
-        )
-      }
+      onPointerMove={(event) => updatePointerX(event.clientX)}
       onPointerLeave={() => {
-        lastPointerYRef.current = null;
         targetPointerRef.current.x = 0;
       }}
     >
@@ -856,7 +842,7 @@ function CinematicHero() {
         </div>
 
         <div className="cinematic-scroll-cue" aria-hidden="true">
-          <span>MOVE DOWN TO RESOLVE · MOVE UP TO REWIND</span>
+          <span>SCROLL DOWN TO RESOLVE · SCROLL UP TO REWIND</span>
         </div>
       </div>
     </section>
