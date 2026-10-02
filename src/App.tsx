@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SiteNav from "./components/SiteNav";
 import HomePage from "./pages/HomePage";
-import TriDrawerShell from "./pages/TriDrawerShell";
+import WorkPage from "./pages/WorkPage";
+import EducationPage from "./pages/EducationPage";
 import StyleLab from "./pages/StyleLab";
 import HeroLab from "./pages/HeroLab";
 import WorkLab from "./pages/WorkLab";
@@ -10,9 +11,9 @@ import BackgroundLab from "./pages/BackgroundLab";
 import DynamicBackground from "./components/DynamicBackground";
 import { backgroundDefaults } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
+import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
 import "./dynamicBackground.scss";
-import "./triDrawer.scss";
 
 
 const normalizePath = (path: string) => {
@@ -30,9 +31,12 @@ function App() {
     return normalizePath(fromPublicPath(window.location.pathname));
   });
 
+  useAdaptiveSectionScroll({ enabled: path === "/" });
+
   useEffect(() => {
-    document.documentElement.dataset.theme = "neutral";
-    document.documentElement.dataset.themeMode = "neutral";
+    document.documentElement.dataset.theme = "dark";
+    document.documentElement.dataset.themeMode = "dark";
+    window.localStorage.setItem("portfolio-theme-mode", "dark");
   }, []);
 
   useEffect(() => {
@@ -117,32 +121,20 @@ function App() {
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const [navResetVersion, setNavResetVersion] = useState(0);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [path]);
 
-  const navigate = (nextPath: string, preserveScroll = false) => {
+  const navigate = (nextPath: string) => {
     const normalized = normalizePath(nextPath);
-    if (!preserveScroll) setNavResetVersion((value) => value + 1);
     if (normalized === path) return;
     window.history.pushState({}, "", toPublicPath(normalized));
     setPath(normalized);
   };
 
-  const isDrawerPath = path === "/" || path === "/work" || path === "/education";
-
   const renderPage = () => {
-    if (isDrawerPath) {
-      return (
-        <TriDrawerShell
-          currentPath={path as "/" | "/work" | "/education"}
-          resetVersion={navResetVersion}
-          onNavigate={(nextPath, preserveScroll) => navigate(nextPath, preserveScroll)}
-        />
-      );
-    }
+    if (path === "/work") return <WorkPage />;
+    if (path === "/education") return <EducationPage />;
     if (path === "/lab/background" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <BackgroundLab />;
     }
@@ -162,16 +154,14 @@ function App() {
   };
 
   return (
-    <div className={isDrawerPath ? "site-root tri-mode" : "site-root"}>
+    <div className="site-root">
       <DynamicBackground />
-      <SiteNav currentPath={path} onNavigate={(nextPath) => navigate(nextPath, false)} />
+      <SiteNav currentPath={path} onNavigate={navigate} />
       {renderPage()}
-      {!isDrawerPath && (
-        <footer className="site-footer page-shell">
-          <span>© {new Date().getFullYear()} S. Haghi</span>
-          <span>Built as a modular portfolio system.</span>
-        </footer>
-      )}
+      <footer className="site-footer page-shell">
+        <span>© {new Date().getFullYear()} S. Haghi</span>
+        <span>Built as a modular portfolio system.</span>
+      </footer>
     </div>
   );
 }
