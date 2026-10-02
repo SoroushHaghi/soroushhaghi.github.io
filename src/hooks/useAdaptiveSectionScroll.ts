@@ -43,18 +43,33 @@ export default function useAdaptiveSectionScroll({
   useEffect(() => {
     if (!enabled) return;
 
+    const root = document.documentElement;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-
-    // Touch/coarse-pointer scrolling remains native. This hook normalizes
-    // mouse-wheel and trackpad gestures on desktop/responsive desktop layouts.
-    if (!finePointer.matches) return;
 
     let gestureActive = false;
     let lastWheelAt = 0;
     let animationUntil = 0;
     let releaseTimer = 0;
     let resizeTimer = 0;
+
+    const syncClearance = () => {
+      root.style.setProperty("--section-scroll-clearance", `${getNavClearance()}px`);
+    };
+
+    const scrollToSection = (
+      section: HTMLElement,
+      behavior: ScrollBehavior = reducedMotion.matches ? "auto" : "smooth"
+    ) => {
+      const clearance = getNavClearance();
+      const targetTop =
+        window.scrollY + section.getBoundingClientRect().top - clearance;
+
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior,
+      });
+    };
 
     const releaseWhenIdle = () => {
       window.clearTimeout(releaseTimer);
@@ -70,20 +85,6 @@ export default function useAdaptiveSectionScroll({
       }
 
       gestureActive = false;
-    };
-
-    const scrollToSection = (
-      section: HTMLElement,
-      behavior: ScrollBehavior = reducedMotion.matches ? "auto" : "smooth"
-    ) => {
-      const clearance = getNavClearance();
-      const targetTop =
-        window.scrollY + section.getBoundingClientRect().top - clearance;
-
-      window.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior,
-      });
     };
 
     const onWheel = (event: WheelEvent) => {
@@ -107,9 +108,8 @@ export default function useAdaptiveSectionScroll({
       const now = performance.now();
       lastWheelAt = now;
 
-      // All events belonging to the same physical wheel/trackpad gesture are
-      // consumed after the first navigation. The next section can only fire
-      // after both the gesture and the scroll animation have settled.
+      // A physical wheel/trackpad gesture can emit many wheel events.
+      // Consume all events after the first so one gesture always means one section.
       if (gestureActive) {
         event.preventDefault();
         releaseWhenIdle();
@@ -128,8 +128,8 @@ export default function useAdaptiveSectionScroll({
       const currentIndex = getCurrentSectionIndex(tops, anchorY);
       const targetIndex = currentIndex + direction;
 
-      // Keep native scrolling available beyond the first/last managed section
-      // (for example, to reach the footer).
+      // Leave native scrolling available outside the managed section range,
+      // e.g. below Contact so the footer remains reachable.
       if (targetIndex < 0 || targetIndex >= sections.length) return;
 
       event.preventDefault();
@@ -140,9 +140,7 @@ export default function useAdaptiveSectionScroll({
       releaseWhenIdle();
     };
 
-    // When the viewport changes size, realign the current section after layout
-    // settles. No viewport percentage thresholds are used.
-    const onResize = () => {
+    const realignAfterResize = () => {
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
         if (gestureActive) return;
@@ -154,18 +152,42 @@ export default function useAdaptiveSectionScroll({
         const anchorY = window.scrollY + clearance;
         const tops = getSectionTops(sections);
         const currentIndex = getCurrentSectionIndex(tops, anchorY);
+
+        // Viewport resizing must not invent a new threshold or animation.
         scrollToSection(sections[currentIndex], "auto");
       }, RESIZE_SETTLE_MS);
     };
 
+    const onViewportChange = () => {
+      syncClearance();
+      if (finePointer.matches) realignAfterResize();
+    };
+
+    root.classList.add("home-section-scroll");
+    syncClearance();
+
+    window.addEventListener("resize", onViewportChange, { passive: true });
+    window.addEventListener("orientationchange", onViewportChange);
+
+    // Touch/coarse-pointer devices use native scrolling plus CSS scroll-snap.
+    // Fine pointers use the deterministic wheel state machine above.
+    if (!finePointer.matches) {
+      return () => {
+        root.classList.remove("home-section-scroll");
+        root.style.removeProperty("--section-scroll-clearance");
+        window.removeEventListener("resize", onViewportChange);
+        window.removeEventListener("orientationchange", onViewportChange);
+      };
+    }
+
     window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("resize", onResize, { passive: true });
-    window.addEventListener("orientationchange", onResize);
 
     return () => {
+      root.classList.remove("home-section-scroll");
+      root.style.removeProperty("--section-scroll-clearance");
       window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("orientationchange", onResize);
+      window.removeEventListener("resize", onViewportChange);
+      window.removeEventListener("orientationchange", onViewportChange);
       window.clearTimeout(releaseTimer);
       window.clearTimeout(resizeTimer);
     };
