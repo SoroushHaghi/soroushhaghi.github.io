@@ -258,9 +258,9 @@ export const academicWork: AcademicWorkItem[] = [
   {
     id: "qkd-seminar",
     status: "IN PROGRESS",
-    title: "Seminar 22 — Co-propagation of QKD Signals with the Next Generation of Optical Networks",
-    context: "QTEC seminar",
-    summary: "Current seminar work on coexistence of QKD signals with next-generation optical-network infrastructure.",
+    title: "Co-propagation of QKD Signals with Next-Generation Optical Networks",
+    context: "Master's seminar",
+    summary: "Seminar work on coexistence of QKD signals with next-generation optical-network infrastructure; final presentation is still pending.",
     tags: ["QKD", "Optical networks", "Quantum communication"]
   },
   {
@@ -318,40 +318,60 @@ export const academicWork: AcademicWorkItem[] = [
     context: "Personally named graded coursework",
     summary: "Analytical work on code properties, entropy/source models, Markov processes, relative entropy, typical sets, and related coding calculations.",
     tags: ["Information theory", "Coding theory", "Analytical coursework"]
-  },
-  {
-    id: "ptb-visit",
-    status: "COMPLETED",
-    title: "PTB Academic / Industry Visit",
-    context: "Physikalisch-Technische Bundesanstalt",
-    summary: "Documented visit covering semiconductor/AI, quantum technologies, sensors, QKD, and related research topics; not employment or research contribution.",
-    tags: ["Quantum technologies", "Sensors", "QKD", "Semiconductors"]
   }
 ];
 
-export const masterModules = [
-  { title: "Advanced Applications of Field Theory", detail: "5 ECTS · 3.3" },
-  { title: "Advanced Quantum Technology for Engineers", detail: "5 ECTS · 3.7" },
-  { title: "Introduction to Quantum Information Technology and Quantum Computing", detail: "5 ECTS · 2.7" },
-  { title: "Nonlinear Photonics", detail: "5 ECTS · 2.7" },
-  { title: "Semiconductor Technology", detail: "5 ECTS · 4.0" },
-  { title: "Applied Quantum Computing: Basics and Devices", detail: "5 ECTS · 3.0" },
-  { title: "Gallium Nitride Technology", detail: "5 ECTS · 3.7" },
-  { title: "Coding Theory", detail: "5 ECTS · 3.0" },
-  { title: "Mathematical Foundations of Information Theory and Coding Theory", detail: "5 ECTS · 4.0" },
-  { title: "Network Information Theory", detail: "6 ECTS · 3.0" },
-  { title: "Quantum Communication Networks", detail: "6 ECTS · 2.3" },
-  { title: "German A1.2", detail: "4 ECTS · 2.7" },
-  { title: "Computational Experiments in Coding Theory", detail: "Passed component" },
-  { title: "Mentoring", detail: "Passed component" },
-  { title: "Algorithms and Complexity for Quantum Computing", detail: "5 ECTS graded result · 3.0 · official module heading still marked not yet completed" }
+export const masterCourseAreas = [
+  {
+    title: "Quantum Information & Computing",
+    courses: [
+      "Advanced Quantum Technology for Engineers",
+      "Introduction to Quantum Information Technology and Quantum Computing",
+      "Applied Quantum Computing: Basics and Devices"
+    ]
+  },
+  {
+    title: "Communication & Information",
+    courses: [
+      "Coding Theory",
+      "Mathematical Foundations of Information Theory and Coding Theory",
+      "Network Information Theory",
+      "Quantum Communication Networks"
+    ]
+  },
+  {
+    title: "Photonics, Devices & Fields",
+    courses: [
+      "Advanced Applications of Field Theory",
+      "Nonlinear Photonics",
+      "Semiconductor Technology",
+      "Gallium Nitride Technology"
+    ]
+  }
 ];
 
+export type EducationArtifact = {
+  label: string;
+  note: string;
+  image?: string;
+};
+
+export const degreeArtifacts: Record<string, EducationArtifact> = {
+  master: {
+    label: "Current academic record",
+    note: "Approved public image can be added here later; grades stay hidden on the website."
+  },
+  bachelor: {
+    label: "Degree certificate",
+    note: "Approved certificate image can be added here later."
+  }
+};
+
 export const trainingAndCredentials = [
-  { period: "2026", title: "Quantum Programming Language", issuer: "Sharif University of Technology", status: "In progress" },
-  { period: "2025", title: "Quantum Machine Learning", issuer: "Ariaquanta Institute", status: "Training" },
-  { period: "2025", title: "Machine Learning + Introduction to Programming Using Python", issuer: "Kaggle", status: "Training" },
-  { period: "2024", title: "TOEFL iBT — 95/120", issuer: "ETS", status: "Language credential" },
-  { period: "2023", title: "Data & ML Bootcamp — 96 hours", issuer: "Azad University, Mashhad", status: "Training" },
-  { period: "2021", title: "Python Programming — 40 hours · 100/100", issuer: "Jahad Daneshgahi, Khorasan Razavi", status: "Certificate" }
+  { period: "2026", title: "Quantum Programming Language", issuer: "Sharif University of Technology", status: "In progress", artifact: "Course record" },
+  { period: "2025", title: "Quantum Machine Learning", issuer: "Ariaquanta Institute", status: "Training", artifact: "Certificate" },
+  { period: "2025", title: "Machine Learning + Introduction to Programming Using Python", issuer: "Kaggle", status: "Training", artifact: "Certificates" },
+  { period: "2024", title: "TOEFL iBT", issuer: "ETS", status: "Language credential", artifact: "Score report" },
+  { period: "2023", title: "Data & ML Bootcamp — 96 hours", issuer: "Azad University, Mashhad", status: "Training", artifact: "Certificate" },
+  { period: "2021", title: "Python Programming — 40 hours", issuer: "Jahad Daneshgahi, Khorasan Razavi", status: "Certificate", artifact: "Certificate" }
 ];
