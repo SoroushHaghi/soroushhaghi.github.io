@@ -2834,6 +2834,14 @@ html[data-theme="light"] .lab-token-readout strong {
     grid-template-columns: 24px minmax(120px, 150px) minmax(0, 1fr);
   }
 
+  .timeline-item-visual .timeline-period {
+    grid-column: 2;
+  }
+
+  .timeline-item-visual .timeline-content {
+    grid-column: 3;
+  }
+
   .timeline-artifact-column {
     grid-column: 3;
     width: min(100%, 520px);
