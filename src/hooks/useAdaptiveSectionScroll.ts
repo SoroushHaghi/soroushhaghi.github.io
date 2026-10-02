@@ -9,22 +9,7 @@ const getNavClearance = () => {
   const nav = document.querySelector<HTMLElement>(".site-nav-shell");
   if (!nav) return 0;
   const rect = nav.getBoundingClientRect();
-  return Math.max(0, rect.bottom + 10);
-};
-
-const closestSectionIndex = (sections: HTMLElement[], clearance: number) => {
-  let bestIndex = 0;
-  let bestDistance = Number.POSITIVE_INFINITY;
-
-  sections.forEach((section, index) => {
-    const distance = Math.abs(section.getBoundingClientRect().top - clearance);
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      bestIndex = index;
-    }
-  });
-
-  return bestIndex;
+  return Math.max(0, rect.bottom + 12);
 };
 
 export default function useAdaptiveSectionScroll({
@@ -60,64 +45,73 @@ export default function useAdaptiveSectionScroll({
 
       if (sections.length < 2) return;
 
+      const direction = Math.sign(event.deltaY);
+      if (!direction) return;
+
       const now = performance.now();
       if (now < lockedUntil) {
         event.preventDefault();
         return;
       }
 
-      const direction = Math.sign(event.deltaY);
-      if (!direction) return;
-
       const clearance = getNavClearance();
       const viewportHeight = window.innerHeight;
-      const currentIndex = closestSectionIndex(sections, clearance);
-      const current = sections[currentIndex];
-      const currentRect = current.getBoundingClientRect();
-
-      // If a future section becomes taller than the viewport, keep ordinary
-      // scrolling inside it. Snap only when the user reaches its boundary.
+      const tolerance = Math.max(24, viewportHeight * 0.035);
       const usableViewport = Math.max(1, viewportHeight - clearance);
-      const isTallSection = currentRect.height > usableViewport * 1.35;
-      const boundaryTolerance = Math.max(28, viewportHeight * 0.05);
 
-      if (isTallSection) {
-        const canScrollInsideDown =
-          direction > 0 &&
-          currentRect.bottom > viewportHeight + boundaryTolerance;
-        const canScrollInsideUp =
-          direction < 0 &&
-          currentRect.top < clearance - boundaryTolerance;
+      const active = sections.find((section) => {
+        const rect = section.getBoundingClientRect();
+        return rect.top <= clearance + tolerance && rect.bottom > clearance + tolerance;
+      });
 
-        if (canScrollInsideDown || canScrollInsideUp) {
-          wheelTotal = 0;
-          return;
+      if (active) {
+        const rect = active.getBoundingClientRect();
+        const isTall = rect.height > usableViewport * 1.25;
+
+        if (isTall) {
+          const canContinueDown =
+            direction > 0 && rect.bottom > viewportHeight + tolerance;
+          const canContinueUp =
+            direction < 0 && rect.top < clearance - tolerance;
+
+          if (canContinueDown || canContinueUp) {
+            wheelTotal = 0;
+            return;
+          }
         }
       }
 
       wheelTotal += event.deltaY;
+      const trigger = Math.max(24, Math.min(72, viewportHeight * 0.045));
 
-      // Scale the trigger with viewport height so mouse wheels and trackpads
-      // feel consistent without tying the behavior to a hard-coded distance.
-      const trigger = Math.max(28, Math.min(88, viewportHeight * 0.055));
       if (Math.abs(wheelTotal) < trigger) {
         event.preventDefault();
         return;
       }
 
-      const step = wheelTotal > 0 ? 1 : -1;
+      const currentY = clearance;
+      const rects = sections.map((section) => ({
+        section,
+        rect: section.getBoundingClientRect(),
+      }));
+
+      let target: HTMLElement | undefined;
+
+      if (direction > 0) {
+        target = rects
+          .filter(({ rect }) => rect.top > currentY + tolerance)
+          .sort((a, b) => a.rect.top - b.rect.top)[0]?.section;
+      } else {
+        target = rects
+          .filter(({ rect }) => rect.top < currentY - tolerance)
+          .sort((a, b) => b.rect.top - a.rect.top)[0]?.section;
+      }
+
       wheelTotal = 0;
-
-      const targetIndex = Math.min(
-        sections.length - 1,
-        Math.max(0, currentIndex + step)
-      );
-
-      if (targetIndex === currentIndex) return;
+      if (!target) return;
 
       event.preventDefault();
 
-      const target = sections[targetIndex];
       const targetTop =
         window.scrollY + target.getBoundingClientRect().top - getNavClearance();
 
@@ -129,7 +123,7 @@ export default function useAdaptiveSectionScroll({
       const distance = Math.abs(targetTop - window.scrollY);
       const viewportUnits = distance / Math.max(1, viewportHeight);
       lockedUntil =
-        now + Math.max(420, Math.min(900, 420 + viewportUnits * 180));
+        now + Math.max(420, Math.min(880, 400 + viewportUnits * 170));
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
