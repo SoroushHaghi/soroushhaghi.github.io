@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { organizationMarks } from "../siteConfig";
 
-const visibleCount = 6;
+const desktopVisibleCount = 6;
+const mobileVisibleCount = 3;
 const rotationMs = 2800;
 
 type Mark = (typeof organizationMarks)[number];
+
+const getVisibleCount = () =>
+  window.matchMedia("(max-width: 900px)").matches
+    ? mobileVisibleCount
+    : desktopVisibleCount;
 
 function MarkVisual({ item }: { item: Mark }) {
   const [failed, setFailed] = useState(false);
@@ -30,12 +36,29 @@ function MarkVisual({ item }: { item: Mark }) {
 }
 
 function AffiliationRail() {
-  const [visible, setVisible] = useState(() => organizationMarks.slice(0, visibleCount));
+  const [visibleCount, setVisibleCount] = useState(getVisibleCount);
+  const [visible, setVisible] = useState(() =>
+    organizationMarks.slice(0, getVisibleCount())
+  );
   const cursor = useRef(visibleCount);
   const slot = useRef(0);
 
   useEffect(() => {
-    // Warm the image cache so a mark is ready before it rotates into view.
+    const media = window.matchMedia("(max-width: 900px)");
+    const onChange = () => setVisibleCount(media.matches ? mobileVisibleCount : desktopVisibleCount);
+
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    setVisible(organizationMarks.slice(0, visibleCount));
+    cursor.current = visibleCount;
+    slot.current = 0;
+  }, [visibleCount]);
+
+  useEffect(() => {
+    // Warm the cache so a mark is ready before it rotates into view.
     organizationMarks.forEach((item) => {
       const image = new Image();
       image.decoding = "async";
@@ -56,7 +79,7 @@ function AffiliationRail() {
     }, rotationMs);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [visibleCount]);
 
   return (
     <div className="organization-rail" aria-label="Affiliations and organizational context">
