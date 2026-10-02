@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { navItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
-import Wordmark from "./Wordmark";
+import HomeIcon from "./HomeIcon";
 
 type SiteNavProps = {
   currentPath: string;
@@ -55,6 +55,11 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
     };
   }, [mobileOpen]);
 
+  const currentLabel =
+    currentPath === "/work" ? "WORK" :
+    currentPath === "/education" ? "EDUCATION" :
+    currentPath === "/" ? "HOME" : "";
+
   const go = (event: React.MouseEvent<HTMLAnchorElement>, href: string, external?: boolean) => {
     setMobileOpen(false);
     if (external) return;
@@ -66,14 +71,17 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
     <>
       <header className={`site-nav-shell ${scrolled ? "is-scrolled" : ""} ${mobileOpen ? "is-open" : ""}`}>
         <nav className="site-nav glass-surface" aria-label="Primary">
-          <a
-            href={toPublicPath("/")}
-            className="brand-mark"
-            onClick={(event) => go(event, "/")}
-            aria-label="S. Haghi — Home"
-          >
-            <Wordmark variant="nav" />
-          </a>
+          <div className="nav-home-cluster">
+            <a
+              href={toPublicPath("/")}
+              className="brand-mark home-mark"
+              onClick={(event) => go(event, "/")}
+              aria-label="Home"
+            >
+              <HomeIcon />
+            </a>
+            <span className="nav-current-label">{currentLabel}</span>
+          </div>
 
           <div className="desktop-nav">
             {navItems.map((item) => (
