@@ -9,7 +9,7 @@ import WorkLab from "./pages/WorkLab";
 import EducationLab from "./pages/EducationLab";
 import BackgroundLab from "./pages/BackgroundLab";
 import DynamicBackground from "./components/DynamicBackground";
-import { backgroundDefaults } from "./backgroundConfig";
+import { backgroundDefaults, backgroundStorageKey } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
@@ -41,7 +41,7 @@ function App() {
 
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem("portfolio-background-lab-v1");
+      const saved = window.localStorage.getItem(backgroundStorageKey);
       const values = saved ? { ...backgroundDefaults, ...JSON.parse(saved) } : backgroundDefaults;
       const root = document.documentElement;
       root.dataset.backgroundMode = values.mode;
