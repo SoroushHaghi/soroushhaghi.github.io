@@ -52,6 +52,12 @@ export const backgroundPresets = [
     copy: "Combined field for testing the full material system",
     values: { mode: "layered", hue: 190, intensity: 0.24, edge: 0.24, speed: 48, scale: 0.96 },
   },
+  {
+    id: "layered-bands",
+    title: "Layered bands",
+    copy: "Higher glass response with slow optical bands",
+    values: { mode: "layered", hue: 199, intensity: 0.49, edge: 0.47, speed: 35, scale: 0.96 },
+  },
 ] satisfies Array<{ id: string; title: string; copy: string; values: BackgroundValues }>;
 
 export const backgroundStorageKey = "portfolio-background-lab-v1";
