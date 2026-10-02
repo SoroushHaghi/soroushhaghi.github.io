@@ -51,8 +51,8 @@ function EducationLab() {
       <div className="hero-lab-head">
         <div>
           <div className="eyebrow">DEV ONLY · EDUCATION LAB</div>
-          <h1>Education density</h1>
-          <p>Adjust only the uncertain layout balance. These values affect the real Education page and stay in this browser.</p>
+          <h1>Education timeline</h1>
+          <p>Same visual language as Work, with stronger degree anchors. These controls only tune the remaining layout balance.</p>
         </div>
         <button className="button secondary" type="button" onClick={reset}>Reset</button>
       </div>
@@ -68,11 +68,11 @@ function EducationLab() {
             <input type="range" min="180" max="300" step="10" value={values.artifactHeight} onChange={(e) => update("artifactHeight", Number(e.target.value))} />
           </label>
           <label>
-            <span>Degree title scale <strong>{values.titleScale.toFixed(2)}</strong></span>
+            <span>Degree emphasis <strong>{values.titleScale.toFixed(2)}</strong></span>
             <input type="range" min="0.86" max="1.1" step="0.01" value={values.titleScale} onChange={(e) => update("titleScale", Number(e.target.value))} />
           </label>
           <label>
-            <span>Academic row spacing <strong>{values.rowSpace}px</strong></span>
+            <span>Row spacing <strong>{values.rowSpace}px</strong></span>
             <input type="range" min="22" max="54" step="2" value={values.rowSpace} onChange={(e) => update("rowSpace", Number(e.target.value))} />
           </label>
 
@@ -83,21 +83,25 @@ function EducationLab() {
         </aside>
 
         <section className="education-lab-preview">
-          <div className="education-lab-degree">
-            <div>
-              <span>2024 — PRESENT</span>
+          <div className="education-lab-line education-lab-line-degree">
+            <div className="education-lab-rail"><span /></div>
+            <div className="education-lab-period">2024 — PRESENT<br /><small>DEGREE</small></div>
+            <div className="education-lab-copy">
+              <span>IN PROGRESS</span>
               <strong>M.Sc. Quantum Technologies</strong>
-              <p>Degree information and focus remain on the left.</p>
+              <p>Degree anchor with concise focus and expandable coursework.</p>
             </div>
-            <div className="education-lab-doc">DOCUMENT IMAGE</div>
+            <div className="education-lab-doc">DEGREE / RECORD</div>
           </div>
-          <div className="education-lab-degree education-lab-degree-muted">
-            <div>
-              <span>ACADEMIC WORK</span>
+          <div className="education-lab-line education-lab-line-muted">
+            <div className="education-lab-rail"><span /></div>
+            <div className="education-lab-period">M.SC.<br /><small>ACADEMIC WORK</small></div>
+            <div className="education-lab-copy">
+              <span>COMPLETED</span>
               <strong>Presentation / coursework</strong>
-              <p>Short description, then visual proof or slides on the right.</p>
+              <p>Short explanation and artifact on the right.</p>
             </div>
-            <div className="education-lab-doc">ARTIFACT</div>
+            <div className="education-lab-doc">SLIDE / DOCUMENT</div>
           </div>
         </section>
       </div>
