@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { WorkArtifact } from "../portfolioContent";
 
 type Props = {
   artifact?: WorkArtifact;
   title: string;
+  tags?: string[];
 };
 
-function WorkArtifactPreview({ artifact, title }: Props) {
-  const [loaded, setLoaded] = useState(false);
-
+function WorkArtifactPreview({ artifact, title, tags = [] }: Props) {
   if (!artifact) {
     return (
       <div className="work-artifact work-artifact-empty" aria-hidden="true">
@@ -17,45 +16,58 @@ function WorkArtifactPreview({ artifact, title }: Props) {
     );
   }
 
-  if (artifact.kind === "gif" && artifact.image) {
+  const primaryHref = artifact.href?.replace("?embed=true", "");
+
+  if (artifact.kind === "live") {
     return (
       <a
-        className="work-artifact work-artifact-gif"
+        className="work-artifact work-artifact-poster work-artifact-poster-live"
+        href={primaryHref}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={artifact.label}
+      >
+        <div className="artifact-poster-top">
+          <span className="artifact-live-dot" />
+          <span>LIVE DEMO AVAILABLE</span>
+        </div>
+        <div className="artifact-poster-window" aria-hidden="true">
+          <div className="artifact-poster-bar"><i /><i /><i /></div>
+          <div className="artifact-poster-grid">
+            <span /><span /><span /><span />
+          </div>
+        </div>
+        <div className="artifact-poster-copy">
+          <strong>{title}</strong>
+          <span>{tags.slice(0, 2).join(" · ")}</span>
+        </div>
+        <span className="artifact-poster-action">OPEN DEMO ↗</span>
+      </a>
+    );
+  }
+
+  if (artifact.kind === "gif") {
+    return (
+      <a
+        className="work-artifact work-artifact-poster work-artifact-poster-gif"
         href={artifact.href}
         target="_blank"
         rel="noreferrer"
         aria-label={artifact.label}
       >
-        <img src={artifact.image} alt={artifact.label} loading="lazy" />
-        <span className="artifact-chip">DEMO GIF</span>
+        <div className="artifact-poster-top">
+          <span className="artifact-play">▶</span>
+          <span>DEMO AVAILABLE</span>
+        </div>
+        <div className="artifact-poster-motion" aria-hidden="true">
+          <span /><span /><span /><span /><span />
+        </div>
+        <div className="artifact-poster-copy">
+          <strong>{title}</strong>
+          <span>{tags.slice(0, 2).join(" · ")}</span>
+        </div>
+        <span className="artifact-poster-action">OPEN DEMO ↗</span>
       </a>
-    );
-  }
-
-  if (artifact.kind === "live" && artifact.href) {
-    return (
-      <div className="work-artifact work-artifact-live">
-        {loaded ? (
-          <>
-            <iframe
-              src={artifact.href}
-              title={artifact.label}
-              loading="lazy"
-              allow="clipboard-read; clipboard-write"
-            />
-            <a className="artifact-open-link" href={artifact.href.replace("?embed=true", "")} target="_blank" rel="noreferrer">
-              Open full demo ↗
-            </a>
-          </>
-        ) : (
-          <button type="button" className="artifact-load" onClick={() => setLoaded(true)}>
-            <span className="artifact-live-dot" />
-            <strong>{artifact.label}</strong>
-            <small>{artifact.note ?? "Load live preview"}</small>
-            <span className="artifact-load-action">LOAD DEMO</span>
-          </button>
-        )}
-      </div>
     );
   }
 
@@ -73,7 +85,8 @@ function WorkArtifactPreview({ artifact, title }: Props) {
           <span>PUBLIC REPOSITORY</span>
         </div>
         <strong>{artifact.repo ?? title}</strong>
-        <span className="artifact-repo-link">Open GitHub ↗</span>
+        <span className="artifact-repo-meta">{tags.slice(0, 2).join(" · ")}</span>
+        <span className="artifact-repo-link">OPEN GITHUB ↗</span>
       </a>
     );
   }
