@@ -762,7 +762,7 @@ function CinematicHero() {
 
         <div className={`cinematic-copy cinematic-copy-${phase}`}>
           {phase === "basis" && (
-            <div className="cinematic-card micro">
+            <div className="cinematic-card equation-card">
               <div className="cinematic-kicker">01 / BASIS</div>
               <p>Hardware ↔ Software · Classical ↔ Quantum</p>
             </div>
