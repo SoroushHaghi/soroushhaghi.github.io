@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
 import EducationPage from "./pages/EducationPage";
 import StyleLab from "./pages/StyleLab";
+import HeroLab from "./pages/HeroLab";
 import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
@@ -70,6 +71,21 @@ function App() {
   }, []);
 
   useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("portfolio-hero-lab-v1");
+      if (!saved) return;
+      const values = JSON.parse(saved);
+      const root = document.documentElement;
+      if (typeof values.height === "number") root.style.setProperty("--hero-min-height", values.height + "svh");
+      if (typeof values.gap === "number") root.style.setProperty("--hero-gap", values.gap + "px");
+      if (typeof values.nameScale === "number") root.style.setProperty("--hero-name-scale", String(values.nameScale));
+      if (typeof values.visualScale === "number") root.style.setProperty("--hero-visual-scale", String(values.visualScale));
+    } catch {
+      // Keep repository defaults if local preview state is malformed.
+    }
+  }, []);
+
+  useEffect(() => {
     const onPopState = () => setPath(normalizePath(fromPublicPath(window.location.pathname)));
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
@@ -89,6 +105,9 @@ function App() {
   const renderPage = () => {
     if (path === "/work") return <WorkPage />;
     if (path === "/education") return <EducationPage />;
+    if (path === "/lab/hero" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
+      return <HeroLab />;
+    }
     if (path === "/lab" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
       return <StyleLab themeMode={themeMode} onThemeModeChange={setThemeMode} />;
     }
