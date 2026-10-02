@@ -7,6 +7,7 @@ import StyleLab from "./pages/StyleLab";
 import HeroLab from "./pages/HeroLab";
 import WorkLab from "./pages/WorkLab";
 import EducationLab from "./pages/EducationLab";
+import DynamicBackground from "./components/DynamicBackground";
 import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
@@ -33,6 +34,22 @@ function App() {
     document.documentElement.dataset.theme = "dark";
     document.documentElement.dataset.themeMode = "dark";
     window.localStorage.setItem("portfolio-theme-mode", "dark");
+  }, []);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("portfolio-background-lab-v1");
+      const values = saved ? JSON.parse(saved) : null;
+      const root = document.documentElement;
+      root.dataset.backgroundMode = values?.mode ?? "off";
+      if (typeof values?.hue === "number") root.style.setProperty("--dynamic-hue", String(values.hue));
+      if (typeof values?.intensity === "number") root.style.setProperty("--dynamic-intensity", String(values.intensity));
+      if (typeof values?.edgeResponse === "number") root.style.setProperty("--dynamic-edge", String(values.edgeResponse));
+      if (typeof values?.speed === "number") root.style.setProperty("--dynamic-speed", values.speed + "s");
+      if (typeof values?.fieldScale === "number") root.style.setProperty("--dynamic-field-scale", String(values.fieldScale));
+    } catch {
+      document.documentElement.dataset.backgroundMode = "off";
+    }
   }, []);
 
   useEffect(() => {
@@ -137,6 +154,7 @@ function App() {
 
   return (
     <div className="site-root">
+      <DynamicBackground />
       <SiteNav currentPath={path} onNavigate={navigate} />
       {renderPage()}
       <footer className="site-footer page-shell">
