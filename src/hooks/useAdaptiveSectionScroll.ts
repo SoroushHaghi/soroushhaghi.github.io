@@ -72,14 +72,17 @@ export default function useAdaptiveSectionScroll({
       gestureActive = false;
     };
 
-    const scrollToSection = (section: HTMLElement) => {
+    const scrollToSection = (
+      section: HTMLElement,
+      behavior: ScrollBehavior = reducedMotion.matches ? "auto" : "smooth"
+    ) => {
       const clearance = getNavClearance();
       const targetTop =
         window.scrollY + section.getBoundingClientRect().top - clearance;
 
       window.scrollTo({
         top: Math.max(0, targetTop),
-        behavior: reducedMotion.matches ? "auto" : "smooth",
+        behavior,
       });
     };
 
@@ -151,7 +154,7 @@ export default function useAdaptiveSectionScroll({
         const anchorY = window.scrollY + clearance;
         const tops = getSectionTops(sections);
         const currentIndex = getCurrentSectionIndex(tops, anchorY);
-        scrollToSection(sections[currentIndex]);
+        scrollToSection(sections[currentIndex], "auto");
       }, RESIZE_SETTLE_MS);
     };
 
