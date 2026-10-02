@@ -1,92 +1,110 @@
 import React from "react";
 import SectionHeading from "../components/SectionHeading";
-import { academicWork, masterModules, trainingAndCredentials } from "../portfolioContent";
+import EducationArtifactPreview from "../components/EducationArtifactPreview";
+import {
+  academicWork,
+  degreeArtifacts,
+  masterCourseAreas,
+  trainingAndCredentials
+} from "../portfolioContent";
 
 function EducationPage() {
   return (
     <main className="subpage page-shell education-detail-page">
       <SectionHeading
         eyebrow="EDUCATION"
-        title="Degrees, coursework, presentations and academic technical work."
-        copy="The academic page separates degree progress, completed coursework, presentations and training so the evidence stays readable without turning coursework into professional experience."
+        title="Degrees, academic work and credentials."
+        copy="Academic evidence stays compact here: degree trajectory first, then selected presentations/coursework, then credentials."
       />
 
       <section className="education-block">
         <div className="education-block-head">
           <span className="eyebrow">DEGREES</span>
-          <p>Formal academic trajectory.</p>
+          <p>Formal academic trajectory, without publishing detailed grades.</p>
         </div>
 
         <div className="degree-stack">
-          <article className="degree-record degree-record-primary">
+          <article className="degree-record degree-record-with-artifact">
             <div className="degree-period">Oct 2024 — Present</div>
             <div className="degree-body">
               <span className="degree-status">IN PROGRESS · 66/120 ECTS</span>
               <h2>M.Sc. Quantum Technologies in Electrical and Computer Engineering</h2>
               <p className="degree-institution">Technische Universität Braunschweig</p>
-              <div className="degree-focus">
-                <span>Quantum information processing & computing</span>
-                <span>Quantum structures, devices & photonics</span>
-                <span>Communication, information & field theory</span>
+
+              <div className="degree-focus degree-focus-compact">
+                <span>Quantum Information & Computing</span>
+                <span>Communication & Information</span>
+                <span>Photonics, Devices & Fields</span>
               </div>
-              <p className="degree-note">Current degree path is being completed toward the industrial internship and thesis phases.</p>
+
+              <details className="education-details">
+                <summary>Selected coursework</summary>
+                <div className="course-area-list">
+                  {masterCourseAreas.map((area) => (
+                    <div className="course-area" key={area.title}>
+                      <strong>{area.title}</strong>
+                      <ul>
+                        {area.courses.map((course) => <li key={course}>{course}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </div>
+            <div className="degree-artifact-column">
+              <EducationArtifactPreview artifact={degreeArtifacts.master} />
             </div>
           </article>
 
-          <article className="degree-record">
+          <article className="degree-record degree-record-with-artifact">
             <div className="degree-period">2018 — Feb 2024</div>
             <div className="degree-body">
-              <span className="degree-status">COMPLETED · 150 CREDITS</span>
+              <span className="degree-status">COMPLETED</span>
               <h2>B.Sc. Computer Engineering — AI specialization</h2>
               <p className="degree-institution">Islamic Azad University, Mashhad Branch</p>
-              <div className="degree-metrics">
-                <span><strong>17.28/20</strong><small>Overall grade</small></span>
-                <span><strong>5 / 131</strong><small>Program rank</small></span>
-              </div>
-              <div className="degree-focus">
-                <span>Software, programming & algorithms</span>
-                <span>AI, machine learning & computer vision</span>
-                <span>Embedded systems & hardware</span>
-                <span>Databases & information systems</span>
+
+              <div className="degree-achievement">Ranked 5th of 131 students</div>
+
+              <div className="degree-focus degree-focus-compact">
+                <span>Software & Algorithms</span>
+                <span>AI & Computer Vision</span>
+                <span>Embedded Systems & Hardware</span>
+                <span>Databases & Information Systems</span>
               </div>
             </div>
+            <div className="degree-artifact-column">
+              <EducationArtifactPreview artifact={degreeArtifacts.bachelor} />
+            </div>
           </article>
-        </div>
-      </section>
-
-      <section className="education-block">
-        <div className="education-block-head">
-          <span className="eyebrow">MASTER'S COURSEWORK</span>
-          <p>Completed or formally credited coursework, with the transcript boundary preserved.</p>
-        </div>
-
-        <div className="module-list">
-          {masterModules.map((module) => (
-            <article className="module-row" key={module.title}>
-              <strong>{module.title}</strong>
-              <span>{module.detail}</span>
-            </article>
-          ))}
         </div>
       </section>
 
       <section className="education-block">
         <div className="education-block-head">
           <span className="eyebrow">ACADEMIC WORK & PRESENTATIONS</span>
-          <p>Presentations, analytical portfolios, graded work and academic activities with their actual scope retained.</p>
+          <p>Only work worth showing publicly; internal course numbering and visit records are omitted here.</p>
         </div>
 
-        <div className="academic-work-grid">
+        <div className="academic-timeline">
           {academicWork.map((item) => (
-            <article className="academic-work-card" key={item.id}>
-              <div className="academic-work-meta">
-                <span>{item.status}</span>
+            <article className="academic-timeline-item" key={item.id}>
+              <div className="academic-timeline-status">{item.status}</div>
+              <div className="academic-timeline-copy">
                 <span>{item.context}</span>
+                <h3>{item.title}</h3>
+                <p>{item.summary}</p>
+                <div className="academic-work-tags">
+                  {item.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
               </div>
-              <h3>{item.title}</h3>
-              <p>{item.summary}</p>
-              <div className="academic-work-tags">
-                {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+              <div className="academic-timeline-artifact">
+                <EducationArtifactPreview
+                  compact
+                  artifact={{
+                    label: item.status === "IN PROGRESS" ? "Presentation in preparation" : "Presentation / academic artifact",
+                    note: "Approved slide or document image can be added here later."
+                  }}
+                />
               </div>
             </article>
           ))}
@@ -96,18 +114,27 @@ function EducationPage() {
       <section className="education-block education-block-last">
         <div className="education-block-head">
           <span className="eyebrow">TRAINING & CREDENTIALS</span>
-          <p>Additional structured learning and credentials outside the degree timeline.</p>
+          <p>Certificates and structured learning, with a visual slot ready for the actual credential image.</p>
         </div>
 
-        <div className="credential-list">
+        <div className="credential-list credential-list-visual">
           {trainingAndCredentials.map((item) => (
-            <article className="credential-row" key={item.period + item.title}>
+            <article className="credential-row credential-row-visual" key={item.period + item.title}>
               <span className="credential-period">{item.period}</span>
-              <div>
+              <div className="credential-main">
                 <strong>{item.title}</strong>
                 <span>{item.issuer}</span>
               </div>
               <small>{item.status}</small>
+              <div className="credential-artifact">
+                <EducationArtifactPreview
+                  compact
+                  artifact={{
+                    label: item.artifact ?? "Credential",
+                    note: "Approved image can be added here later."
+                  }}
+                />
+              </div>
             </article>
           ))}
         </div>
