@@ -1,158 +1,70 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { expertiseCapabilities, expertiseTargets } from "../expertise/expertiseData";
+import React, { useEffect, useMemo, useRef } from "react";
+import { expertiseCapabilities } from "../expertise/expertiseData";
 import "./cinematicHero.scss";
 
 type Point3 = { x: number; y: number; z: number };
 
+const SPHERE_R = 115;
+const CAMERA_DISTANCE = 430;
+const VIEW_PITCH = (-68 * Math.PI) / 180;
+const VIEW_ROLL = (20 * Math.PI) / 180;
+const VIEW_SPIN = -0.35;
+
+const KNOWLEDGE = "#4b86d8";
+const EXPERIENCE = "#cf5a5a";
+
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
+
 const smooth = (a: number, b: number, v: number) => {
   const t = clamp01((v - a) / Math.max(1e-6, b - a));
   return t * t * (3 - 2 * t);
 };
-const mix = (a: number, b: number, t: number) => a + (b - a) * t;
-const rgba = (hex: string, a: number) => {
-  const v = hex.replace("#", "");
-  const r = parseInt(v.slice(0, 2), 16);
-  const g = parseInt(v.slice(2, 4), 16);
-  const b = parseInt(v.slice(4, 6), 16);
-  return `rgba(${r},${g},${b},${a})`;
-};
-
-const KNOWLEDGE = "#4b86d8";
-const EXPERIENCE = "#cf5a5a";
-const TARGET = "#e4c449";
 
 function CinematicHero() {
   const rootRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
-  const [progress, setProgress] = useState(0);
 
-  const capabilities = useMemo(() => {
-    const projected = expertiseCapabilities.map((item) => {
-      const zCoordinate =
-        70 * ((item.K - item.E) / (item.K + item.E + 1e-6));
-      const directionLength =
-        Math.hypot(item.x, item.y, zCoordinate) || 1;
-      const strength = Math.max(0, Math.min(1, item.score / 5));
-      const azimuth = Math.atan2(item.y, item.x);
-      const elevation = Math.atan2(
-        zCoordinate,
-        Math.hypot(item.x, item.y)
-      );
+  const capabilities = useMemo(
+    () =>
+      expertiseCapabilities.map((item) => {
+        const z =
+          70 * ((item.K - item.E) / (item.K + item.E + 1e-6));
+        const n = Math.hypot(item.x, item.y, z) || 1;
+        const strength = clamp01(item.score / 5);
+        const length = strength * SPHERE_R;
 
-      return {
-        ...item,
-        planeX: item.x / 100,
-        planeY: item.y / 100,
-        zCoordinate,
-        strength,
-        azimuth,
-        elevation,
-        dir: {
-          x: item.x / directionLength,
-          y: item.y / directionLength,
-          z: zCoordinate / directionLength,
-        },
-      };
-    });
-
-    const amplitudeNorm =
-      Math.sqrt(
-        projected.reduce(
-          (sum, item) => sum + item.strength * item.strength,
-          0
-        )
-      ) || 1;
-
-    return projected.map((item) => ({
-      ...item,
-      amplitude: item.strength / amplitudeNorm,
-    }));
-  }, []);
-
-  const targetStates = useMemo(() => {
-    const norm =
-      Math.sqrt(
-        expertiseTargets.reduce(
-          (sum, item) => sum + item.support * item.support,
-          0
-        )
-      ) || 1;
-
-    return expertiseTargets.map((item) => {
-      const length =
-        Math.hypot(item.pos.x, item.pos.y, item.pos.z) || 1;
-      const amplitude = item.support / norm;
-
-      return {
-        ...item,
-        direction: {
-          x: item.pos.x / length,
-          y: item.pos.y / length,
-          z: item.pos.z / length,
-        },
-        amplitude,
-        probability: amplitude * amplitude,
-      };
-    });
-  }, []);
-
-  const selectedTarget = useMemo(() => {
-    let hash = 2166136261;
-    const source = capabilities
-      .map(
-        (item) =>
-          item.id +
-          ":" +
-          item.strength.toFixed(4) +
-          ":" +
-          item.zCoordinate.toFixed(3)
-      )
-      .join("|");
-
-    for (let i = 0; i < source.length; i += 1) {
-      hash ^= source.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-
-    const sample = ((hash >>> 0) % 1000003) / 1000003;
-    let cumulative = 0;
-
-    for (const target of targetStates) {
-      cumulative += target.probability;
-      if (sample <= cumulative) return target;
-    }
-
-    return targetStates[targetStates.length - 1];
-  }, [capabilities, targetStates]);
+        return {
+          ...item,
+          base: { x: item.x, y: item.y, z: 0 } as Point3,
+          direction: {
+            x: item.x / n,
+            y: item.y / n,
+            z: z / n,
+          } as Point3,
+          length,
+        };
+      }),
+    []
+  );
 
   useEffect(() => {
-    const updateProgressFromScroll = () => {
+    const updateProgress = () => {
       const root = rootRef.current;
       if (!root) return;
 
       const rect = root.getBoundingClientRect();
       const travel = Math.max(1, root.offsetHeight - window.innerHeight);
-      const next = clamp01(-rect.top / travel);
-
-      progressRef.current = next;
-      setProgress((current) =>
-        Math.abs(current - next) > 0.0005 ? next : current
-      );
+      progressRef.current = clamp01(-rect.top / travel);
     };
 
-    updateProgressFromScroll();
-    window.addEventListener("scroll", updateProgressFromScroll, {
-      passive: true,
-    });
-    window.addEventListener("resize", updateProgressFromScroll, {
-      passive: true,
-    });
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", updateProgressFromScroll);
-      window.removeEventListener("resize", updateProgressFromScroll);
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
     };
   }, []);
 
@@ -161,6 +73,7 @@ function CinematicHero() {
 
     const draw = () => {
       frame = requestAnimationFrame(draw);
+
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -168,214 +81,45 @@ function CinematicHero() {
       const W = Math.max(1, rect.width);
       const H = Math.max(1, rect.height);
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      const w = Math.round(W * dpr);
-      const h = Math.round(H * dpr);
 
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
+      const targetW = Math.round(W * dpr);
+      const targetH = Math.round(H * dpr);
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
       }
 
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
+
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
       const p = progressRef.current;
       const centerX = W * 0.5;
       const centerY = H * 0.5;
-      const planeScale = Math.min(W * 0.34, H * 0.34);
-      const sphereR = Math.min(W, H) * (W < 760 ? 0.31 : 0.285);
+      const scale = Math.min(W, H) / 330;
 
-      const stage2d = smooth(0.035, 0.13, p);
-      const planeIn = smooth(0.18, 0.30, p);
-      const pointsIn = smooth(0.27, 0.42, p);
-      const zIn = smooth(0.40, 0.48, p);
-      const knowledgeGrow = smooth(0.44, 0.52, p);
-      const experienceGrow = smooth(0.50, 0.58, p);
-      const vectorResolve = smooth(0.58, 0.66, p);
-      const recenter = smooth(0.65, 0.76, p);
-      const sphereIn = smooth(0.76, 0.84, p);
-      const targetsIn = smooth(0.85, 0.92, p);
-      const collapse = smooth(0.94, 0.995, p);
-      const planeFade = 1 - smooth(0.62, 0.75, p);
+      const xAxisIn = smooth(0.03, 0.11, p);
+      const yAxisIn = smooth(0.10, 0.19, p);
+      const planeIn = smooth(0.17, 0.29, p);
+      const pointsIn = smooth(0.28, 0.41, p);
+      const view3D = smooth(0.40, 0.57, p);
+      const rodGrow = smooth(0.43, 0.60, p);
+      const recenter = smooth(0.60, 0.80, p);
+      const planeFade = 1 - smooth(0.64, 0.82, p);
+      const sphereGrow = smooth(0.80, 0.98, p);
 
-      ctx.save();
-      ctx.fillStyle = "#020406";
-      ctx.fillRect(0, 0, W, H);
+      const spin = VIEW_SPIN * view3D;
+      const pitch = VIEW_PITCH * view3D;
+      const roll = VIEW_ROLL * view3D;
 
-      const glow = ctx.createRadialGradient(
-        centerX,
-        centerY,
-        0,
-        centerX,
-        centerY,
-        Math.max(W, H) * 0.72
-      );
-      glow.addColorStop(0, "rgba(40,55,76,.15)");
-      glow.addColorStop(0.48, "rgba(14,20,29,.065)");
-      glow.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, W, H);
-      ctx.restore();
-
-      const projectPlane = (x: number, y: number, z = 0): Point3 => {
-        const tiltX = mix(0, -0.50, planeIn);
-        const tiltZ = mix(0, -0.12, planeIn);
-        const cz = Math.cos(tiltZ);
-        const sz = Math.sin(tiltZ);
-        const x1 = cz * x - sz * y;
-        const y1 = sz * x + cz * y;
-        const cx = Math.cos(tiltX);
-        const sx = Math.sin(tiltX);
-
-        return {
-          x: x1,
-          y: cx * y1 - sx * z,
-          z: sx * y1 + cx * z,
-        };
-      };
-
-      const toScreen = (v: Point3, scale = planeScale) => {
-        const camera = 3.8;
-        const persp = camera / (camera - v.z * 0.65);
-        return {
-          x: centerX + v.x * scale * persp,
-          y: centerY - v.y * scale * persp,
-          z: v.z,
-          persp,
-        };
-      };
-
-      const drawLine = (
-        a: { x: number; y: number },
-        b: { x: number; y: number },
-        color: string,
-        width = 1
-      ) => {
-        ctx.save();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = width;
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
-        ctx.restore();
-      };
-
-      // 01 — Hardware / Software.
-      if (stage2d > 0.001) {
-        const axisLen = planeScale * 1.20 * stage2d;
-
-        drawLine(
-          { x: centerX - axisLen, y: centerY },
-          { x: centerX + axisLen, y: centerY },
-          `rgba(232,238,247,${0.34 * planeFade})`
-        );
-
-        ctx.save();
-        ctx.globalAlpha = stage2d * planeFade;
-        ctx.fillStyle = "rgba(238,242,248,.78)";
-        ctx.font = "600 12px Inter, system-ui, sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("HARDWARE", centerX - axisLen - 42, centerY + 4);
-        ctx.fillText("SOFTWARE", centerX + axisLen + 42, centerY + 4);
-        ctx.restore();
-
-        // 02 — Classical / Quantum.
-        const yAxis = smooth(0.115, 0.22, p);
-        if (yAxis > 0) {
-          drawLine(
-            { x: centerX, y: centerY - axisLen * yAxis },
-            { x: centerX, y: centerY + axisLen * yAxis },
-            `rgba(232,238,247,${0.30 * planeFade})`
-          );
-
-          ctx.save();
-          ctx.globalAlpha = yAxis * planeFade;
-          ctx.fillStyle = "rgba(238,242,248,.72)";
-          ctx.font = "600 12px Inter, system-ui, sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText("QUANTUM", centerX, centerY - axisLen * yAxis - 18);
-          ctx.fillText("CLASSICAL", centerX, centerY + axisLen * yAxis + 24);
-          ctx.restore();
-        }
-      }
-
-      // 03 — The 2D basis becomes a plane.
-      if (planeIn > 0.001 && planeFade > 0.001) {
-        const gridN = 6;
-        for (let i = -gridN; i <= gridN; i += 1) {
-          const v = i / gridN;
-          const a = toScreen(projectPlane(-1.1, v));
-          const b = toScreen(projectPlane(1.1, v));
-          const c = toScreen(projectPlane(v, -1.1));
-          const d = toScreen(projectPlane(v, 1.1));
-
-          drawLine(a, b, `rgba(176,191,210,${0.11 * planeIn * planeFade})`);
-          drawLine(c, d, `rgba(176,191,210,${0.11 * planeIn * planeFade})`);
-        }
-      }
-
-      // 04 + 05 — Live evidence points, then Knowledge / Experience depth.
-      for (let i = 0; i < capabilities.length; i += 1) {
-        const item = capabilities[i];
-        const stagger = clamp01((pointsIn * capabilities.length - i) / 4);
-        const base = toScreen(projectPlane(item.planeX, item.planeY, 0));
-
-        if (stagger > 0 && planeFade > 0) {
-          ctx.save();
-          ctx.globalAlpha = stagger * planeFade * (1 - vectorResolve) * 0.82;
-          ctx.fillStyle = "rgba(219,228,240,.74)";
-          ctx.beginPath();
-          ctx.arc(base.x, base.y, 2.1 + 1.7 * stagger, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-
-        if (zIn > 0 && vectorResolve < 0.999) {
-          const kTop = toScreen(
-            projectPlane(item.planeX, item.planeY, item.K * 0.9 * knowledgeGrow)
-          );
-          const eBottom = toScreen(
-            projectPlane(item.planeX, item.planeY, -item.E * 0.9 * experienceGrow)
-          );
-          const barAlpha = (1 - vectorResolve) * 0.72;
-
-          drawLine(base, kTop, rgba(KNOWLEDGE, barAlpha), 1.4);
-          drawLine(base, eBottom, rgba(EXPERIENCE, barAlpha), 1.4);
-        }
-      }
-
-      if (zIn > 0 && planeFade > 0) {
-        const top = toScreen(projectPlane(0, 0, 1.08 * zIn));
-        const bottom = toScreen(projectPlane(0, 0, -1.08 * zIn));
-
-        drawLine(top, bottom, `rgba(236,241,247,${0.34 * planeFade})`);
-
-        ctx.save();
-        ctx.globalAlpha = zIn * planeFade;
-        ctx.fillStyle = "rgba(238,242,248,.78)";
-        ctx.font = "600 11px Inter, system-ui, sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("KNOWLEDGE", top.x, top.y - 12);
-        ctx.fillText("EXPERIENCE", bottom.x, bottom.y + 20);
-        ctx.restore();
-      }
-
-      // Shared 3D camera for rods and sphere. The same mathematical state is
-      // viewed throughout the resolve/centering/sphere transition.
-      const cameraDistance = 430 / 115;
-      const spin = -0.35;
-      const pitch = (-68 * Math.PI) / 180;
-      const roll = (20 * Math.PI) / 180;
-
-      const rotateState = (v: Point3) => {
+      const rotatePoint = (point: Point3): Point3 => {
         const cs = Math.cos(spin);
         const ss = Math.sin(spin);
-        const x1 = cs * v.x - ss * v.y;
-        const y1 = ss * v.x + cs * v.y;
-        const z1 = v.z;
+        const x1 = cs * point.x - ss * point.y;
+        const y1 = ss * point.x + cs * point.y;
+        const z1 = point.z;
 
         const cp = Math.cos(pitch);
         const sp = Math.sin(pitch);
@@ -393,69 +137,217 @@ function CinematicHero() {
         };
       };
 
-      const projectState = (v: Point3) => {
-        const rotated = rotateState(v);
-        const persp =
-          cameraDistance / (cameraDistance - rotated.z);
+      const project = (point: Point3) => {
+        const rotated = rotatePoint(point);
+        const persp = CAMERA_DISTANCE / (CAMERA_DISTANCE - rotated.z);
 
         return {
-          x: centerX + rotated.x * sphereR * persp,
-          y: centerY - rotated.y * sphereR * persp,
-          z: rotated.z,
+          x: centerX + rotated.x * scale * persp,
+          y: centerY - rotated.y * scale * persp,
+          depth: rotated.z,
           persp,
         };
       };
 
-      const shellRadius =
-        sphereR *
-        (cameraDistance /
-          Math.sqrt(cameraDistance * cameraDistance - 1));
+      const line = (
+        a: { x: number; y: number },
+        b: { x: number; y: number },
+        stroke: string,
+        width = 1
+      ) => {
+        ctx.save();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+        ctx.restore();
+      };
 
-      const visibilityMetric = (rotated: Point3) =>
-        cameraDistance * rotated.z -
+      const label = (
+        text: string,
+        point: { x: number; y: number },
+        alpha: number,
+        dx = 0,
+        dy = 0
+      ) => {
+        if (alpha <= 0) return;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = "rgba(225,232,241,.72)";
+        ctx.font = "600 10px Inter, system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(text, point.x + dx, point.y + dy);
+        ctx.restore();
+      };
+
+      ctx.save();
+      ctx.fillStyle = "#020406";
+      ctx.fillRect(0, 0, W, H);
+
+      const background = ctx.createRadialGradient(
+        centerX,
+        centerY,
+        0,
+        centerX,
+        centerY,
+        Math.max(W, H) * 0.72
+      );
+      background.addColorStop(0, "rgba(30,44,61,.105)");
+      background.addColorStop(0.55, "rgba(10,16,23,.035)");
+      background.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = background;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+
+      const planeAlpha = planeFade * Math.max(xAxisIn, yAxisIn, planeIn);
+
+      // 1) Hardware <-> Software appears first.
+      const xLeft = project({ x: -112 * xAxisIn, y: 0, z: 0 });
+      const xRight = project({ x: 112 * xAxisIn, y: 0, z: 0 });
+      line(
+        xLeft,
+        xRight,
+        "rgba(224,232,242," + 0.34 * planeFade + ")"
+      );
+      label("HARDWARE", xLeft, xAxisIn * planeFade, -24, 4);
+      label("SOFTWARE", xRight, xAxisIn * planeFade, 26, 4);
+
+      // 2) Classical <-> Quantum appears second.
+      if (yAxisIn > 0.001) {
+        const yClassical = project({ x: 0, y: -112 * yAxisIn, z: 0 });
+        const yQuantum = project({ x: 0, y: 112 * yAxisIn, z: 0 });
+
+        line(
+          yClassical,
+          yQuantum,
+          "rgba(224,232,242," + 0.30 * planeFade + ")"
+        );
+        label("CLASSICAL", yClassical, yAxisIn * planeFade, 0, 18);
+        label("QUANTUM", yQuantum, yAxisIn * planeFade, 0, -12);
+      }
+
+      // 3) The basis fills into a flat plane. The plane stays front-facing
+      // while evidence is placed, then rotates continuously into the final
+      // lab/expertise camera as depth becomes visible.
+      if (planeIn > 0.001 && planeFade > 0.001) {
+        const grid = 5;
+        const extent = 100;
+
+        for (let i = -grid; i <= grid; i += 1) {
+          const v = (i / grid) * extent;
+          const a = project({ x: -extent, y: v, z: 0 });
+          const b = project({ x: extent, y: v, z: 0 });
+          const c = project({ x: v, y: -extent, z: 0 });
+          const d = project({ x: v, y: extent, z: 0 });
+
+          line(
+            a,
+            b,
+            "rgba(170,187,208," + 0.095 * planeIn * planeFade + ")"
+          );
+          line(
+            c,
+            d,
+            "rgba(170,187,208," + 0.095 * planeIn * planeFade + ")"
+          );
+        }
+      }
+
+      // 4) The third axis is distinct from Classical/Quantum. It becomes
+      // visible only when the camera begins to reveal actual depth.
+      if (view3D > 0.08 && planeFade > 0.001) {
+        const zKnowledge = project({ x: 0, y: 0, z: 105 * view3D });
+        const zExperience = project({ x: 0, y: 0, z: -105 * view3D });
+
+        line(
+          zExperience,
+          zKnowledge,
+          "rgba(224,232,242," + 0.26 * view3D * planeFade + ")"
+        );
+        label(
+          "KNOWLEDGE",
+          zKnowledge,
+          view3D * planeFade,
+          0,
+          -12
+        );
+        label(
+          "EXPERIENCE",
+          zExperience,
+          view3D * planeFade,
+          0,
+          18
+        );
+      }
+
+      // Perspective-correct sphere helpers copied from the calibrated
+      // lab/expertise projection.
+      const sphereRadius3D = SPHERE_R * sphereGrow;
+      const shellRadius =
+        sphereRadius3D > 0
+          ? scale *
+            sphereRadius3D *
+            (CAMERA_DISTANCE /
+              Math.sqrt(
+                CAMERA_DISTANCE * CAMERA_DISTANCE -
+                  sphereRadius3D * sphereRadius3D
+              ))
+          : 0;
+
+      const surfaceVisibilityMetric = (rotated: Point3) =>
+        CAMERA_DISTANCE * rotated.z -
         (rotated.x * rotated.x +
           rotated.y * rotated.y +
           rotated.z * rotated.z);
 
-      const drawGreatCircle = (
+      const drawSphereCircle = (
         plane: "xy" | "xz" | "yz",
-        alpha: number
+        backAlpha: number,
+        frontAlpha: number,
+        radius: number
       ) => {
-        const samples = 420;
-        const points: Array<{
+        if (radius <= 0) return;
+
+        type RingPoint = {
           x: number;
           y: number;
           metric: number;
           back: boolean;
-        }> = [];
+        };
 
-        for (let i = 0; i <= samples; i += 1) {
-          const angle = (i / samples) * Math.PI * 2;
+        const points: RingPoint[] = [];
+        const segments = 480;
+
+        for (let i = 0; i <= segments; i += 1) {
+          const a = (i / segments) * Math.PI * 2;
           let point: Point3;
 
           if (plane === "xy") {
             point = {
-              x: Math.cos(angle),
-              y: Math.sin(angle),
+              x: radius * Math.cos(a),
+              y: radius * Math.sin(a),
               z: 0,
             };
           } else if (plane === "xz") {
             point = {
-              x: Math.cos(angle),
+              x: radius * Math.cos(a),
               y: 0,
-              z: Math.sin(angle),
+              z: radius * Math.sin(a),
             };
           } else {
             point = {
               x: 0,
-              y: Math.cos(angle),
-              z: Math.sin(angle),
+              y: radius * Math.cos(a),
+              z: radius * Math.sin(a),
             };
           }
 
-          const rotated = rotateState(point);
-          const projected = projectState(point);
-          const metric = visibilityMetric(rotated);
+          const rotated = rotatePoint(point);
+          const projected = project(point);
+          const metric = surfaceVisibilityMetric(rotated);
 
           points.push({
             x: projected.x,
@@ -467,15 +359,43 @@ function CinematicHero() {
 
         ([true, false] as const).forEach((drawBack) => {
           ctx.save();
-          ctx.strokeStyle = drawBack
-            ? "rgba(220,230,242," + alpha * 0.24 + ")"
-            : "rgba(220,230,242," + alpha + ")";
+          ctx.strokeStyle =
+            "rgba(220,230,242," +
+            (drawBack ? backAlpha : frontAlpha) +
+            ")";
           ctx.lineWidth = 1;
           ctx.beginPath();
 
           let open = false;
+
           for (let i = 0; i < points.length; i += 1) {
             const point = points[i];
+            const previous = i > 0 ? points[i - 1] : null;
+
+            if (previous && previous.back !== point.back) {
+              const denom = previous.metric - point.metric;
+              const t =
+                Math.abs(denom) < 1e-9
+                  ? 0.5
+                  : previous.metric / denom;
+              const u = clamp01(t);
+              const edge = {
+                x: previous.x + (point.x - previous.x) * u,
+                y: previous.y + (point.y - previous.y) * u,
+              };
+
+              if (previous.back === drawBack && open) {
+                ctx.lineTo(edge.x, edge.y);
+              }
+
+              open = false;
+
+              if (point.back === drawBack) {
+                ctx.moveTo(edge.x, edge.y);
+                open = true;
+              }
+            }
+
             if (point.back === drawBack) {
               if (!open) {
                 ctx.moveTo(point.x, point.y);
@@ -483,8 +403,6 @@ function CinematicHero() {
               } else {
                 ctx.lineTo(point.x, point.y);
               }
-            } else {
-              open = false;
             }
           }
 
@@ -493,233 +411,147 @@ function CinematicHero() {
         });
       };
 
-      // 06 — Resolve each evidence column into its final rod. The canonical
-      // normalized length stays constant. Re-centering translates the whole
-      // rod to the same 3D origin; it does not stretch or shrink the rod.
-      if (vectorResolve > 0.001) {
-        for (const item of capabilities) {
-          const baseOffset: Point3 = {
-            x: item.planeX * 0.68 * (1 - recenter),
-            y: item.planeY * 0.68 * (1 - recenter),
-            z: 0,
-          };
-
-          const tip: Point3 = {
-            x: baseOffset.x + item.dir.x * item.strength,
-            y: baseOffset.y + item.dir.y * item.strength,
-            z: baseOffset.z + item.dir.z * item.strength,
-          };
-
-          const start = projectState(baseOffset);
-          const end = projectState(tip);
-          const color = item.mode === "Knowledge" ? KNOWLEDGE : EXPERIENCE;
-          const alpha = vectorResolve * (0.24 + recenter * 0.58);
-
-          drawLine(
-            start,
-            end,
-            rgba(color, alpha),
-            1.5 + item.strength * 2.2
-          );
-
-          ctx.save();
-          ctx.globalAlpha = vectorResolve * (0.42 + recenter * 0.48);
-          ctx.fillStyle = color;
-          ctx.beginPath();
-          ctx.arc(end.x, end.y, 2 + item.strength * 1.8, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
-      }
-
-      // BEGIN is the origin of the existing 3D state, not a destination off to
-      // one side. It appears only after the rods have nearly converged.
-      const beginAlpha = smooth(0.70, 0.77, p) * (1 - smooth(0.82, 0.87, p));
-      if (beginAlpha > 0.001) {
+      // 5) Sphere grows only after the same rods have converged.
+      if (sphereGrow > 0.001) {
         ctx.save();
-        ctx.globalAlpha = beginAlpha;
-        ctx.fillStyle = "rgba(236,241,248,.72)";
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 2.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.font = "600 10px Inter, system-ui, sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("BEGIN", centerX, centerY - 13);
-        ctx.restore();
-      }
 
-      // 07 — Only after the same rods are centered does the shell form around
-      // the same origin.
-      if (sphereIn > 0.001) {
-        const easedR = shellRadius * sphereIn;
-
-        const inner = ctx.createRadialGradient(
-          centerX - easedR * 0.18,
-          centerY - easedR * 0.2,
-          0,
+        const glass = ctx.createRadialGradient(
+          centerX - shellRadius * 0.18,
+          centerY - shellRadius * 0.22,
+          shellRadius * 0.08,
           centerX,
           centerY,
-          easedR
+          Math.max(1, shellRadius)
         );
-        inner.addColorStop(0, `rgba(190,210,236,${0.035 * sphereIn})`);
-        inner.addColorStop(0.72, `rgba(120,146,180,${0.014 * sphereIn})`);
-        inner.addColorStop(1, "rgba(10,14,20,0)");
+        glass.addColorStop(0, "rgba(218,226,238,.040)");
+        glass.addColorStop(0.72, "rgba(179,193,211,.018)");
+        glass.addColorStop(1, "rgba(120,142,172,.006)");
 
-        ctx.save();
-        ctx.fillStyle = inner;
+        ctx.fillStyle = glass;
         ctx.beginPath();
-        ctx.arc(centerX, centerY, easedR, 0, Math.PI * 2);
+        ctx.arc(centerX, centerY, shellRadius, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.strokeStyle = `rgba(224,232,242,${0.20 * sphereIn})`;
-        ctx.lineWidth = 1.25;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, easedR, 0, Math.PI * 2);
-        ctx.stroke();
         ctx.restore();
 
-        if (sphereIn > 0.18) {
-          drawGreatCircle("xy", 0.050 * sphereIn);
-          drawGreatCircle("xz", 0.036 * sphereIn);
-          drawGreatCircle("yz", 0.032 * sphereIn);
+        drawSphereCircle("xy", 0.010, 0.024, sphereRadius3D);
+        drawSphereCircle("xz", 0.009, 0.020, sphereRadius3D);
+        drawSphereCircle("yz", 0.008, 0.018, sphereRadius3D);
+      }
 
-          const knowledge = projectState({ x: 0, y: 0, z: 1 });
-          const experience = projectState({ x: 0, y: 0, z: -1 });
-          const hardware = projectState({ x: -1, y: 0, z: 0 });
-          const software = projectState({ x: 1, y: 0, z: 0 });
-          const classical = projectState({ x: 0, y: -1, z: 0 });
-          const quantum = projectState({ x: 0, y: 1, z: 0 });
+      // 6) Evidence points land first. Once a rod grows, the point itself
+      // dissolves into the rod base instead of remaining as a second object.
+      const pointAlpha = pointsIn * (1 - rodGrow) * planeFade;
 
-          ctx.save();
-          ctx.globalAlpha = sphereIn * 0.62;
-          ctx.fillStyle = "rgba(229,235,244,.72)";
-          ctx.font = "600 9px Inter, system-ui, sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText("KNOWLEDGE", knowledge.x, knowledge.y - 10);
-          ctx.fillText("EXPERIENCE", experience.x, experience.y + 18);
-          ctx.fillText("HARDWARE", hardware.x, hardware.y - 7);
-          ctx.fillText("SOFTWARE", software.x, software.y - 7);
-          ctx.fillText("CLASSICAL", classical.x, classical.y - 7);
-          ctx.fillText("QUANTUM", quantum.x, quantum.y - 7);
-          ctx.restore();
-        }
-
-        // 08 — Target states are generated on the shell.
-        const targetRows = targetStates.map((target) => ({
-          target,
-          point: projectState(target.direction),
-        }));
-
-        for (const row of targetRows) {
-          const isChosen = row.target.id === selectedTarget.id;
-          const targetAlpha =
-            targetsIn *
-            (collapse > 0 ? (isChosen ? 1 : 1 - collapse) : 1);
-
-          if (targetAlpha <= 0.01) continue;
-
-          ctx.save();
-          ctx.globalAlpha =
-            targetAlpha * (row.point.z < -0.15 ? 0.34 : 0.96);
-          ctx.fillStyle = TARGET;
-          ctx.strokeStyle = "rgba(255,231,130,.88)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(
-            row.point.x,
-            row.point.y,
-            4.2 + (isChosen ? collapse * 2.8 : 0),
-            0,
-            Math.PI * 2
+      if (pointAlpha > 0.001) {
+        capabilities.forEach((item, index) => {
+          const stagger = clamp01(
+            (pointsIn * capabilities.length - index) / 3.5
           );
-          ctx.fill();
-          ctx.stroke();
-          ctx.restore();
+          if (stagger <= 0) return;
 
-          if (
-            targetsIn > 0.5 &&
-            row.point.z > -0.1 &&
-            (collapse < 0.1 || isChosen)
-          ) {
-            ctx.save();
-            ctx.globalAlpha = targetAlpha * 0.84;
-            ctx.fillStyle = "rgba(233,219,153,.92)";
-            ctx.font = "600 9px Inter, system-ui, sans-serif";
-            ctx.textAlign = "left";
-            ctx.fillText(
-              row.target.name,
-              row.point.x + 10,
-              row.point.y - 7
-            );
-            ctx.restore();
-          }
-        }
+          const point = project(item.base);
 
-        if (collapse > 0.52) {
-          const measured = projectState(selectedTarget.direction);
           ctx.save();
-          ctx.globalAlpha = smooth(0.52, 1, collapse);
-          ctx.strokeStyle = "rgba(255,240,170,.94)";
-          ctx.fillStyle = "rgba(255,244,193,.96)";
-          ctx.lineWidth = 1.25;
+          ctx.globalAlpha = pointAlpha * stagger;
+          ctx.fillStyle = "rgba(222,230,241,.86)";
           ctx.beginPath();
-          ctx.arc(measured.x, measured.y, 8 + collapse * 4, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.font = "700 10px Inter, system-ui, sans-serif";
-          ctx.textAlign = "left";
-          ctx.fillText("YOUR COMPANY", measured.x + 14, measured.y - 8);
+          ctx.arc(point.x, point.y, 3.2, 0, Math.PI * 2);
+          ctx.fill();
           ctx.restore();
-        }
+        });
+      }
 
-        // Redraw the true outer silhouette last.
+      // 7) One continuous rod object per capability:
+      // - it grows from the evidence point,
+      // - then keeps exactly the same vector/length,
+      // - then only its base translates to the shared origin.
+      capabilities.forEach((item) => {
+        if (rodGrow <= 0.001) return;
+
+        const base: Point3 = {
+          x: item.base.x * (1 - recenter),
+          y: item.base.y * (1 - recenter),
+          z: 0,
+        };
+
+        const vectorScale = rodGrow;
+        const tip: Point3 = {
+          x: base.x + item.direction.x * item.length * vectorScale,
+          y: base.y + item.direction.y * item.length * vectorScale,
+          z: base.z + item.direction.z * item.length * vectorScale,
+        };
+
+        const start = project(base);
+        const end = project(tip);
+        const color =
+          item.mode === "Knowledge" ? KNOWLEDGE : EXPERIENCE;
+
+        line(
+          start,
+          end,
+          color === KNOWLEDGE
+            ? "rgba(75,134,216,.86)"
+            : "rgba(207,90,90,.82)",
+          1.45 + item.length / SPHERE_R * 2.2
+        );
+
         ctx.save();
-        ctx.globalAlpha = sphereIn;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.92;
+        ctx.beginPath();
+        ctx.arc(
+          end.x,
+          end.y,
+          2.3 + (item.length / SPHERE_R) * 1.8,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // 8) Redraw the sphere's front geometry and true silhouette last.
+      if (sphereGrow > 0.001) {
+        drawSphereCircle("xy", 0, 0.034, sphereRadius3D);
+        drawSphereCircle("xz", 0, 0.028, sphereRadius3D);
+        drawSphereCircle("yz", 0, 0.024, sphereRadius3D);
+
+        ctx.save();
         ctx.strokeStyle = "rgba(229,236,246,.22)";
-        ctx.lineWidth = 1.3;
+        ctx.lineWidth = 1.25;
         ctx.beginPath();
         ctx.arc(centerX, centerY, shellRadius, 0, Math.PI * 2);
         ctx.stroke();
         ctx.restore();
-      }
 
-      // Stable fine grain. It does not carry semantic state.
-      ctx.save();
-      ctx.globalAlpha = 0.025;
-      ctx.fillStyle = "#fff";
-      for (let i = 0; i < 90; i += 1) {
-        const x = ((i * 97 + Math.floor(p * 1000)) % 997) / 997 * W;
-        const y = ((i * 193 + 23) % 991) / 991 * H;
-        ctx.fillRect(x, y, 0.65, 0.65);
+        if (sphereGrow > 0.86) {
+          const hardware = project({ x: -SPHERE_R, y: 0, z: 0 });
+          const software = project({ x: SPHERE_R, y: 0, z: 0 });
+          const classical = project({ x: 0, y: -SPHERE_R, z: 0 });
+          const quantum = project({ x: 0, y: SPHERE_R, z: 0 });
+          const knowledge = project({ x: 0, y: 0, z: SPHERE_R });
+          const experience = project({ x: 0, y: 0, z: -SPHERE_R });
+
+          const axisAlpha = smooth(0.86, 1, sphereGrow) * 0.58;
+          label("HARDWARE", hardware, axisAlpha, -18, 0);
+          label("SOFTWARE", software, axisAlpha, 20, 0);
+          label("CLASSICAL", classical, axisAlpha, 0, 16);
+          label("QUANTUM", quantum, axisAlpha, 0, -10);
+          label("KNOWLEDGE", knowledge, axisAlpha, 0, -10);
+          label("EXPERIENCE", experience, axisAlpha, 0, 16);
+        }
       }
-      ctx.restore();
     };
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [capabilities, selectedTarget, targetStates]);
-
-  const phase =
-    progress < 0.035
-      ? "void"
-      : progress < 0.24
-      ? "basis"
-      : progress < 0.40
-      ? "evidence"
-      : progress < 0.59
-      ? "knowledge-experience"
-      : progress < 0.78
-      ? "centering"
-      : progress < 0.88
-      ? "state"
-      : progress < 0.94
-      ? "future"
-      : "measurement";
+  }, [capabilities]);
 
   return (
     <section
       ref={rootRef}
       className="cinematic-hero"
-      aria-label="Scroll-driven technical profile narrative"
+      aria-label="Scroll-driven expertise state construction"
     >
       <div className="cinematic-hero-sticky">
         <canvas
@@ -727,105 +559,6 @@ function CinematicHero() {
           className="cinematic-hero-canvas"
           aria-hidden="true"
         />
-
-        <div className={`cinematic-copy cinematic-copy-${phase}`}>
-          {phase === "basis" && (
-            <div className="cinematic-card equation-card">
-              <div className="cinematic-kicker">01 / BASIS</div>
-              <p>Hardware ↔ Software · Classical ↔ Quantum</p>
-            </div>
-          )}
-
-          {phase === "evidence" && (
-            <div className="cinematic-card side">
-              <div className="cinematic-kicker">02 / LIVE EVIDENCE PLANE</div>
-              <h2>Evidence finds a position.</h2>
-              <p>
-                The same public-safe state can regenerate this map whenever
-                the underlying Career OS evidence changes.
-              </p>
-            </div>
-          )}
-
-          {phase === "knowledge-experience" && (
-            <div className="cinematic-card side">
-              <div className="cinematic-kicker">03 / DEPTH</div>
-              <h2>Knowledge rises. Experience extends below.</h2>
-              <p>
-                K and E are independent evidence components. They add depth
-                without replacing the original Hardware/Software and
-                Classical/Quantum coordinates.
-              </p>
-            </div>
-          )}
-
-          {phase === "centering" && (
-            <div className="cinematic-card side">
-              <div className="cinematic-kicker">04 / ONE ORIGIN</div>
-              <h2>The state centers in place.</h2>
-              <p>
-                Rod lengths stay normalized and unchanged. Their angles come
-                from the same deterministic transform; only their origins
-                converge to the center of this 3D space.
-              </p>
-            </div>
-          )}
-
-          {phase === "state" && (
-            <div className="cinematic-card equation-card">
-              <div className="cinematic-kicker">
-                CURRENT TECHNICAL STATE
-              </div>
-              <div className="cinematic-equation">
-                |ψ<sub>profile</sub>⟩ = Σ α<sub>i</sub>|c<sub>i</sub>⟩
-              </div>
-              <p>
-                α<sub>i</sub> = S<sub>i</sub> / √ΣS<sub>j</sub>² ·
-                the sphere is a quantum-inspired representation of the same
-                live evidence state.
-              </p>
-            </div>
-          )}
-
-          {phase === "future" && (
-            <div className="cinematic-card equation-card future-card">
-              <div className="cinematic-kicker">POSSIBLE FUTURE STATES</div>
-              <div className="cinematic-equation">
-                |ψ<sub>future</sub>⟩ = Σ β<sub>j</sub>|t<sub>j</sub>⟩
-              </div>
-              <p>
-                P(t<sub>j</sub>) = |β<sub>j</sub>|² · yellow points are
-                evidence-supported directions on the same state space.
-              </p>
-            </div>
-          )}
-
-          {phase === "measurement" && (
-            <div className="cinematic-card equation-card measurement-card">
-              <div className="cinematic-kicker">MEASUREMENT</div>
-              <div className="cinematic-equation">
-                |ψ<sub>future</sub>⟩ → |Your Company⟩
-              </div>
-              <p>
-                The other possible yellow states collapse away. This build's
-                deterministic sample resolves through {selectedTarget.name}.
-              </p>
-              <div className="cinematic-cta">Seeking an internship.</div>
-            </div>
-          )}
-        </div>
-
-        <div className="cinematic-progress" aria-hidden="true">
-          <span
-            style={{
-              transform: `scaleX(${Math.max(0.002, progress)})`,
-            }}
-          />
-        </div>
-
-        <div className="cinematic-scroll-cue" aria-hidden="true">
-          <span>SCROLL TO RESOLVE THE STATE</span>
-        </div>
       </div>
     </section>
   );
