@@ -18,6 +18,7 @@ function TriDrawerShell({ currentPath, resetVersion, onNavigate }: Props) {
   const homeRef = useRef<HTMLElement>(null);
   const workRef = useRef<HTMLElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const lastResetVersion = useRef(resetVersion);
 
   const paneRefs = useMemo(
     () => ({
@@ -31,6 +32,8 @@ function TriDrawerShell({ currentPath, resetVersion, onNavigate }: Props) {
   const activeIndex = paneOrder.indexOf(currentPath);
 
   useEffect(() => {
+    if (lastResetVersion.current === resetVersion) return;
+    lastResetVersion.current = resetVersion;
     const target = paneRefs[currentPath].current;
     if (!target) return;
     target.scrollTo({ top: 0, behavior: "auto" });
