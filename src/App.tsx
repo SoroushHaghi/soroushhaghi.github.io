@@ -12,7 +12,6 @@ import ExpertiseLab from "./pages/ExpertiseLab";
 import DynamicBackground from "./components/DynamicBackground";
 import { backgroundDefaults, backgroundStorageKey } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
-import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
 import "./dynamicBackground.scss";
 
@@ -32,7 +31,6 @@ function App() {
     return normalizePath(fromPublicPath(window.location.pathname));
   });
 
-  useAdaptiveSectionScroll({ enabled: path === "/" });
 
   useEffect(() => {
     document.documentElement.dataset.theme = "dark";
