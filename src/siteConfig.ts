@@ -99,10 +99,10 @@ export const organizationMarks = [
   {
     id: "tu-braunschweig",
     name: "TU Braunschweig",
-    short: "TUBS",
+    short: "TU Braunschweig",
     logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Siegel_TU_Braunschweig_transparent.svg",
     hue: "354",
-    scale: 0.84,
+    scale: 1.04,
   },
   {
     id: "leibniz-hannover",
@@ -119,7 +119,7 @@ export const organizationMarks = [
     short: "Sharif",
     logo: "https://sadrazar.github.io/images/SharifLogo.jpg",
     hue: "210",
-    scale: 1.00,
+    scale: 1.08,
   },
   {
     id: "ferdowsi",
@@ -127,7 +127,7 @@ export const organizationMarks = [
     short: "Ferdowsi",
     logo: "https://img.logokit.com/um.ac.ir",
     hue: "160",
-    scale: 1.00,
+    scale: 1.08,
   },
   {
     id: "azad-university",
@@ -135,7 +135,7 @@ export const organizationMarks = [
     short: "Azad",
     logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Azad_University_logo.png",
     hue: "199",
-    scale: 1.00,
+    scale: 1.06,
   },
   {
     id: "iran-khodro",
@@ -160,7 +160,7 @@ export const organizationMarks = [
     short: "INTEL",
     logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Intel_logo_2023.svg",
     hue: "205",
-    scale: 1.12,
+    scale: 1.16,
   },
   {
     id: "texas-instruments",
@@ -168,7 +168,7 @@ export const organizationMarks = [
     short: "TI",
     logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Texas_Instruments_logo_2024.svg",
     hue: "353",
-    scale: 1.08,
+    scale: 1.14,
   },
   {
     id: "volkswagen",
@@ -200,6 +200,6 @@ export const organizationMarks = [
     short: "INFINEON",
     logo: "https://api.iconify.design/simple-icons/infineon.svg?color=%2300878F",
     hue: "184",
-    scale: 1.10,
+    scale: 1.16,
   },
 ] as const;
