@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   applyBackground,
   backgroundDefaults,
@@ -18,6 +18,12 @@ function loadInitialValues(): BackgroundValues {
 
 export function useBackgroundLab() {
   const [values, setValues] = useState<BackgroundValues>(loadInitialValues);
+
+  useEffect(() => {
+    applyBackground(values);
+    // Apply the stored Lab state only while this Lab is mounted.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const apply = (next: BackgroundValues) => {
     setValues(next);
