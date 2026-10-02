@@ -1,0 +1,43 @@
+name: Publish Current CV
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "public/cv/HAGHI_CV.pdf"
+      - "public/cv/index.html"
+      - ".github/workflows/publish-current-cv.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-publish
+  cancel-in-progress: false
+
+jobs:
+  publish-current-cv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      - name: Publish canonical CV route to gh-pages
+        run: |
+          git fetch origin gh-pages
+          git worktree add --detach /tmp/gh-pages origin/gh-pages
+          rm -rf /tmp/gh-pages/cv
+          mkdir -p /tmp/gh-pages/cv
+          cp -a public/cv/. /tmp/gh-pages/cv/
+          cd /tmp/gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cv
+          if git diff --cached --quiet; then
+            echo "Canonical CV route is already current."
+            exit 0
+          fi
+          git commit -m "Publish canonical current CV"
+          git push origin HEAD:gh-pages
