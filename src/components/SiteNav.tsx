@@ -19,10 +19,46 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [currentPath]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const root = document.documentElement;
+    const body = document.body;
+    const previousRootOverflow = root.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousRootOverscroll = root.style.overscrollBehavior;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+
+    root.classList.add("mobile-nav-open");
+    root.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    root.style.overscrollBehavior = "none";
+    body.style.overscrollBehavior = "none";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      root.classList.remove("mobile-nav-open");
+      root.style.overflow = previousRootOverflow;
+      body.style.overflow = previousBodyOverflow;
+      root.style.overscrollBehavior = previousRootOverscroll;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileOpen]);
+
   const go = (event: React.MouseEvent<HTMLAnchorElement>, href: string, external?: boolean) => {
+    setMobileOpen(false);
     if (external) return;
     event.preventDefault();
-    setMobileOpen(false);
     onNavigate(href);
   };
 
@@ -55,8 +91,9 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
           <button
             className="mobile-menu-button"
             type="button"
-            aria-label="Toggle navigation"
+            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-primary-navigation"
             onClick={() => setMobileOpen((value) => !value)}
           >
             <span />
@@ -66,17 +103,32 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
       </header>
 
       {mobileOpen && (
-        <div className="mobile-nav-panel glass-surface">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={toPublicPath(item.href)}
-              onClick={(event) => go(event, item.href, item.external)}
-            >
-              {item.label}
-              <span aria-hidden="true">↗</span>
-            </a>
-          ))}
+        <div className="mobile-nav-overlay">
+          <button
+            className="mobile-nav-backdrop"
+            type="button"
+            aria-label="Close navigation"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div
+            id="mobile-primary-navigation"
+            className="mobile-nav-panel glass-surface"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+          >
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={toPublicPath(item.href)}
+                className={currentPath === item.href ? "active" : ""}
+                onClick={(event) => go(event, item.href, item.external)}
+              >
+                {item.label}
+                <span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
         </div>
       )}
     </>
