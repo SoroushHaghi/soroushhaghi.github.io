@@ -57,6 +57,8 @@ jobs:
           cp build/index.html build/lab/background/index.html
           mkdir -p build/lab/expertise
           cp build/index.html build/lab/expertise/index.html
+          mkdir -p build/review-sphere-flow-60aa2fac
+          cp build/index.html build/review-sphere-flow-60aa2fac/index.html
 
       - name: Publish preview without changing production root
         run: |
