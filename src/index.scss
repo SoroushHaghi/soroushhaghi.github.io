@@ -4849,3 +4849,56 @@ html[data-theme="light"] .lab-token-readout strong {
     font-size: 7px;
   }
 }
+
+
+/* Affiliation logo optical normalization — fixed canvas + perceived-size tuning */
+.organization-mark,
+.organization-mark-content{
+  height:116px;
+  min-height:116px;
+}
+
+.organization-mark-content{
+  width:124px;
+}
+
+.organization-logo-frame{
+  width:100px;
+  height:100px;
+  display:grid;
+  place-items:center;
+}
+
+.organization-logo-frame img{
+  width:92px;
+  height:92px;
+  max-width:none;
+  max-height:none;
+  object-fit:contain;
+  object-position:center;
+  transform:scale(var(--logo-scale,1)) !important;
+  transform-origin:center;
+}
+
+.organization-mark-caption{
+  bottom:-8px;
+  font-size:9px;
+}
+
+@media(max-width:560px){
+  .organization-mark,
+  .organization-mark-content{
+    height:94px;
+    min-height:94px;
+  }
+
+  .organization-logo-frame{
+    width:82px;
+    height:82px;
+  }
+
+  .organization-logo-frame img{
+    width:76px;
+    height:76px;
+  }
+}
