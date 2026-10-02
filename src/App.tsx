@@ -9,7 +9,6 @@ import { fromPublicPath, toPublicPath } from "./routes";
 import useAdaptiveSectionScroll from "./hooks/useAdaptiveSectionScroll";
 import "./index.scss";
 
-type ThemeMode = "system" | "light" | "dark";
 
 const normalizePath = (path: string) => {
   const cleaned = path.replace(/\/+$/, "");
@@ -28,27 +27,11 @@ function App() {
 
   useAdaptiveSectionScroll({ enabled: path === "/" });
 
-  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
-    const saved = window.localStorage.getItem("portfolio-theme-mode");
-    return saved === "light" || saved === "dark" ? saved : "dark";
-  });
-
   useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: light)");
-
-    const applyTheme = () => {
-      // Dark-first release phase: System intentionally resolves to dark until
-      // the separate light-theme calibration pass is complete.
-      const resolved = themeMode === "system" ? "dark" : themeMode;
-      document.documentElement.dataset.theme = resolved;
-      document.documentElement.dataset.themeMode = themeMode;
-      window.localStorage.setItem("portfolio-theme-mode", themeMode);
-    };
-
-    applyTheme();
-    media.addEventListener("change", applyTheme);
-    return () => media.removeEventListener("change", applyTheme);
-  }, [themeMode]);
+    document.documentElement.dataset.theme = "dark";
+    document.documentElement.dataset.themeMode = "dark";
+    window.localStorage.setItem("portfolio-theme-mode", "dark");
+  }, []);
 
   useEffect(() => {
     try {
@@ -109,7 +92,7 @@ function App() {
       return <HeroLab />;
     }
     if (path === "/lab" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <StyleLab themeMode={themeMode} onThemeModeChange={setThemeMode} />;
+      return <StyleLab />;
     }
     return <HomePage onNavigate={navigate} />;
   };
