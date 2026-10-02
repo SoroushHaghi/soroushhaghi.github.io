@@ -1,13 +1,12 @@
 .cinematic-hero {
   position: relative;
-  height: 100svh;
+  height: 820svh;
   background: #020406;
   isolation: isolate;
-  cursor: ns-resize;
 }
 
 .cinematic-hero-sticky {
-  position: relative;
+  position: sticky;
   top: 0;
   height: 100svh;
   min-height: 620px;
@@ -194,7 +193,7 @@
 
 @media (max-width: 760px) {
   .cinematic-hero {
-    height: 100svh;
+    height: 680svh;
   }
 
   .cinematic-hero-sticky {
