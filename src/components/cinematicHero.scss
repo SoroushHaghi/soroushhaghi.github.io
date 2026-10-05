@@ -39,3 +39,84 @@
     height: 320svh;
   }
 }
+
+
+.camera-lab-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 6;
+  width: min(720px, calc(100% - 32px));
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  gap: 10px 14px;
+  align-items: end;
+  padding: 14px 16px;
+  border: 1px solid rgba(230, 238, 248, .12);
+  border-radius: 18px;
+  background: rgba(8, 12, 18, .72);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .28);
+  backdrop-filter: blur(18px);
+  color: rgba(235, 241, 249, .82);
+  font: 500 11px/1.35 Inter, system-ui, sans-serif;
+}
+
+.camera-lab-title {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.camera-lab-title strong {
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+
+.camera-lab-title span {
+  color: rgba(235, 241, 249, .56);
+  font-variant-numeric: tabular-nums;
+}
+
+.camera-lab-controls label {
+  display: grid;
+  gap: 6px;
+}
+
+.camera-lab-controls label > span {
+  color: rgba(235, 241, 249, .58);
+}
+
+.camera-lab-controls input[type="range"] {
+  width: 100%;
+}
+
+.camera-lab-controls button {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid rgba(235, 241, 249, .15);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .045);
+  color: rgba(235, 241, 249, .78);
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .camera-lab-controls {
+    bottom: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px 12px;
+    padding: 12px;
+  }
+
+  .camera-lab-title {
+    display: grid;
+    gap: 2px;
+  }
+
+  .camera-lab-controls button {
+    grid-column: 1 / -1;
+  }
+}
