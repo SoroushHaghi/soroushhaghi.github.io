@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { expertiseCapabilities } from "../expertise/expertiseData";
 import "./cinematicHero.scss";
 
 type Point3 = { x: number; y: number; z: number };
 
 const SPHERE_R = 115;
-const AXIS_R = 142;
+const AXIS_R = 132;
 const CAMERA_DISTANCE = 430;
-const VIEW_SPIN = -0.35;
-const VIEW_PITCH = (-68 * Math.PI) / 180;
-const VIEW_ROLL = (-7 * Math.PI) / 180;
+const VIEW_SPIN = (-20 * Math.PI) / 180;
+const VIEW_PITCH = (-60 * Math.PI) / 180;
+const VIEW_ROLL = (8 * Math.PI) / 180;
 
 const BLUE = "#4b86d8";
 const RED = "#cf5a5a";
@@ -40,6 +40,15 @@ function CinematicHero() {
   const progressRef = useRef(0);
   const wheelLockUntilRef = useRef(0);
   const wheelAnimationRef = useRef<number | null>(null);
+
+  const cameraLabMode =
+    typeof window !== "undefined" &&
+    window.location.pathname.includes("review-camera-lab-v7");
+
+  const [labSpinDeg, setLabSpinDeg] = useState(-20);
+  const [labPitchDeg, setLabPitchDeg] = useState(-60);
+  const [labRollDeg, setLabRollDeg] = useState(8);
+  const [labScalePct, setLabScalePct] = useState(100);
 
   const capabilities = useMemo(
     () =>
@@ -237,11 +246,47 @@ function CinematicHero() {
 
       const centerX = W * 0.5;
       const centerY = H * 0.5;
-      const scale = Math.min(W, H) / 340;
 
-      const spin = VIEW_SPIN * cameraMove;
-      const pitch = VIEW_PITCH * cameraMove;
-      const roll = VIEW_ROLL * cameraMove;
+      // Fit the full axis + label composition inside the viewport instead of
+      // letting the vertical axis or its labels drift under the top nav.
+      // Width becomes the limiting dimension on phones; height limits laptops.
+      const sideSafe = W < 760 ? 18 : 44;
+      const topSafe = W < 760 ? 84 : 96;
+      const bottomSafe = W < 760 ? 42 : 56;
+      const labelReserve = 50;
+      const scaleX =
+        (W * 0.5 - sideSafe - labelReserve) / AXIS_R;
+      const scaleTop =
+        (centerY - topSafe - labelReserve) / AXIS_R;
+      const scaleBottom =
+        (H - bottomSafe - centerY - labelReserve) / AXIS_R;
+      const fittedScale = Math.max(
+        0.58,
+        Math.min(scaleX, scaleTop, scaleBottom)
+      );
+      const scale =
+        fittedScale *
+        (cameraLabMode ? labScalePct / 100 : 1);
+
+      const targetSpin = cameraLabMode
+        ? (labSpinDeg * Math.PI) / 180
+        : VIEW_SPIN;
+      const targetPitch = cameraLabMode
+        ? (labPitchDeg * Math.PI) / 180
+        : VIEW_PITCH;
+      const targetRoll = cameraLabMode
+        ? (labRollDeg * Math.PI) / 180
+        : VIEW_ROLL;
+
+      // Avoid the corkscrew look of interpolating all Euler angles equally.
+      // Pitch establishes depth first; screen-plane roll settles only near
+      // the end of the camera move.
+      const spin =
+        targetSpin * smooth(0.08, 0.92, cameraMove);
+      const pitch =
+        targetPitch * smooth(0.0, 0.86, cameraMove);
+      const roll =
+        targetRoll * smooth(0.62, 1.0, cameraMove);
 
       const rotate = (point: Point3): Point3 => {
         const cs = Math.cos(spin);
@@ -400,59 +445,10 @@ function CinematicHero() {
       ctx.fillRect(0, 0, W, H);
       ctx.restore();
 
-      // Stage 1 — Hardware / Software only.
-      if (xAxisIn > 0.001) {
-        const extent = AXIS_R * xAxisIn;
-        const left = project({ x: -extent, y: 0, z: 0 });
-        const right = project({ x: extent, y: 0, z: 0 });
-        const preCamera = 1 - cameraMove;
-        const stroke =
-          "rgba(224,232,242," +
-          0.30 * xAxisIn * preCamera +
-          ")";
-
-        drawAxis(left, right, stroke);
-
-        drawAxisLabel(
-          "HARDWARE",
-          left,
-          xAxisIn * 0.88 * preCamera,
-          38
-        );
-        drawAxisLabel(
-          "SOFTWARE",
-          right,
-          xAxisIn * 0.88 * preCamera,
-          38
-        );
-      }
-
-      // Stage 2 — Classical / Quantum, only after X is complete.
-      if (yAxisIn > 0.001) {
-        const extent = AXIS_R * yAxisIn;
-        const classical = project({ x: 0, y: -extent, z: 0 });
-        const quantum = project({ x: 0, y: extent, z: 0 });
-        const preCamera = 1 - cameraMove;
-        const stroke =
-          "rgba(224,232,242," +
-          0.28 * yAxisIn * preCamera +
-          ")";
-
-        drawAxis(classical, quantum, stroke);
-
-        drawAxisLabel(
-          "CLASSICAL",
-          classical,
-          yAxisIn * 0.88 * preCamera,
-          38
-        );
-        drawAxisLabel(
-          "QUANTUM",
-          quantum,
-          yAxisIn * 0.88 * preCamera,
-          38
-        );
-      }
+      // The principal axes are rendered exactly once at the end of every
+      // frame. Their reveal amount is still driven by xAxisIn / yAxisIn /
+      // zAxisIn, but the same axis objects persist through camera motion,
+      // centering and sphere formation.
 
       // Stage 3 — 2D plane appears after both axes are finished.
       if (planeIn > 0.001 && planeFade > 0.001) {
@@ -498,62 +494,6 @@ function CinematicHero() {
       // Stage 5 — camera rotates the already-complete 2D state into the
       // calibrated 3D perspective. No rods or Z axis yet.
       // The transform is handled by cameraMove above.
-
-      // Keep the original X/Y axes visible after the camera settles.
-      // Labels cross-fade out before the sphere labels take over, avoiding
-      // duplicate words.
-      if (cameraMove > 0.001) {
-        const axisAlpha = 0.30 * cameraMove;
-        const labelAlpha =
-          0.64 * cameraMove * (1 - sphereGrow);
-
-        const left = project({ x: -AXIS_R, y: 0, z: 0 });
-        const right = project({ x: AXIS_R, y: 0, z: 0 });
-        const classical = project({ x: 0, y: -AXIS_R, z: 0 });
-        const quantum = project({ x: 0, y: AXIS_R, z: 0 });
-        const xStroke =
-          "rgba(224,232,242," + axisAlpha + ")";
-        const yStroke =
-          "rgba(224,232,242," +
-          Math.max(0, axisAlpha - 0.02) +
-          ")";
-
-        drawAxis(left, right, xStroke);
-        drawAxis(classical, quantum, yStroke);
-
-        drawAxisLabel("HARDWARE", left, labelAlpha, 42);
-        drawAxisLabel("SOFTWARE", right, labelAlpha, 42);
-        drawAxisLabel("CLASSICAL", classical, labelAlpha, 42);
-        drawAxisLabel("QUANTUM", quantum, labelAlpha, 42);
-      }
-
-      // Stage 6 — Knowledge / Experience axis only after camera movement ends.
-      // This pre-sphere label set fades out before the sphere label set appears.
-      if (zAxisIn > 0.001) {
-        const preSphere = 1 - sphereGrow;
-        const extent = AXIS_R * zAxisIn;
-        const experience = project({ x: 0, y: 0, z: -extent });
-        const knowledge = project({ x: 0, y: 0, z: extent });
-        const stroke =
-          "rgba(224,232,242," +
-          0.28 * zAxisIn * preSphere +
-          ")";
-
-        drawAxis(experience, knowledge, stroke);
-
-        drawAxisLabel(
-          "EXPERIENCE",
-          experience,
-          zAxisIn * 0.9 * preSphere,
-          42
-        );
-        drawAxisLabel(
-          "KNOWLEDGE",
-          knowledge,
-          zAxisIn * 0.9 * preSphere,
-          42
-        );
-      }
 
       // Stages 7–9 — one continuous rod object per capability.
       // Rods first grow signed along Z. After point removal, the SAME rods
@@ -605,20 +545,6 @@ function CinematicHero() {
 
       // Stage 8 — the original plane points disappear completely before
       // centering. pointsOut is handled in the point-rendering stage above.
-
-      // During centering, fade only the grid. Principal axes remain.
-      if (centering > 0.001) {
-        const left = project({ x: -AXIS_R, y: 0, z: 0 });
-        const right = project({ x: AXIS_R, y: 0, z: 0 });
-        const classical = project({ x: 0, y: -AXIS_R, z: 0 });
-        const quantum = project({ x: 0, y: AXIS_R, z: 0 });
-        const experience = project({ x: 0, y: 0, z: -AXIS_R });
-        const knowledge = project({ x: 0, y: 0, z: AXIS_R });
-
-        drawAxis(left, right, "rgba(224,232,242,.20)");
-        drawAxis(classical, quantum, "rgba(224,232,242,.18)");
-        drawAxis(experience, knowledge, "rgba(224,232,242,.18)");
-      }
 
       // Stage 10 — sphere appears only after centering is complete.
       if (sphereGrow > 0.001) {
@@ -842,27 +768,8 @@ function CinematicHero() {
         ctx.stroke();
         ctx.restore();
 
-        // Principal axes stay visible through the sphere.
-        const axisRadius = AXIS_R * sphereGrow;
-        const left = project({ x: -axisRadius, y: 0, z: 0 });
-        const right = project({ x: axisRadius, y: 0, z: 0 });
-        const classical = project({ x: 0, y: -axisRadius, z: 0 });
-        const quantum = project({ x: 0, y: axisRadius, z: 0 });
-        const experience = project({ x: 0, y: 0, z: -axisRadius });
-        const knowledge = project({ x: 0, y: 0, z: axisRadius });
-
-        drawAxis(left, right, "rgba(230,236,245,.22)", 1);
-        drawAxis(classical, quantum, "rgba(230,236,245,.20)", 1);
-        drawAxis(experience, knowledge, "rgba(230,236,245,.20)", 1);
-
-        const finalLabelAlpha = smooth(0.35, 1, sphereGrow) * 0.68;
-        drawAxisLabel("HARDWARE", left, finalLabelAlpha, 46);
-        drawAxisLabel("SOFTWARE", right, finalLabelAlpha, 46);
-        drawAxisLabel("CLASSICAL", classical, finalLabelAlpha, 46);
-        drawAxisLabel("QUANTUM", quantum, finalLabelAlpha, 46);
-        drawAxisLabel("EXPERIENCE", experience, finalLabelAlpha, 46);
-        drawAxisLabel("KNOWLEDGE", knowledge, finalLabelAlpha, 46);
-
+        // The sphere is only the shell/grid. Principal axes are not recreated
+        // here; the persistent axis layer is rendered once after the shell.
         ctx.save();
         ctx.strokeStyle = "rgba(229,236,246,.42)";
         ctx.lineWidth = 1.45;
@@ -871,11 +778,66 @@ function CinematicHero() {
         ctx.stroke();
         ctx.restore();
       }
+
+      // Persistent principal-axis layer.
+      // These are the SAME axis objects from first reveal to final sphere:
+      // no fade-out, no replacement, no sphere-stage duplicate labels.
+      if (xAxisIn > 0.001) {
+        const extent = AXIS_R * xAxisIn;
+        const left = project({ x: -extent, y: 0, z: 0 });
+        const right = project({ x: extent, y: 0, z: 0 });
+        const alpha = 0.30 * xAxisIn;
+
+        drawAxis(
+          left,
+          right,
+          "rgba(224,232,242," + alpha + ")"
+        );
+        drawAxisLabel("HARDWARE", left, 0.64 * xAxisIn, 42);
+        drawAxisLabel("SOFTWARE", right, 0.64 * xAxisIn, 42);
+      }
+
+      if (yAxisIn > 0.001) {
+        const extent = AXIS_R * yAxisIn;
+        const classical = project({ x: 0, y: -extent, z: 0 });
+        const quantum = project({ x: 0, y: extent, z: 0 });
+        const alpha = 0.28 * yAxisIn;
+
+        drawAxis(
+          classical,
+          quantum,
+          "rgba(224,232,242," + alpha + ")"
+        );
+        drawAxisLabel("CLASSICAL", classical, 0.62 * yAxisIn, 42);
+        drawAxisLabel("QUANTUM", quantum, 0.62 * yAxisIn, 42);
+      }
+
+      if (zAxisIn > 0.001) {
+        const extent = AXIS_R * zAxisIn;
+        const experience = project({ x: 0, y: 0, z: -extent });
+        const knowledge = project({ x: 0, y: 0, z: extent });
+        const alpha = 0.28 * zAxisIn;
+
+        drawAxis(
+          experience,
+          knowledge,
+          "rgba(224,232,242," + alpha + ")"
+        );
+        drawAxisLabel("EXPERIENCE", experience, 0.64 * zAxisIn, 42);
+        drawAxisLabel("KNOWLEDGE", knowledge, 0.64 * zAxisIn, 42);
+      }
     };
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [capabilities]);
+  }, [
+    capabilities,
+    cameraLabMode,
+    labPitchDeg,
+    labRollDeg,
+    labScalePct,
+    labSpinDeg,
+  ]);
 
   return (
     <section
@@ -889,6 +851,88 @@ function CinematicHero() {
           className="cinematic-hero-canvas"
           aria-hidden="true"
         />
+
+        {cameraLabMode && (
+          <div
+            className="camera-lab-controls"
+            onWheel={(event) => event.stopPropagation()}
+          >
+            <div className="camera-lab-title">
+              <strong>Camera Lab</strong>
+              <span>
+                Spin {labSpinDeg}° · Pitch {labPitchDeg}° · Roll {labRollDeg}°
+              </span>
+            </div>
+
+            <label>
+              <span>Spin</span>
+              <input
+                type="range"
+                min="-45"
+                max="45"
+                step="1"
+                value={labSpinDeg}
+                onChange={(event) =>
+                  setLabSpinDeg(Number(event.target.value))
+                }
+              />
+            </label>
+
+            <label>
+              <span>Pitch</span>
+              <input
+                type="range"
+                min="-80"
+                max="-25"
+                step="1"
+                value={labPitchDeg}
+                onChange={(event) =>
+                  setLabPitchDeg(Number(event.target.value))
+                }
+              />
+            </label>
+
+            <label>
+              <span>Roll</span>
+              <input
+                type="range"
+                min="-25"
+                max="25"
+                step="1"
+                value={labRollDeg}
+                onChange={(event) =>
+                  setLabRollDeg(Number(event.target.value))
+                }
+              />
+            </label>
+
+            <label>
+              <span>Scale</span>
+              <input
+                type="range"
+                min="78"
+                max="108"
+                step="1"
+                value={labScalePct}
+                onChange={(event) =>
+                  setLabScalePct(Number(event.target.value))
+                }
+              />
+            </label>
+
+            <button
+              type="button"
+              onClick={() => {
+                setLabSpinDeg(-20);
+                setLabPitchDeg(-60);
+                setLabRollDeg(8);
+                setLabScalePct(100);
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
