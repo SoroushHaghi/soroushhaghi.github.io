@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toPublicPath } from "../routes";
 import "./polishLab.scss";
 
@@ -74,7 +74,7 @@ function PolishLab() {
     }
   }, [copyText]);
 
-  const applyPatches = () => {
+  const applyPatches = useCallback(() => {
     const frame = frameRef.current;
     const doc = frame?.contentDocument;
     if (!doc) return;
@@ -106,11 +106,11 @@ function PolishLab() {
       const node = doc.querySelector(selector);
       if (node) node.textContent = value;
     });
-  };
+  }, [cssText, parseResult]);
 
   useEffect(() => {
     applyPatches();
-  }, [copyText, cssText, frameVersion, parseResult]);
+  }, [applyPatches, frameVersion]);
 
   const reset = () => {
     setCopyText(JSON.stringify(defaultCopy, null, 2));
