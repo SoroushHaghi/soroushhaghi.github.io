@@ -5782,3 +5782,93 @@ html[data-theme="light"] .lab-token-readout strong {
     height:68px !important;
   }
 }
+
+
+/* 2026-10-06 affiliation rail: stable linked logo canvas + optical sizing */
+.organization-mark[data-brand] {
+  color: inherit;
+  text-decoration: none;
+}
+
+.organization-mark[data-brand] .organization-mark-content {
+  width: 132px;
+  max-width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.organization-mark[data-brand] .organization-logo-frame {
+  width: 108px;
+  height: 92px;
+}
+
+.organization-mark[data-brand] .organization-logo-frame > img {
+  width: 82px !important;
+  height: 82px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+.organization-mark[data-brand="tu-braunschweig"] .organization-logo-frame > img {
+  width: 100px !important;
+  height: 68px !important;
+}
+
+.organization-mark[data-brand="leibniz-hannover"] .organization-logo-frame > img {
+  width: 106px !important;
+  height: 68px !important;
+}
+
+.organization-mark[data-brand="ptb"] .organization-logo-frame > img {
+  width: 106px !important;
+  height: 64px !important;
+}
+
+.organization-mark[data-brand="intel"] .organization-logo-frame > img {
+  width: 104px !important;
+  height: 64px !important;
+}
+
+.organization-mark[data-brand="infineon"] .organization-logo-frame > img {
+  width: 108px !important;
+  height: 66px !important;
+}
+
+.organization-mark[data-brand="texas-instruments"] .organization-logo-frame > img,
+.organization-mark[data-brand="volkswagen"] .organization-logo-frame > img,
+.organization-mark[data-brand="huawei"] .organization-logo-frame > img {
+  width: 78px !important;
+  height: 78px !important;
+}
+
+@media (max-width: 900px) {
+  .organization-mark[data-brand] .organization-mark-content {
+    width: 108px;
+  }
+
+  .organization-mark[data-brand] .organization-logo-frame {
+    width: 92px;
+    height: 82px;
+  }
+
+  .organization-mark[data-brand] .organization-logo-frame > img {
+    max-width: 86px !important;
+    max-height: 72px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .organization-mark[data-brand] .organization-mark-content {
+    width: 92px;
+  }
+
+  .organization-mark[data-brand] .organization-logo-frame {
+    width: 78px;
+    height: 70px;
+  }
+
+  .organization-mark[data-brand] .organization-logo-frame > img {
+    max-width: 72px !important;
+    max-height: 62px !important;
+  }
+}
