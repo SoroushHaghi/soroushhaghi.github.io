@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import defaultCopy from "./siteCopy.json";
 
 export const SITE_COPY_DRAFT_KEY = "portfolio-site-copy-draft-v1";
@@ -65,8 +65,10 @@ export function useSiteCopy(): SiteCopy {
     };
   }, []);
 
-  void version;
-  return getSiteCopy();
+  return useMemo(() => {
+    void version;
+    return getSiteCopy();
+  }, [version]);
 }
 
 export default defaultCopy;
