@@ -9,6 +9,7 @@ import WorkLab from "./pages/WorkLab";
 import EducationLab from "./pages/EducationLab";
 import BackgroundLab from "./pages/BackgroundLab";
 import ExpertiseLab from "./pages/ExpertiseLab";
+import PolishLab from "./pages/PolishLab";
 import DynamicBackground from "./components/DynamicBackground";
 import { backgroundDefaults, backgroundStorageKey } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
@@ -142,27 +143,18 @@ function App() {
     setPath(normalized);
   };
 
+  const labsEnabled = process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true";
+
   const renderPage = () => {
     if (path === "/work") return <WorkPage />;
     if (path === "/education") return <EducationPage />;
-    if (path === "/lab/background" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <BackgroundLab />;
-    }
-    if (path === "/lab/expertise" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <ExpertiseLab />;
-    }
-    if (path === "/lab/education" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <EducationLab />;
-    }
-    if (path === "/lab/work" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <WorkLab />;
-    }
-    if (path === "/lab/hero" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <HeroLab />;
-    }
-    if (path === "/lab" && (process.env.NODE_ENV !== "production" || process.env.REACT_APP_ENABLE_LAB === "true")) {
-      return <StyleLab />;
-    }
+    if (path === "/lab/polish" && labsEnabled) return <PolishLab />;
+    if (path === "/lab/background" && labsEnabled) return <BackgroundLab />;
+    if (path === "/lab/expertise" && labsEnabled) return <ExpertiseLab />;
+    if (path === "/lab/education" && labsEnabled) return <EducationLab />;
+    if (path === "/lab/work" && labsEnabled) return <WorkLab />;
+    if (path === "/lab/hero" && labsEnabled) return <HeroLab />;
+    if (path === "/lab" && labsEnabled) return <StyleLab />;
     return <HomePage onNavigate={navigate} />;
   };
 
