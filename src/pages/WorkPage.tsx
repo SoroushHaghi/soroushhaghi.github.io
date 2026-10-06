@@ -2,18 +2,19 @@ import React, { useMemo, useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import WorkArtifactPreview from "../components/WorkArtifactPreview";
 import { workTimeline, WorkTimelineItem } from "../portfolioContent";
+import { useSiteCopy } from "../content/useSiteCopy";
 
 type Filter = "all" | WorkTimelineItem["kind"];
 
-const filters: { id: Filter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "experience", label: "Experience" },
-  { id: "project", label: "Projects" },
-  { id: "co-op", label: "Co-op" },
-];
-
 function WorkPage() {
+  const copy = useSiteCopy();
   const [filter, setFilter] = useState<Filter>("all");
+  const filters: { id: Filter; label: string }[] = [
+    { id: "all", label: copy.workPage.filters.all },
+    { id: "experience", label: copy.workPage.filters.experience },
+    { id: "project", label: copy.workPage.filters.project },
+    { id: "co-op", label: copy.workPage.filters["co-op"] },
+  ];
 
   const items = useMemo(
     () =>
@@ -26,8 +27,8 @@ function WorkPage() {
   return (
     <main className="subpage page-shell work-timeline-page">
       <SectionHeading
-        eyebrow="WORK"
-        title="Experience and projects over time."
+        eyebrow={copy.workPage.eyebrow}
+        title={copy.workPage.title}
       />
 
       <div className="timeline-filter-row" role="toolbar" aria-label="Filter work timeline">
@@ -71,7 +72,7 @@ function WorkPage() {
 
               {(item.bullets || item.scope || item.links) && (
                 <details className="timeline-details">
-                  <summary>Details</summary>
+                  <summary>{copy.workPage.details}</summary>
                   <div className="timeline-details-body">
                     {item.bullets && (
                       <ul className="timeline-bullets">
