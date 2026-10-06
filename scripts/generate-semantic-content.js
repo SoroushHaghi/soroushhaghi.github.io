@@ -110,7 +110,7 @@ function homeHtml() {
   return `
     <main>
       <section>
-        <p>${esc(copy.home.hero.eyebrow)}</p>
+        <p>${esc(copy.careerState.stages[0].eyebrow)}</p>
         <h1>${esc(copy.identity.fullName)}</h1>
       </section>
       <section>
@@ -265,7 +265,7 @@ fs.writeFileSync(path.join(contentDir, "index.html"), fullSiteHtml());
 
 const plain = [
   copy.identity.fullName,
-  copy.home.hero.eyebrow,
+  copy.careerState.stages[0].eyebrow,
   "",
   copy.careerState.semanticHeading,
   copy.careerState.semanticIntro,
