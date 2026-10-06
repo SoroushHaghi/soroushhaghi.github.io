@@ -2,7 +2,6 @@ import React from "react";
 import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
-import VisualInterlude from "../components/VisualInterlude";
 import CinematicHero from "../components/CinematicHero";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
@@ -38,8 +37,6 @@ function HomePage({ onNavigate }: Props) {
           ))}
         </div>
       </section>
-
-      <VisualInterlude />
 
       <section className="section page-shell expertise-section" data-scroll-section="expertise">
         <SectionHeading
