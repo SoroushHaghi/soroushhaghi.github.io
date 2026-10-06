@@ -1,0 +1,1007 @@
+{
+  "identity": {
+    "fullName": "Soroush Haghi",
+    "shortName": "S. Haghi"
+  },
+  "navigation": {
+    "work": "WORK",
+    "education": "EDUCATION",
+    "cv": "CV"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "COMPUTER ENGINEERING → QUANTUM TECHNOLOGIES",
+      "lead": "Connecting software and computation with physical systems, communication, and quantum technologies.",
+      "cta": "View work"
+    },
+    "education": {
+      "eyebrow": "EDUCATION",
+      "title": "Current direction, built on an engineering foundation.",
+      "copy": "From Computer Engineering into Quantum Technologies, with focus spanning computation, communication, photonics and devices.",
+      "action": "Explore education"
+    },
+    "expertise": {
+      "eyebrow": "EXPERTISE",
+      "title": "Where my education and technical work connect.",
+      "copy": "A readable index of the domains that recur across my coursework, projects and systems."
+    },
+    "work": {
+      "eyebrow": "SELECTED WORK",
+      "title": "Selected technical work.",
+      "copy": "Three representative projects and systems; the Work page carries the broader set.",
+      "action": "View all work",
+      "cardAction": "View work"
+    },
+    "affiliations": {
+      "eyebrow": "AFFILIATIONS & CONTEXT"
+    },
+    "contact": {
+      "eyebrow": "CONTACT",
+      "title": "Seeking an internship.",
+      "email": "Email",
+      "cv": "Open CV"
+    }
+  },
+  "careerState": {
+    "ariaLabel": "Career expertise state",
+    "brand": "EXPERTISE STATE",
+    "stages": [
+      {
+        "eyebrow": "",
+        "title": "",
+        "copy": ""
+      },
+      {
+        "eyebrow": "01 · BACHELOR",
+        "title": "Computer Engineering",
+        "copy": ""
+      },
+      {
+        "eyebrow": "02 · MASTER",
+        "title": "Quantum Engineering",
+        "copy": ""
+      },
+      {
+        "eyebrow": "03 · EVIDENCE",
+        "title": "Every dot is one step.",
+        "copy": ""
+      },
+      {
+        "eyebrow": "04 · DEPTH",
+        "title": "Each step is either knowledge or experience.",
+        "copy": ""
+      },
+      {
+        "eyebrow": "05 · SUPERPOSITION",
+        "title": "I am a qubit in superposition of 4 states.",
+        "copy": ""
+      }
+    ],
+    "axes": {
+      "hardware": "HARDWARE",
+      "software": "SOFTWARE",
+      "classical": "CLASSICAL",
+      "quantum": "QUANTUM",
+      "experience": "EXPERIENCE",
+      "knowledge": "KNOWLEDGE"
+    },
+    "basisNames": {
+      "QH": "Quantum Hardware",
+      "QS": "Quantum Computing",
+      "CH": "Classical Hardware",
+      "CS": "Classical Computing"
+    },
+    "equationHint": "click ψ to measure",
+    "scrollHint": "scroll",
+    "semanticHeading": "Career-state narrative",
+    "semanticIntro": "An interactive visualization of the trajectory from Computer Engineering into Quantum Engineering, the evidence behind it, and the relationship between knowledge and experience across classical and quantum hardware/software domains.",
+    "capabilities": [
+      {
+        "id": "qinfo",
+        "name": "Quantum Information",
+        "mode": "Knowledge",
+        "hardwareSoftware": 42,
+        "classicalQuantum": 78,
+        "knowledge": 0.94,
+        "experience": 0.28
+      },
+      {
+        "id": "qalgo",
+        "name": "Quantum Algorithms",
+        "mode": "Knowledge",
+        "hardwareSoftware": 70,
+        "classicalQuantum": 84,
+        "knowledge": 0.88,
+        "experience": 0.38
+      },
+      {
+        "id": "qpl",
+        "name": "QPL / CV Quantum Computing",
+        "mode": "Knowledge",
+        "hardwareSoftware": 20,
+        "classicalQuantum": 90,
+        "knowledge": 0.88,
+        "experience": 0.32
+      },
+      {
+        "id": "qcomm",
+        "name": "Quantum Communication Networks",
+        "mode": "Knowledge",
+        "hardwareSoftware": 27,
+        "classicalQuantum": 70,
+        "knowledge": 0.88,
+        "experience": 0.36
+      },
+      {
+        "id": "qkd",
+        "name": "QKD / Optical Networks",
+        "mode": "Knowledge",
+        "hardwareSoftware": -10,
+        "classicalQuantum": 74,
+        "knowledge": 0.76,
+        "experience": 0.3
+      },
+      {
+        "id": "qml",
+        "name": "Quantum Machine Learning",
+        "mode": "Knowledge",
+        "hardwareSoftware": 78,
+        "classicalQuantum": 58,
+        "knowledge": 0.7,
+        "experience": 0.2
+      },
+      {
+        "id": "qhardware",
+        "name": "Quantum Hardware Platforms",
+        "mode": "Knowledge",
+        "hardwareSoftware": -60,
+        "classicalQuantum": 84,
+        "knowledge": 0.78,
+        "experience": 0.2
+      },
+      {
+        "id": "qphysics",
+        "name": "Quantum Physics Foundations",
+        "mode": "Knowledge",
+        "hardwareSoftware": -44,
+        "classicalQuantum": 63,
+        "knowledge": 0.9,
+        "experience": 0.18
+      },
+      {
+        "id": "photonicqc",
+        "name": "Photonic Quantum Computing",
+        "mode": "Knowledge",
+        "hardwareSoftware": -20,
+        "classicalQuantum": 88,
+        "knowledge": 0.78,
+        "experience": 0.22
+      },
+      {
+        "id": "nonlinear",
+        "name": "Nonlinear Photonics",
+        "mode": "Knowledge",
+        "hardwareSoftware": -52,
+        "classicalQuantum": 18,
+        "knowledge": 0.92,
+        "experience": 0.4
+      },
+      {
+        "id": "nano",
+        "name": "Nano Optics / Plasmonics",
+        "mode": "Knowledge",
+        "hardwareSoftware": -64,
+        "classicalQuantum": 7,
+        "knowledge": 0.72,
+        "experience": 0.18
+      },
+      {
+        "id": "em",
+        "name": "Electromagnetics / Field Theory",
+        "mode": "Knowledge",
+        "hardwareSoftware": -72,
+        "classicalQuantum": -18,
+        "knowledge": 0.91,
+        "experience": 0.33
+      },
+      {
+        "id": "semi",
+        "name": "Semiconductor Technology",
+        "mode": "Knowledge",
+        "hardwareSoftware": -76,
+        "classicalQuantum": -39,
+        "knowledge": 0.78,
+        "experience": 0.2
+      },
+      {
+        "id": "gan",
+        "name": "GaN Technology",
+        "mode": "Knowledge",
+        "hardwareSoftware": -80,
+        "classicalQuantum": -25,
+        "knowledge": 0.74,
+        "experience": 0.18
+      },
+      {
+        "id": "materials",
+        "name": "Crystal Defects / Materials",
+        "mode": "Knowledge",
+        "hardwareSoftware": -73,
+        "classicalQuantum": -51,
+        "knowledge": 0.7,
+        "experience": 0.24
+      },
+      {
+        "id": "coding",
+        "name": "Information & Coding Theory",
+        "mode": "Knowledge",
+        "hardwareSoftware": 34,
+        "classicalQuantum": -16,
+        "knowledge": 0.88,
+        "experience": 0.38
+      },
+      {
+        "id": "nit",
+        "name": "Network Information Theory",
+        "mode": "Knowledge",
+        "hardwareSoftware": 26,
+        "classicalQuantum": -5,
+        "knowledge": 0.84,
+        "experience": 0.28
+      },
+      {
+        "id": "formal",
+        "name": "Formal Languages / Automata",
+        "mode": "Knowledge",
+        "hardwareSoftware": 61,
+        "classicalQuantum": -78,
+        "knowledge": 0.76,
+        "experience": 0.46
+      },
+      {
+        "id": "sql",
+        "name": "SQL",
+        "mode": "Knowledge",
+        "hardwareSoftware": 79,
+        "classicalQuantum": -94,
+        "knowledge": 0.56,
+        "experience": 0.16
+      },
+      {
+        "id": "embedded",
+        "name": "Embedded / ATmega32",
+        "mode": "Experience",
+        "hardwareSoftware": -42,
+        "classicalQuantum": -72,
+        "knowledge": 0.56,
+        "experience": 0.72
+      },
+      {
+        "id": "cpp",
+        "name": "C / C++ Implementation",
+        "mode": "Experience",
+        "hardwareSoftware": 74,
+        "classicalQuantum": -87,
+        "knowledge": 0.54,
+        "experience": 0.62
+      },
+      {
+        "id": "codinglab",
+        "name": "Coding Theory Computational Lab",
+        "mode": "Experience",
+        "hardwareSoftware": 46,
+        "classicalQuantum": -20,
+        "knowledge": 0.62,
+        "experience": 0.58
+      },
+      {
+        "id": "itsupport",
+        "name": "IT Support / Hardware",
+        "mode": "Experience",
+        "hardwareSoftware": -86,
+        "classicalQuantum": -88,
+        "knowledge": 0.4,
+        "experience": 0.88
+      },
+      {
+        "id": "networkinfra",
+        "name": "Local Networking / Infrastructure",
+        "mode": "Experience",
+        "hardwareSoftware": -57,
+        "classicalQuantum": -84,
+        "knowledge": 0.48,
+        "experience": 0.78
+      },
+      {
+        "id": "career",
+        "name": "Career OS",
+        "mode": "Experience",
+        "hardwareSoftware": 91,
+        "classicalQuantum": -34,
+        "knowledge": 0.76,
+        "experience": 0.88
+      },
+      {
+        "id": "website",
+        "name": "Portfolio Website",
+        "mode": "Experience",
+        "hardwareSoftware": 96,
+        "classicalQuantum": -27,
+        "knowledge": 0.56,
+        "experience": 0.74
+      },
+      {
+        "id": "pythonml",
+        "name": "Python ML Applications",
+        "mode": "Experience",
+        "hardwareSoftware": 84,
+        "classicalQuantum": -75,
+        "knowledge": 0.72,
+        "experience": 0.86
+      },
+      {
+        "id": "activity",
+        "name": "Activity Recognition + CI",
+        "mode": "Experience",
+        "hardwareSoftware": 82,
+        "classicalQuantum": -67,
+        "knowledge": 0.62,
+        "experience": 0.78
+      },
+      {
+        "id": "mri",
+        "name": "MRI Segmentation Inference",
+        "mode": "Experience",
+        "hardwareSoftware": 80,
+        "classicalQuantum": -58,
+        "knowledge": 0.66,
+        "experience": 0.82
+      },
+      {
+        "id": "vehicle",
+        "name": "Vehicle Detection",
+        "mode": "Experience",
+        "hardwareSoftware": 59,
+        "classicalQuantum": -56,
+        "knowledge": 0.6,
+        "experience": 0.72
+      },
+      {
+        "id": "image",
+        "name": "Image Processing",
+        "mode": "Experience",
+        "hardwareSoftware": 53,
+        "classicalQuantum": -45,
+        "knowledge": 0.58,
+        "experience": 0.7
+      },
+      {
+        "id": "ta",
+        "name": "Teaching Assistant / Exercise Class",
+        "mode": "Experience",
+        "hardwareSoftware": 61,
+        "classicalQuantum": -78,
+        "knowledge": 0.64,
+        "experience": 0.68
+      },
+      {
+        "id": "gitci",
+        "name": "Git / CI / Technical Tooling",
+        "mode": "Experience",
+        "hardwareSoftware": 92,
+        "classicalQuantum": -53,
+        "knowledge": 0.56,
+        "experience": 0.86
+      }
+    ]
+  },
+  "work": {
+    "page": {
+      "eyebrow": "WORK",
+      "title": "Experience and projects over time.",
+      "filters": {
+        "all": "All",
+        "experience": "Experience",
+        "project": "Projects",
+        "co-op": "Co-op"
+      },
+      "details": "Details"
+    },
+    "items": [
+      {
+        "id": "career-os",
+        "kind": "project",
+        "period": "Sep 2026 — Present",
+        "sort": 20260912,
+        "title": "Career OS",
+        "organization": "Open-source / AI-assisted co-development",
+        "summary": "Privacy-first shared AI context and evidence-to-knowledge system with provenance-aware workflows, queue/retry processing, provider adapters, and public/private boundaries.",
+        "bullets": [
+          "User-directed requirements, architecture, privacy rules, workflow design, testing, debugging, and iterative refinement.",
+          "Public repository contains reusable contracts, tests, synthetic examples, automation logic, and implementation-status boundaries."
+        ],
+        "tags": [
+          "Systems",
+          "Automation",
+          "AI tooling",
+          "Provenance",
+          "GitHub"
+        ],
+        "links": [
+          {
+            "label": "GitHub",
+            "href": "https://github.com/SoroushHaghi/career-os"
+          }
+        ],
+        "artifact": {
+          "kind": "repo",
+          "label": "Public repository",
+          "href": "https://github.com/SoroushHaghi/career-os",
+          "repo": "SoroushHaghi/career-os"
+        },
+        "scope": "Demonstrated · AI-assisted co-development"
+      },
+      {
+        "id": "mri-segmentation",
+        "kind": "project",
+        "period": "Public repo · Nov 2025",
+        "sort": 20251122,
+        "title": "MRI Segmentation Inference Dashboard",
+        "summary": "Streamlit/PyTorch inference application using pretrained segmentation weights, preprocessing, mask generation, overlays, and area visualization.",
+        "tags": [
+          "PyTorch",
+          "Streamlit",
+          "Medical imaging",
+          "Inference"
+        ],
+        "links": [
+          {
+            "label": "GitHub",
+            "href": "https://github.com/SoroushHaghi/MRI-tumor-detection"
+          },
+          {
+            "label": "Live demo",
+            "href": "https://ptb-mri-detection.streamlit.app"
+          }
+        ],
+        "artifact": {
+          "kind": "live",
+          "label": "MRI segmentation demo",
+          "href": "https://ptb-mri-detection.streamlit.app/?embed=true",
+          "note": "Load the live Streamlit preview"
+        },
+        "scope": "Demonstrated inference integration; no model-training authorship claim"
+      },
+      {
+        "id": "gas-classification",
+        "kind": "project",
+        "period": "Public repo · Nov 2025",
+        "sort": 20251110,
+        "title": "Gas Classification Pipeline & Dashboard",
+        "summary": "Python/Streamlit sensor-classification workflow using statistical window features and RandomForest prediction probabilities.",
+        "tags": [
+          "Python",
+          "scikit-learn",
+          "RandomForest",
+          "Sensors",
+          "Streamlit"
+        ],
+        "links": [
+          {
+            "label": "GitHub",
+            "href": "https://github.com/SoroushHaghi/gas-detection"
+          },
+          {
+            "label": "Live demo",
+            "href": "https://gas-detection-tubs.streamlit.app"
+          }
+        ],
+        "artifact": {
+          "kind": "live",
+          "label": "Gas classification demo",
+          "href": "https://gas-detection-tubs.streamlit.app/?embed=true",
+          "note": "Load the live Streamlit preview"
+        },
+        "scope": "Demonstrated project scope; unsupported performance claims omitted"
+      },
+      {
+        "id": "activity-recognition",
+        "kind": "project",
+        "period": "Public repo · Nov 2025",
+        "sort": 20251104,
+        "title": "Activity Recognition ML Comparison",
+        "summary": "Structured sensor-ML project comparing RandomForest and 1D-CNN approaches with Poetry-managed dependencies and GitLab CI lint/test stages.",
+        "tags": [
+          "Python",
+          "PyTorch",
+          "scikit-learn",
+          "CI",
+          "Sensor ML"
+        ],
+        "links": [
+          {
+            "label": "GitHub",
+            "href": "https://github.com/SoroushHaghi/Activity_Recognition"
+          }
+        ],
+        "artifact": {
+          "kind": "gif",
+          "label": "Pipeline demo",
+          "image": "https://raw.githubusercontent.com/SoroushHaghi/Activity_Recognition/main/docs/demo.gif",
+          "href": "https://github.com/SoroushHaghi/Activity_Recognition"
+        },
+        "scope": "Demonstrated ML/CI scope; accuracy and Docker claims intentionally omitted"
+      },
+      {
+        "id": "bachelor-projects",
+        "kind": "project",
+        "period": "Undergraduate work · 2018 — 2024",
+        "sort": 20180101,
+        "title": "Bachelor Engineering Projects",
+        "organization": "Computer Engineering coursework",
+        "summary": "Curated undergraduate work spanning computer vision, embedded systems, image processing, and signal processing.",
+        "bullets": [
+          "Day/Night Vehicle Detection — MATLAB computer vision and image processing.",
+          "Hybrid Image Generation — low/high spatial-frequency image composition.",
+          "ATmega32 Digital Clock and Digital Safe — embedded C coursework.",
+          "Stereo Sound Direction — MATLAB signal-processing artifact; authorship remains bounded."
+        ],
+        "tags": [
+          "MATLAB",
+          "Computer vision",
+          "Embedded C",
+          "ATmega32",
+          "Signal processing"
+        ],
+        "links": [
+          {
+            "label": "Project collection",
+            "href": "https://soroushhaghi.github.io/bachelor-engineering-projects/"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/SoroushHaghi/bachelor-engineering-projects"
+          }
+        ],
+        "artifact": {
+          "kind": "live",
+          "label": "Bachelor project collection",
+          "href": "https://soroushhaghi.github.io/bachelor-engineering-projects/",
+          "note": "Load the interactive project collection"
+        },
+        "scope": "Coursework / demonstrated and user-confirmed items; boundaries preserved per project"
+      },
+      {
+        "id": "teaching-assistant",
+        "kind": "experience",
+        "period": "Sep 2023 — Jan 2024",
+        "sort": 20230901,
+        "title": "Teaching Assistant — Theory of Formal Languages and Automata",
+        "organization": "Azad University, Mashhad Branch",
+        "summary": "Led supervised weekly exercise and problem-solving sessions for approximately 20 students and supported assignment/exam evaluation.",
+        "tags": [
+          "Teaching",
+          "Algorithms",
+          "Technical communication"
+        ],
+        "artifact": {
+          "kind": "evidence",
+          "label": "Signed university certification",
+          "note": "Evidence on file · public document preview not published yet"
+        },
+        "scope": "Demonstrated role; supervised course responsibility"
+      },
+      {
+        "id": "rd-denoising",
+        "kind": "project",
+        "period": "Public repo · Dec 2023",
+        "sort": 20231218,
+        "title": "Image Noise / Denoising / PSNR Repository",
+        "summary": "Public repository structured around noise simulation, denoising, and PSNR-based image-quality evaluation.",
+        "tags": [
+          "Python",
+          "Image processing",
+          "Denoising",
+          "PSNR"
+        ],
+        "links": [
+          {
+            "label": "GitHub",
+            "href": "https://github.com/SoroushHaghi/RD_denoising"
+          }
+        ],
+        "artifact": {
+          "kind": "repo",
+          "label": "Public repository",
+          "href": "https://github.com/SoroushHaghi/RD_denoising",
+          "repo": "SoroushHaghi/RD_denoising"
+        },
+        "scope": "Public repository scope only; no stronger authorship or benchmark claim"
+      },
+      {
+        "id": "ikco",
+        "kind": "co-op",
+        "period": "Apr 2023 — Sep 2023",
+        "sort": 20230401,
+        "title": "Iran Khodro (IKCO)",
+        "organization": "Co-op — Pouyesh Scheme",
+        "summary": "University participation in a talent/industry context with personal work on a MATLAB day/night vehicle-detection project.",
+        "bullets": [
+          "Participation led to an invitation to work from Iran Khodro.",
+          "Ranked 1st among 50 participants in the relevant context."
+        ],
+        "tags": [
+          "Computer vision",
+          "MATLAB",
+          "Industry-university"
+        ],
+        "artifact": {
+          "kind": "evidence",
+          "label": "Project / ranking evidence",
+          "note": "Evidence on file · public document preview not published yet"
+        },
+        "scope": "User-confirmed context; not represented as formal employment"
+      },
+      {
+        "id": "ferdowsi-startup",
+        "kind": "experience",
+        "period": "Mar 2023 — Aug 2023",
+        "sort": 20230301,
+        "title": "Ferdowsi University Startup",
+        "organization": "Project Contributor",
+        "summary": "Temporary project-based collaboration supporting coordination, external presentations, stakeholder communication, outreach, attendee coordination, on-site presentation, and professional networking.",
+        "tags": [
+          "Project coordination",
+          "Presentations",
+          "Stakeholder communication"
+        ],
+        "artifact": {
+          "kind": "evidence",
+          "label": "Signed reference letter",
+          "note": "Evidence on file · public document preview not published yet"
+        },
+        "scope": "Demonstrated by signed reference; no software/model implementation claim"
+      },
+      {
+        "id": "volunteer-it",
+        "kind": "experience",
+        "period": "Oct 2022 — Aug 2023",
+        "sort": 20221001,
+        "title": "Volunteer IT Support",
+        "organization": "Azad University, Mashhad Branch",
+        "summary": "Continued supporting the university IT team after the internship, progressing from central support to on-site troubleshooting and repair across internal university units.",
+        "tags": [
+          "IT support",
+          "Hardware",
+          "Networks",
+          "Windows"
+        ],
+        "artifact": {
+          "kind": "evidence",
+          "label": "Role evidence",
+          "note": "Private evidence retained in Career OS"
+        },
+        "scope": "User-confirmed volunteer continuation"
+      },
+      {
+        "id": "it-intern",
+        "kind": "experience",
+        "period": "Jul 2022 — Sep 2022",
+        "sort": 20220701,
+        "title": "IT Support Intern",
+        "organization": "Azad University, Mashhad Branch",
+        "summary": "Desktop troubleshooting and repair, component replacement/upgrades, Windows installation/configuration, physical rack/cabling work, and local network/Wi-Fi setup and troubleshooting.",
+        "tags": [
+          "IT support",
+          "Hardware",
+          "Networking",
+          "Windows"
+        ],
+        "artifact": {
+          "kind": "evidence",
+          "label": "Internship evidence",
+          "note": "Private evidence retained in Career OS"
+        },
+        "scope": "User-confirmed internship scope"
+      }
+    ]
+  },
+  "education": {
+    "page": {
+      "eyebrow": "EDUCATION",
+      "title": "Academic journey over time.",
+      "copy": "Degrees, academic work and credentials in one chronological view.",
+      "filters": {
+        "all": "All",
+        "degree": "Degrees",
+        "academic": "Academic Work",
+        "credential": "Credentials"
+      },
+      "timelineRuleLabel": "Timeline rule",
+      "timelineRuleCopy": "Exact dates are shown where verified. Academic work without a verified month/day stays within its known study period instead of receiving an invented date."
+    },
+    "degrees": [
+      {
+        "id": "msc",
+        "degree": "M.Sc. Quantum Technologies",
+        "institution": "TU Braunschweig",
+        "period": "2024 — Present",
+        "focus": [
+          "Quantum information & computing",
+          "Communication & photonics",
+          "Semiconductor & device technologies"
+        ],
+        "domains": [
+          "quantum",
+          "communication",
+          "photonics",
+          "devices-sensing"
+        ]
+      },
+      {
+        "id": "bsc",
+        "degree": "B.Sc. Computer Engineering",
+        "institution": "Azad University, Mashhad",
+        "period": "2018 — 2024",
+        "focus": [
+          "AI & computer vision",
+          "Embedded systems",
+          "Software & computer engineering"
+        ],
+        "achievement": "Ranked 5th of 131 students",
+        "domains": [
+          "ai-perception",
+          "devices-sensing",
+          "software-systems"
+        ]
+      }
+    ],
+    "academicWork": [
+      {
+        "id": "qkd-satellite",
+        "status": "COMPLETED",
+        "title": "QKD Satellite Communication — Academic Work",
+        "context": "Master's selected academic work",
+        "summary": "Source-approved academic work in QKD satellite communication; represented here at academic-work scope without implying experimental or deployment experience.",
+        "tags": [
+          "QKD",
+          "Satellite communication",
+          "Quantum communication"
+        ]
+      },
+      {
+        "id": "qkd-seminar",
+        "status": "PRESENTATION PENDING",
+        "title": "Co-propagation of QKD Signals with Next-Generation Optical Networks",
+        "context": "Master's seminar",
+        "summary": "Seminar work on coexistence of QKD signals with next-generation optical-network infrastructure; final presentation is still pending.",
+        "tags": [
+          "QKD",
+          "Optical networks",
+          "Quantum communication"
+        ]
+      },
+      {
+        "id": "qcn-presentation",
+        "status": "COMPLETED",
+        "title": "Quantum Communication Networks — Technical Presentation",
+        "context": "Master's academic work",
+        "summary": "Presentation covering quantum-state concepts, tomography, CHSH, entanglement, dense coding, and teleportation.",
+        "tags": [
+          "Quantum communication",
+          "Entanglement",
+          "CHSH"
+        ]
+      },
+      {
+        "id": "channel-coding-presentation",
+        "status": "COMPLETED",
+        "title": "Channel Coding with State — Technical Presentation",
+        "context": "Master's academic work",
+        "summary": "Presentation on state-dependent channels, random binning, dirty-paper coding, and achievable-rate ideas.",
+        "tags": [
+          "Information theory",
+          "Coding",
+          "Communication"
+        ]
+      },
+      {
+        "id": "defects-presentation",
+        "status": "COMPLETED",
+        "title": "Dislocations and Crystal Defects — Presentation",
+        "context": "Master's academic work",
+        "summary": "Presentation on crystalline defects, Burgers-vector interpretation, glide/climb, and multiplication mechanisms.",
+        "tags": [
+          "Semiconductors",
+          "Materials",
+          "Crystal defects"
+        ]
+      },
+      {
+        "id": "metasurface-journal-club",
+        "status": "COMPLETED",
+        "title": "Sn Nanobar Plasmonic Metasurface — Journal Club",
+        "context": "Master's academic work",
+        "summary": "Literature-review presentation summarizing a published FDTD setup and resonance results; no personal FDTD execution implied.",
+        "tags": [
+          "Photonics",
+          "Nano-optics",
+          "Metasurfaces"
+        ]
+      },
+      {
+        "id": "nonlinear-photonics",
+        "status": "COMPLETED",
+        "title": "Nonlinear Photonics Exercise Portfolio",
+        "context": "12 preserved written submissions",
+        "summary": "Analytical work covering dispersion, phase matching, harmonic generation, Kerr effects, fiber nonlinearities, and gain/threshold calculations.",
+        "tags": [
+          "Photonics",
+          "Nonlinear optics",
+          "Analytical coursework"
+        ]
+      },
+      {
+        "id": "coding-lab",
+        "status": "COMPLETED",
+        "title": "Coding Theory Computational Lab",
+        "context": "Group worksheet / MATLAB-based exercises",
+        "summary": "Named group participation in cyclic-code/error-correction exercises, generator-matrix work, and recorded bit-error behavior versus SNR.",
+        "tags": [
+          "Coding theory",
+          "MATLAB",
+          "Error correction"
+        ]
+      },
+      {
+        "id": "information-theory-hw",
+        "status": "COMPLETED",
+        "title": "Information & Coding Theory — Graded Written Work",
+        "context": "Personally named graded coursework",
+        "summary": "Analytical work on code properties, entropy/source models, Markov processes, relative entropy, typical sets, and related coding calculations.",
+        "tags": [
+          "Information theory",
+          "Coding theory",
+          "Analytical coursework"
+        ]
+      }
+    ],
+    "trainingAndCredentials": [
+      {
+        "period": "2026",
+        "title": "Quantum Programming Language",
+        "issuer": "Sharif University of Technology",
+        "status": "In progress",
+        "artifact": "Course record"
+      },
+      {
+        "period": "2025",
+        "title": "Quantum Machine Learning",
+        "issuer": "Ariaquanta Institute",
+        "status": "Training",
+        "artifact": "Certificate"
+      },
+      {
+        "period": "2025",
+        "title": "Machine Learning + Introduction to Programming Using Python",
+        "issuer": "Kaggle",
+        "status": "Training",
+        "artifact": "Certificates"
+      },
+      {
+        "period": "2024",
+        "title": "TOEFL iBT",
+        "issuer": "ETS",
+        "status": "Language credential",
+        "artifact": "Score report"
+      },
+      {
+        "period": "2023",
+        "title": "Data & ML Bootcamp — 96 hours",
+        "issuer": "Azad University, Mashhad",
+        "status": "Training",
+        "artifact": "Certificate"
+      },
+      {
+        "period": "2021",
+        "title": "Python Programming — 40 hours",
+        "issuer": "Jahad Daneshgahi, Khorasan Razavi",
+        "status": "Certificate",
+        "artifact": "Certificate"
+      }
+    ],
+    "masterCourseAreas": [
+      {
+        "title": "Quantum Information & Computing",
+        "courses": [
+          "Advanced Quantum Technology for Engineers",
+          "Introduction to Quantum Information Technology and Quantum Computing",
+          "Applied Quantum Computing: Basics and Devices"
+        ]
+      },
+      {
+        "title": "Communication & Information",
+        "courses": [
+          "Coding Theory",
+          "Mathematical Foundations of Information Theory and Coding Theory",
+          "Network Information Theory",
+          "Quantum Communication Networks"
+        ]
+      },
+      {
+        "title": "Photonics, Devices & Fields",
+        "courses": [
+          "Advanced Applications of Field Theory",
+          "Nonlinear Photonics",
+          "Semiconductor Technology",
+          "Gallium Nitride Technology"
+        ]
+      }
+    ]
+  },
+  "affiliations": [
+    {
+      "id": "tu-braunschweig",
+      "name": "TU Braunschweig",
+      "url": "https://www.tu-braunschweig.de/en/"
+    },
+    {
+      "id": "leibniz-hannover",
+      "name": "Leibniz Universität Hannover",
+      "url": "https://www.uni-hannover.de/en/"
+    },
+    {
+      "id": "sharif",
+      "name": "Sharif University of Technology",
+      "url": "https://en.sharif.edu/"
+    },
+    {
+      "id": "ferdowsi",
+      "name": "Ferdowsi University of Mashhad",
+      "url": "https://en.um.ac.ir/"
+    },
+    {
+      "id": "azad-university",
+      "name": "Azad University",
+      "url": "https://iau.ir/en"
+    },
+    {
+      "id": "iran-khodro",
+      "name": "Iran Khodro",
+      "url": "https://www.ikco.ir/"
+    },
+    {
+      "id": "ptb",
+      "name": "Physikalisch-Technische Bundesanstalt",
+      "url": "https://www.ptb.de/cms/en.html"
+    },
+    {
+      "id": "intel",
+      "name": "Intel",
+      "url": "https://www.intel.com/"
+    },
+    {
+      "id": "texas-instruments",
+      "name": "Texas Instruments",
+      "url": "https://www.ti.com/"
+    },
+    {
+      "id": "volkswagen",
+      "name": "Volkswagen",
+      "url": "https://www.volkswagen.com/"
+    },
+    {
+      "id": "huawei",
+      "name": "Huawei",
+      "url": "https://www.huawei.com/"
+    },
+    {
+      "id": "infineon",
+      "name": "Infineon",
+      "url": "https://www.infineon.com/"
+    }
+  ],
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}
