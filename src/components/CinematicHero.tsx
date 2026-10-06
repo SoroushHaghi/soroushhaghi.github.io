@@ -115,7 +115,14 @@ const pointSegmentDistance = (px: number, py: number, a: Point2, b: Point2) => {
 
 function CinematicHero() {
   const copy = useSiteCopy();
-  const axes = copy.careerState.axes;
+  const {
+    hardware: axisHardware,
+    software: axisSoftware,
+    classical: axisClassical,
+    quantum: axisQuantum,
+    experience: axisExperience,
+    knowledge: axisKnowledge,
+  } = copy.careerState.axes;
   const rootRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
@@ -201,7 +208,7 @@ function CinematicHero() {
       out[key] /= den || 1;
     });
     return out;
-  }, [capabilities, axes]);
+  }, [capabilities]);
 
   useEffect(() => {
     const updateProgress = () => {
@@ -506,24 +513,24 @@ function CinematicHero() {
         const left = projectLegacy({ x: -ex, y: 0, z: 0 }, legacyScale);
         const right = projectLegacy({ x: ex, y: 0, z: 0 }, legacyScale);
         arrow(left, right, 0.3 * xAxisIn * (1 - collapse));
-        axisLabel(axes.hardware, left, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
-        axisLabel(axes.software, right, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(axisHardware, left, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(axisSoftware, right, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
       }
       if (yAxisIn > 0.001 && collapse < 0.999) {
         const ex = AXIS_R * yAxisIn;
         const classical = projectLegacy({ x: 0, y: -ex, z: 0 }, legacyScale);
         const quantum = projectLegacy({ x: 0, y: ex, z: 0 }, legacyScale);
         arrow(classical, quantum, 0.28 * yAxisIn * (1 - collapse));
-        axisLabel(axes.classical, classical, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
-        axisLabel(axes.quantum, quantum, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(axisClassical, classical, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(axisQuantum, quantum, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
       }
       if (zAxisIn > 0.001 && collapse < 0.999) {
         const ex = AXIS_R * zAxisIn;
         const experience = projectLegacy({ x: 0, y: 0, z: -ex }, legacyScale);
         const knowledge = projectLegacy({ x: 0, y: 0, z: ex }, legacyScale);
         arrow(experience, knowledge, 0.28 * zAxisIn * (1 - collapse));
-        axisLabel(axes.experience, experience, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
-        axisLabel(axes.knowledge, knowledge, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(axisExperience, experience, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(axisKnowledge, knowledge, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
       }
 
       if (collapse > 0.001 && sphereReveal < 0.75) {
@@ -777,7 +784,7 @@ function CinematicHero() {
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [capabilities]);
+  }, [capabilities, axisHardware, axisSoftware, axisClassical, axisQuantum, axisExperience, axisKnowledge]);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
     if (event.pointerType === "touch") return;
@@ -866,9 +873,9 @@ function CinematicHero() {
             ))}
           </ol>
           <p>
-            Axes: {axes.hardware} ↔ {axes.software};{" "}
-            {axes.classical} ↔ {axes.quantum};{" "}
-            {axes.experience} ↔ {axes.knowledge}.
+            Axes: {axisHardware} ↔ {axisSoftware};{" "}
+            {axisClassical} ↔ {axisQuantum};{" "}
+            {axisExperience} ↔ {axisKnowledge}.
           </p>
           <p>
             Final states: QH — {copy.careerState.basisNames.QH}; QS — {copy.careerState.basisNames.QS};{" "}
