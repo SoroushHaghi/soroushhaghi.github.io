@@ -47,6 +47,8 @@ jobs:
             mkdir -p "build/$route"
             cp build/index.html "build/$route/index.html"
           done
+          mkdir -p build/lab/polish
+          cp build/index.html build/lab/polish/index.html
           mkdir -p build/lab/hero
           cp build/index.html build/lab/hero/index.html
           mkdir -p build/lab/work
