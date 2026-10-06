@@ -10,14 +10,14 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "COMPUTER ENGINEERING → QUANTUM TECHNOLOGIES",
-      "lead": "Connecting software and computation with physical systems, communication, and quantum technologies.",
+      "eyebrow": "AI & QUANTUM ",
+      "lead": "",
       "cta": "View work"
     },
     "education": {
       "eyebrow": "EDUCATION",
-      "title": "Current direction, built on an engineering foundation.",
-      "copy": "From Computer Engineering into Quantum Technologies, with focus spanning computation, communication, photonics and devices.",
+      "title": "Engineering foundation, built current direction.",
+      "copy": "From AI & Computer Engineering into Quantum Technologies, with focus spanning computation, communication, optimization, photonics and devices.",
       "action": "Explore education"
     },
     "expertise": {
@@ -44,7 +44,7 @@
   },
   "careerState": {
     "ariaLabel": "Career expertise state",
-    "brand": "EXPERTISE STATE",
+    "brand": "WHO AM I?",
     "stages": [
       {
         "eyebrow": "",
@@ -52,28 +52,28 @@
         "copy": ""
       },
       {
-        "eyebrow": "01 · BACHELOR",
-        "title": "Computer Engineering",
+        "eyebrow": "01 · BACHELOR · 2019",
+        "title": " AI & Computer Engineer",
         "copy": ""
       },
       {
-        "eyebrow": "02 · MASTER",
-        "title": "Quantum Engineering",
+        "eyebrow": "02 · MASTER · 2024",
+        "title": "A Quantum Engineer",
         "copy": ""
       },
       {
-        "eyebrow": "03 · EVIDENCE",
-        "title": "Every dot|is|one step.",
+        "eyebrow": "03 · PORTFOLIO · since 2019",
+        "title": "A dot|in my|professional life.",
         "copy": ""
       },
       {
-        "eyebrow": "04 · DEPTH",
-        "title": "Each step|is either|knowledge or experience.",
+        "eyebrow": "04 · PORTFOLIO DEPTH",
+        "title": "Depth of |Knowledge, Experience.",
         "copy": ""
       },
       {
-        "eyebrow": "05 · SUPERPOSITION",
-        "title": "I am a qubit|in superposition|of 4 states.",
+        "eyebrow": "05 · live PORTFOLIO SUPERPOSITION",
+        "title": "I`m QUBIT. In|Superposition.|with Probability of Knowldege & Experience.",
         "copy": ""
       }
     ],
