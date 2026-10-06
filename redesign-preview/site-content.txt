@@ -1,15 +1,15 @@
 Soroush Haghi
-COMPUTER ENGINEERING → QUANTUM TECHNOLOGIES
-Connecting software and computation with physical systems, communication, and quantum technologies.
+AI & QUANTUM 
+
 
 Career-state narrative
 An interactive visualization of the trajectory from Computer Engineering into Quantum Engineering, the evidence behind it, and the relationship between knowledge and experience across classical and quantum hardware/software domains.
 
-01 · BACHELOR — Computer Engineering
-02 · MASTER — Quantum Engineering
-03 · EVIDENCE — Every dot is one step.
-04 · DEPTH — Each step is either knowledge or experience.
-05 · SUPERPOSITION — I am a qubit in superposition of 4 states.
+01 · BACHELOR · 2019 —  AI & Computer Engineer
+02 · MASTER · 2024 — A Quantum Engineer
+03 · PORTFOLIO · since 2019 — A dot in my professional life.
+04 · PORTFOLIO DEPTH — Depth of  Knowledge, Experience.
+05 · live PORTFOLIO SUPERPOSITION — I`m QUBIT. In Superposition. with Probability of Knowldege & Experience.
 
 Capabilities:
 - Quantum Information — Knowledge
