@@ -39,7 +39,6 @@ function PolishLab() {
   const [tab, setTab] = useState<Tab>("copy");
   const [copyText, setCopyText] = useState(() => JSON.stringify(defaultCopy, null, 2));
   const [cssText, setCssText] = useState(defaultCss);
-  const [parseError, setParseError] = useState("");
   const [frameVersion, setFrameVersion] = useState(0);
 
   useEffect(() => {
@@ -61,14 +60,17 @@ function PolishLab() {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ copyText, cssText, device }));
   }, [copyText, cssText, device]);
 
-  const parsedCopy = useMemo(() => {
+  const parseResult = useMemo(() => {
     try {
-      const parsed = JSON.parse(copyText);
-      setParseError("");
-      return parsed as Record<string, string>;
+      return {
+        parsed: JSON.parse(copyText) as Record<string, string>,
+        error: "",
+      };
     } catch (error) {
-      setParseError(error instanceof Error ? error.message : "Invalid JSON");
-      return null;
+      return {
+        parsed: null,
+        error: error instanceof Error ? error.message : "Invalid JSON",
+      };
     }
   }, [copyText]);
 
@@ -85,8 +87,9 @@ function PolishLab() {
     }
     style.textContent = cssText;
 
-    if (!parsedCopy) return;
+    if (!parseResult.parsed) return;
 
+    const parsedCopy = parseResult.parsed;
     const patches: Array<[string, string | undefined]> = [
       ['#education-preview .section-heading h2', parsedCopy.educationTitle],
       ['#education-preview .section-heading p', parsedCopy.educationCopy],
@@ -107,7 +110,7 @@ function PolishLab() {
 
   useEffect(() => {
     applyPatches();
-  }, [copyText, cssText, frameVersion]);
+  }, [copyText, cssText, frameVersion, parseResult]);
 
   const reset = () => {
     setCopyText(JSON.stringify(defaultCopy, null, 2));
@@ -158,8 +161,8 @@ function PolishLab() {
               value={copyText}
               onChange={(event) => setCopyText(event.target.value)}
             />
-            <div className={parseError ? "polish-lab-status error" : "polish-lab-status"}>
-              {parseError ? `JSON error: ${parseError}` : "Valid JSON · preview updates live"}
+            <div className={parseResult.error ? "polish-lab-status error" : "polish-lab-status"}>
+              {parseResult.error ? `JSON error: ${parseResult.error}` : "Valid JSON · preview updates live"}
             </div>
           </div>
         ) : (
