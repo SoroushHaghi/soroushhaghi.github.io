@@ -92,17 +92,21 @@ function AffiliationRail() {
   return (
     <div className="organization-rail" aria-label="Affiliations and organizational context">
       {visible.map((item, index) => (
-        <div
+        <a
           className="organization-mark"
           data-brand={item.id}
           aria-label={item.name}
+          title={item.name}
+          href={item.url}
+          target="_blank"
+          rel="noreferrer"
           key={index}
           style={{ "--brand-hue": item.hue } as React.CSSProperties}
         >
           <span className="organization-mark-content" key={item.id}>
             <MarkVisual item={item} />
           </span>
-        </div>
+        </a>
       ))}
     </div>
   );
