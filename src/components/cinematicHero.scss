@@ -51,10 +51,10 @@
 
 .career-state-intro {
   position: absolute;
-  left: var(--page-x);
-  top: 50%;
+  left: clamp(52px, 5.2vw, 96px);
+  top: 55%;
   z-index: 7;
-  width: min(780px, calc(100% - (var(--page-x) * 2)));
+  width: min(780px, calc(100% - clamp(104px, 10.4vw, 192px)));
   transform: translateY(calc(-50% + 10px));
   opacity: 0;
   pointer-events: none;
@@ -163,13 +163,7 @@
   flex-direction: column;
   gap: 8px;
   transform: translateY(-50%);
-  opacity: 0;
   pointer-events: none;
-  transition: opacity .34s ease;
-}
-
-.career-state-steps.show {
-  opacity: 1;
 }
 
 .career-state-steps i {
@@ -331,7 +325,7 @@
   .career-state-intro {
     left: 18px;
     right: 18px;
-    top: 50%;
+    top: 55%;
     width: auto;
   }
 
