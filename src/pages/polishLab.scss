@@ -241,3 +241,136 @@
     height: calc(56dvh - 64px);
   }
 }
+
+
+.polish-lab-layout-body {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 0 14px 14px;
+}
+
+.polish-control-group {
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 14px;
+  background: rgba(255,255,255,.018);
+}
+
+.polish-control-group-head {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.polish-control-group-head strong {
+  font-size: 11px;
+  font-weight: 700;
+  color: #d6deea;
+}
+
+.polish-control-group-head span {
+  color: #718096;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.polish-control {
+  display: grid;
+  grid-template-columns: minmax(108px, 1fr) minmax(100px, 1.25fr) 56px;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  color: #8f9cab;
+  font-size: 10px;
+}
+
+.polish-control input[type="range"] {
+  width: 100%;
+  accent-color: #dbe5f0;
+}
+
+.polish-control output {
+  color: #d0dae6;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 9px;
+  text-align: right;
+}
+
+.polish-add-text,
+.polish-reset-layout,
+.polish-remove-text {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,.025);
+  color: #aeb9c7;
+  font: inherit;
+  cursor: pointer;
+}
+
+.polish-add-text {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 12px;
+  font-size: 10px;
+}
+
+.polish-add-text.active {
+  background: #edf1f5;
+  color: #090b0e;
+  border-color: transparent;
+}
+
+.polish-empty-note {
+  margin: 10px 0 0;
+  color: #66768a;
+  font-size: 10px;
+}
+
+.polish-mock-row {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 11px;
+  background: #090c10;
+}
+
+.polish-mock-row > input[type="text"] {
+  width: 100%;
+  min-height: 34px;
+  margin-bottom: 7px;
+  padding: 0 9px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px;
+  outline: none;
+  background: #06080b;
+  color: #dce6f1;
+  font: 11px/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.polish-remove-text,
+.polish-reset-layout {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 9px;
+}
+
+.polish-remove-text {
+  margin-top: 6px;
+}
+
+.polish-reset-layout {
+  margin-top: 10px;
+}
+
+.polish-add-text:hover,
+.polish-reset-layout:hover,
+.polish-remove-text:hover {
+  background: rgba(255,255,255,.06);
+  color: #fff;
+}
