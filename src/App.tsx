@@ -13,6 +13,7 @@ import PolishLab from "./pages/PolishLab";
 import DynamicBackground from "./components/DynamicBackground";
 import { backgroundDefaults, backgroundStorageKey } from "./backgroundConfig";
 import { fromPublicPath, toPublicPath } from "./routes";
+import { useSiteCopy } from "./content/useSiteCopy";
 import "./index.scss";
 import "./dynamicBackground.scss";
 
@@ -23,6 +24,7 @@ const normalizePath = (path: string) => {
 };
 
 function App() {
+  const copy = useSiteCopy();
   const [path, setPath] = useState(() => {
     const restoredPath = sessionStorage.getItem("spaPath");
     if (restoredPath) {
@@ -165,7 +167,7 @@ function App() {
       {renderPage()}
       <footer className="site-footer page-shell">
         <span>© {new Date().getFullYear()} S. Haghi</span>
-        <span>All rights reserved.</span>
+        <span>{copy.footer.rights}</span>
       </footer>
     </div>
   );
