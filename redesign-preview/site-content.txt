@@ -1,7 +1,6 @@
 Soroush Haghi
 AI & QUANTUM 
 
-
 Career-state narrative
 An interactive visualization of the trajectory from Computer Engineering into Quantum Engineering, the evidence behind it, and the relationship between knowledge and experience across classical and quantum hardware/software domains.
 
