@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { navItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 import HomeIcon from "./HomeIcon";
+import { useSiteCopy } from "../content/useSiteCopy";
 
 type SiteNavProps = {
   currentPath: string;
@@ -9,6 +10,7 @@ type SiteNavProps = {
 };
 
 function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
+  const copy = useSiteCopy();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -55,9 +57,11 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
     };
   }, [mobileOpen]);
 
+  const navLabel = (href: string) => href === "/work" ? copy.nav.work : href === "/education" ? copy.nav.education : href === "/cv" ? copy.nav.cv : href;
+
   const currentLabel =
-    currentPath === "/work" ? "WORK" :
-    currentPath === "/education" ? "EDUCATION" :
+    currentPath === "/work" ? copy.nav.work :
+    currentPath === "/education" ? copy.nav.education :
     "";
 
   const go = (event: React.MouseEvent<HTMLAnchorElement>, href: string, external?: boolean) => {
@@ -91,7 +95,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
                 className={currentPath === item.href ? "active" : ""}
                 onClick={(event) => go(event, item.href, item.external)}
               >
-                {item.label}
+                {navLabel(item.href)}
               </a>
             ))}
           </div>
@@ -132,7 +136,7 @@ function SiteNav({ currentPath, onNavigate }: SiteNavProps) {
                 className={currentPath === item.href ? "active" : ""}
                 onClick={(event) => go(event, item.href, item.external)}
               >
-                {item.label}
+                {navLabel(item.href)}
                 <span aria-hidden="true">↗</span>
               </a>
             ))}
