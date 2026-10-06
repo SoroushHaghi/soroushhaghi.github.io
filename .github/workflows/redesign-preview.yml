@@ -76,6 +76,9 @@ jobs:
           mkdir -p build/review-camera-lab-v7
           cp build/index.html build/review-camera-lab-v7/index.html
 
+      - name: Refresh semantic route fallbacks
+        run: node scripts/generate-semantic-content.js
+
       - name: Publish preview without changing production root
         run: |
           cp -a build /tmp/redesign-preview-build
