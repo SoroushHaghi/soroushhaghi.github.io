@@ -331,7 +331,7 @@ function CinematicHero() {
       ctx.fillRect(0, 0, W, H);
 
       const p = progressRef.current;
-      const xAxisIn = smooth(0.105, STOPS[1], p);
+      const xAxisIn = smooth(0.115, STOPS[1], p);
       const yAxisIn = smooth(STOPS[1], STOPS[2], p);
       const planeIn = smooth(STOPS[1] + (STOPS[2] - STOPS[1]) * 0.42, STOPS[2], p);
       const pointsIn = smooth(STOPS[2], STOPS[3], p);
@@ -861,18 +861,11 @@ function CinematicHero() {
 
         <div className="career-state-vignette" aria-hidden="true" />
 
-        <div className={`career-state-intro ${activeStage === 0 ? "show" : ""}`}>
-          <div className="career-state-intro-eyebrow">{copy.home.hero.eyebrow}</div>
-          <h1 className="hero-name career-state-intro-name">
-            <Wordmark variant="hero" />
-          </h1>
-        </div>
-
         <div className="career-state-semantic sr-only">
           <h2>{copy.careerState.semanticHeading}</h2>
           <p>{copy.careerState.semanticIntro}</p>
           <ol>
-            {copy.careerState.stages.slice(1).map((item, index) => (
+            {copy.careerState.stages.map((item, index) => (
               <li key={`${item.eyebrow}-${index}`}>
                 <strong>{item.eyebrow}</strong>{" "}
                 {item.title.replaceAll("|", " ")}
@@ -897,17 +890,25 @@ function CinematicHero() {
         </div>
         <div className={`career-state-brand ${activeStage === 0 ? "" : "show"}`}>{copy.careerState.brand}</div>
 
-        <div className={`career-state-copy ${activeStage === 0 ? "is-hidden" : ""}`}>
-          <div className="career-state-kicker">{stage.eyebrow}</div>
-          <h1>
-            {titleLines.map((line, index) => (
-              <React.Fragment key={`${line}-${index}`}>
-                {index > 0 && <br />}
-                {line}
-              </React.Fragment>
-            ))}
-          </h1>
-          {stage.copy && <p>{stage.copy}</p>}
+        <div className={`career-state-copy ${activeStage === 0 ? "is-intro" : ""}`}>
+          <div className="career-state-stage-content" key={activeStage}>
+            <div className="career-state-kicker">{stage.eyebrow}</div>
+            {activeStage === 0 ? (
+              <h1 className="hero-name career-state-intro-wordmark">
+                <Wordmark variant="hero" />
+              </h1>
+            ) : (
+              <h1>
+                {titleLines.map((line, index) => (
+                  <React.Fragment key={`${line}-${index}`}>
+                    {index > 0 && <br />}
+                    {line}
+                  </React.Fragment>
+                ))}
+              </h1>
+            )}
+            {stage.copy && <p>{stage.copy}</p>}
+          </div>
         </div>
 
         <div className="career-state-steps" aria-hidden="true">
