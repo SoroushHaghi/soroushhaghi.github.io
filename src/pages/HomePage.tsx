@@ -3,8 +3,6 @@ import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import CinematicHero from "../components/CinematicHero";
-import SignaturePlaceholder from "../components/SignaturePlaceholder";
-import Wordmark from "../components/Wordmark";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 import { useSiteCopy } from "../content/useSiteCopy";
@@ -17,29 +15,6 @@ function HomePage({ onNavigate }: Props) {
 
   return (
     <main>
-      <section className="hero page-shell" data-scroll-section="hero" aria-labelledby="home-hero-name">
-        <div className="hero-copy">
-          <div className="eyebrow">{copy.home.hero.eyebrow}</div>
-          <h1 className="hero-name" id="home-hero-name">
-            <Wordmark variant="hero" />
-          </h1>
-          <p className="hero-lead">{copy.home.hero.lead}</p>
-          <div className="hero-actions">
-            <a
-              href={toPublicPath("/work")}
-              className="button primary"
-              onClick={(e) => {
-                e.preventDefault();
-                onNavigate("/work");
-              }}
-            >
-              {copy.home.hero.cta} <span>→</span>
-            </a>
-          </div>
-        </div>
-        <SignaturePlaceholder />
-      </section>
-
       <CinematicHero />
 
       <section className="section page-shell" id="education-preview" data-scroll-section="education">
