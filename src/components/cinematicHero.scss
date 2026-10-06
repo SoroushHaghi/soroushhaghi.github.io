@@ -49,49 +49,6 @@
 }
 
 
-.career-state-intro {
-  position: absolute;
-  left: clamp(52px, 5.2vw, 96px);
-  top: 55%;
-  z-index: 7;
-  width: min(780px, calc(100% - clamp(104px, 10.4vw, 192px)));
-  transform: translateY(calc(-50% + 10px));
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity .48s cubic-bezier(.2,.8,.2,1),
-    transform .56s cubic-bezier(.2,.8,.2,1),
-    filter .48s ease;
-  filter: blur(2px);
-}
-
-.career-state-intro.show {
-  opacity: 1;
-  transform: translateY(-50%);
-  filter: none;
-  pointer-events: auto;
-}
-
-.career-state-intro-eyebrow {
-  margin-bottom: 16px;
-  color: #b7bec7;
-  font-size: 11px;
-  font-weight: 720;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-}
-
-.career-state-intro-name {
-  display: inline-block;
-  margin: 0;
-  color: #f4f6f8;
-  font-size: calc(clamp(54px, 7.2vw, 126px) * var(--hero-name-scale));
-  font-weight: 620;
-  line-height: .91;
-  letter-spacing: -.065em;
-  cursor: default;
-}
-
 .career-state-brand {
   position: absolute;
   left: clamp(28px, 3.2vw, 58px);
@@ -119,12 +76,22 @@
   z-index: 4;
   width: min(390px, 31vw);
   pointer-events: none;
-  transition: opacity .26s ease, transform .26s ease;
 }
 
-.career-state-copy.is-hidden {
-  opacity: 0;
-  transform: translateY(8px);
+.career-state-copy.is-intro {
+  top: 55%;
+  width: min(780px, calc(100% - clamp(104px, 10.4vw, 192px)));
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.career-state-stage-content {
+  animation: career-state-copy-in .42s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes career-state-copy-in {
+  from { opacity: 0; transform: translateY(8px); filter: blur(1.4px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
 
 .career-state-kicker {
@@ -133,6 +100,26 @@
   font-size: 9px;
   font-weight: 650;
   letter-spacing: .20em;
+}
+
+.career-state-copy.is-intro .career-state-kicker {
+  margin-bottom: 16px;
+  color: #b7bec7;
+  font-size: 11px;
+  font-weight: 720;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.career-state-intro-wordmark {
+  display: inline-block;
+  margin: 0 0 0 6px;
+  color: #f4f6f8;
+  font-size: calc(clamp(54px, 7.2vw, 126px) * var(--hero-name-scale));
+  font-weight: 620;
+  line-height: .91;
+  letter-spacing: -.065em;
+  cursor: default;
 }
 
 .career-state-copy h1 {
@@ -163,6 +150,8 @@
   flex-direction: column;
   gap: 8px;
   transform: translateY(-50%);
+  opacity: 1;
+  visibility: visible;
   pointer-events: none;
 }
 
@@ -322,19 +311,20 @@
 @media (max-width: 760px) {
   .cinematic-hero { height: 650svh; }
 
-  .career-state-intro {
+  .career-state-copy.is-intro {
     left: 18px;
     right: 18px;
     top: 55%;
     width: auto;
   }
 
-  .career-state-intro-eyebrow {
+  .career-state-copy.is-intro .career-state-kicker {
     margin-bottom: 12px;
     font-size: 9px;
   }
 
-  .career-state-intro-name {
+  .career-state-intro-wordmark {
+    margin-left: 6px;
     font-size: clamp(48px, 16vw, 72px);
   }
   .cinematic-hero-sticky { min-height: 560px; }
