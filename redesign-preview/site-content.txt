@@ -3,7 +3,7 @@ AI & QUANTUM
 
 Career-state narrative
 An interactive visualization of the trajectory from Computer Engineering into Quantum Engineering, the evidence behind it, and the relationship between knowledge and experience across classical and quantum hardware/software domains.
-
+AI & QUANTUM  — Soroush Haghi
 01 · BACHELOR · 2019 —  AI & Computer Engineer
 02 · MASTER · 2024 — A Quantum Engineer
 03 · PORTFOLIO · since 2019 — A dot in my professional life.

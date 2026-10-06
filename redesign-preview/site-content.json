@@ -9,9 +9,6 @@
     "cv": "CV"
   },
   "home": {
-    "hero": {
-      "eyebrow": "AI & QUANTUM "
-    },
     "education": {
       "eyebrow": "EDUCATION",
       "title": "Engineering foundation, built current direction.",
@@ -45,8 +42,8 @@
     "brand": "WHO AM I?",
     "stages": [
       {
-        "eyebrow": "",
-        "title": "",
+        "eyebrow": "AI & QUANTUM ",
+        "title": "Soroush Haghi",
         "copy": ""
       },
       {
