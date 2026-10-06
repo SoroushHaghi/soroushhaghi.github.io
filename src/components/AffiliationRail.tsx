@@ -2,15 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { organizationMarks } from "../siteConfig";
 
 const desktopVisibleCount = 6;
+const tabletVisibleCount = 4;
 const mobileVisibleCount = 3;
 const rotationMs = 2800;
 
 type Mark = (typeof organizationMarks)[number];
 
-const getVisibleCount = () =>
-  window.matchMedia("(max-width: 900px)").matches
-    ? mobileVisibleCount
-    : desktopVisibleCount;
+const getVisibleCount = () => {
+  if (window.innerWidth <= 640) return mobileVisibleCount;
+  if (window.innerWidth <= 1024) return tabletVisibleCount;
+  return desktopVisibleCount;
+};
 
 function MarkVisual({ item }: { item: Mark }) {
   const [failed, setFailed] = useState(false);
@@ -32,9 +34,10 @@ function MarkVisual({ item }: { item: Mark }) {
           <img
             key={item.id}
             src={item.logo}
-            alt=""
+            alt={`${item.name} logo`}
             loading="eager"
             decoding="async"
+            draggable={false}
             onError={() => setFailed(true)}
           />
         </span>
@@ -52,12 +55,9 @@ function AffiliationRail() {
   const slot = useRef(0);
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 900px)");
-    const onChange = () =>
-      setVisibleCount(media.matches ? mobileVisibleCount : desktopVisibleCount);
-
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
+    const onResize = () => setVisibleCount(getVisibleCount());
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   useEffect(() => {
