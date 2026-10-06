@@ -6,6 +6,7 @@ import {
   degreeArtifacts,
   trainingAndCredentials
 } from "../portfolioContent";
+import { useSiteCopy } from "../content/useSiteCopy";
 
 type Filter = "all" | "degree" | "academic" | "credential";
 
@@ -23,13 +24,6 @@ type EducationTimelineItem = {
   artifactNote: string;
   achievement?: string;
 };
-
-const filters: { id: Filter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "degree", label: "Degrees" },
-  { id: "academic", label: "Academic Work" },
-  { id: "credential", label: "Credentials" }
-];
 
 const timelineItems: EducationTimelineItem[] = [
   {
@@ -91,7 +85,14 @@ const timelineItems: EducationTimelineItem[] = [
 ];
 
 function EducationPage() {
+  const copy = useSiteCopy();
   const [filter, setFilter] = useState<Filter>("all");
+  const filters: { id: Filter; label: string }[] = [
+    { id: "all", label: copy.educationPage.filters.all },
+    { id: "degree", label: copy.educationPage.filters.degree },
+    { id: "academic", label: copy.educationPage.filters.academic },
+    { id: "credential", label: copy.educationPage.filters.credential },
+  ];
 
   const items = useMemo(
     () =>
@@ -104,9 +105,9 @@ function EducationPage() {
   return (
     <main className="subpage page-shell education-journey-page">
       <SectionHeading
-        eyebrow="EDUCATION"
-        title="Academic journey over time."
-        copy="Degrees, academic work and credentials in one chronological view."
+        eyebrow={copy.educationPage.eyebrow}
+        title={copy.educationPage.title}
+        copy={copy.educationPage.copy}
       />
 
       <div className="timeline-filter-row" role="toolbar" aria-label="Filter education timeline">
@@ -164,9 +165,9 @@ function EducationPage() {
       </div>
 
       <div className="education-timeline-note">
-        <span>Timeline rule</span>
+        <span>{copy.educationPage.timelineRuleLabel}</span>
         <p>
-          Exact dates are shown where verified. Academic work without a verified month/day stays within its known study period instead of receiving an invented date.
+          {copy.educationPage.timelineRuleCopy}
         </p>
       </div>
     </main>
