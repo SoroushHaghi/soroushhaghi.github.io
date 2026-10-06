@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { expertiseCapabilities } from "../expertise/expertiseData";
 import { useSiteCopy } from "../content/useSiteCopy";
+import Wordmark from "./Wordmark";
 import "./cinematicHero.scss";
 
 type Point3 = { x: number; y: number; z: number };
@@ -330,7 +331,7 @@ function CinematicHero() {
       ctx.fillRect(0, 0, W, H);
 
       const p = progressRef.current;
-      const xAxisIn = smooth(STOPS[0], STOPS[1], p);
+      const xAxisIn = smooth(0.075, STOPS[1], p);
       const yAxisIn = smooth(STOPS[1], STOPS[2], p);
       const planeIn = smooth(STOPS[1] + (STOPS[2] - STOPS[1]) * 0.42, STOPS[2], p);
       const pointsIn = smooth(STOPS[2], STOPS[3], p);
@@ -860,6 +861,13 @@ function CinematicHero() {
 
         <div className="career-state-vignette" aria-hidden="true" />
 
+        <div className={`career-state-intro ${activeStage === 0 ? "show" : ""}`}>
+          <div className="career-state-intro-eyebrow">{copy.home.hero.eyebrow}</div>
+          <h1 className="hero-name career-state-intro-name">
+            <Wordmark variant="hero" />
+          </h1>
+        </div>
+
         <div className="career-state-semantic sr-only">
           <h2>{copy.careerState.semanticHeading}</h2>
           <p>{copy.careerState.semanticIntro}</p>
@@ -887,7 +895,7 @@ function CinematicHero() {
             ))}
           </ul>
         </div>
-        <div className="career-state-brand">{copy.careerState.brand}</div>
+        <div className={`career-state-brand ${activeStage === 0 ? "" : "show"}`}>{copy.careerState.brand}</div>
 
         <div className={`career-state-copy ${activeStage === 0 ? "is-hidden" : ""}`}>
           <div className="career-state-kicker">{stage.eyebrow}</div>
@@ -902,7 +910,7 @@ function CinematicHero() {
           {stage.copy && <p>{stage.copy}</p>}
         </div>
 
-        <div className="career-state-steps" aria-hidden="true">
+        <div className={`career-state-steps ${activeStage === 0 ? "" : "show"}`} aria-hidden="true">
           {STOPS.slice(1).map((_, index) => (
             <i key={index} className={activeStage === index + 1 ? "on" : ""} />
           ))}
@@ -929,10 +937,6 @@ function CinematicHero() {
           <span><i style={{ background: BASIS_COLORS.QS }} />QS · {copy.careerState.basisNames.QS}</span>
           <span><i style={{ background: BASIS_COLORS.CH }} />CH · {copy.careerState.basisNames.CH}</span>
           <span><i style={{ background: BASIS_COLORS.CS }} />CS · {copy.careerState.basisNames.CS}</span>
-        </div>
-
-        <div className={`career-state-scroll-hint ${activeStage === 0 ? "show" : ""}`} aria-hidden="true">
-          <span>↓</span> {copy.careerState.scrollHint}
         </div>
 
         {tooltip && (
