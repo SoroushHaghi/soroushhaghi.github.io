@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Career State — Final Review</title>
+<link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+<section id="sequence">
+  <div id="sticky">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="overlay"></div>
+
+    <div class="brand">EXPERTISE STATE</div>
+
+    <div class="stage" id="copy">
+      <div class="kicker" id="kicker">01 · Axis</div>
+      <h1 id="headline">Hardware ↔ Software</h1>
+      <p id="body"></p>
+    </div>
+
+    <div class="stepDots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+
+    <div class="equation" id="equation">
+      <button class="eqButton" id="psiButton" type="button" aria-label="Measure career state"><span class="psiLhs">|ψ<sub>Career</sub>⟩ =</span> <span class="psiTerm" data-basis="CH">α|CH⟩</span> <span class="psiPlus">+</span> <span class="psiTerm" data-basis="QH">β|QH⟩</span> <span class="psiPlus">+</span> <span class="psiTerm" data-basis="CS">γ|CS⟩</span> <span class="psiPlus">+</span> <span class="psiTerm" data-basis="QS">δ|QS⟩</span></button>
+      <div class="eqHint">click ψ to measure</div>
+    </div>
+
+    <div class="measureOutput" id="measureOutput">
+      <small>Career state</small>
+      <strong id="measureCode"></strong>
+      <span id="measureName"></span>
+    </div>
+
+    <div class="rodTooltip" id="rodTooltip">
+      <span id="rodTooltipName"></span>
+      <small id="rodTooltipMeta"></small>
+    </div>
+
+    <div class="legend" id="legend">
+      <span class="key"><i style="background:var(--qh);color:var(--qh)"></i>QH · Quantum Hardware</span>
+      <span class="key"><i style="background:var(--qs);color:var(--qs)"></i>QS · Quantum Software</span>
+      <span class="key"><i style="background:var(--ch);color:var(--ch)"></i>CH · Classical Hardware</span>
+      <span class="key"><i style="background:var(--cs);color:var(--cs)"></i>CS · Classical Software</span>
+    </div>
+
+    <div class="scrollHint" id="scrollHint">↓ scroll</div>
+  </div>
+</section>
+
+<script src="./data.js"></script>
+<script src="./app-1.js"></script>
+<script src="./app-2.js"></script>
+<script src="./app-3.js"></script>
+<script src="./app-4.js"></script>
+<script src="./app-5.js"></script>
+</body>
+</html>
