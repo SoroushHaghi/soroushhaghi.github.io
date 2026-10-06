@@ -5872,3 +5872,252 @@ html[data-theme="light"] .lab-token-readout strong {
     max-height: 62px !important;
   }
 }
+
+/* 2026-10-06 canonical affiliation rail normalization */
+.organization-rail {
+  width: min(100%, 1080px) !important;
+  margin-inline: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+
+.organization-mark {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 118px !important;
+  min-height: 118px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  border: 1px solid rgba(255,255,255,.055) !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(circle at 50% 50%, hsla(var(--brand-hue), 72%, 58%, .045), transparent 68%),
+    rgba(255,255,255,.008) !important;
+  transform: none !important;
+  transition: border-color 180ms ease, background 180ms ease, opacity 180ms ease !important;
+}
+
+.organization-mark:hover,
+.organization-mark:focus-visible {
+  transform: none !important;
+  border-color: hsla(var(--brand-hue), 72%, 68%, .18) !important;
+  background:
+    radial-gradient(circle at 50% 50%, hsla(var(--brand-hue), 72%, 58%, .07), transparent 68%),
+    rgba(255,255,255,.012) !important;
+  outline: none !important;
+}
+
+.organization-mark-content {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  padding: 16px 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+}
+
+.organization-logo-frame,
+.organization-logo-frame-standard,
+.organization-logo-frame-wide,
+.organization-logo-frame-luh-rect,
+.organization-logo-frame-tubs-rect,
+.organization-logo-frame-ikco-new,
+.organization-logo-frame-azad-symbol {
+  position: relative !important;
+  inset: auto !important;
+  width: 132px !important;
+  height: 76px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+}
+
+.organization-logo-frame::before,
+.organization-logo-frame-standard::before,
+.organization-logo-frame-wide::before,
+.organization-logo-frame-luh-rect::before,
+.organization-logo-frame-tubs-rect::before,
+.organization-logo-frame-ikco-new::before,
+.organization-logo-frame-azad-symbol::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 50% auto auto 50% !important;
+  width: 68px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: radial-gradient(circle, hsla(var(--brand-hue), 82%, 62%, .10), transparent 72%) !important;
+  filter: blur(10px) !important;
+  opacity: .58 !important;
+  pointer-events: none !important;
+}
+
+.organization-logo-asset,
+.organization-logo-frame-standard .organization-logo-asset,
+.organization-logo-frame-wide .organization-logo-asset,
+.organization-logo-frame-luh-rect .organization-logo-asset,
+.organization-logo-frame-tubs-rect .organization-logo-asset,
+.organization-logo-frame-ikco-new .organization-logo-asset,
+.organization-logo-frame-azad-symbol .organization-logo-asset {
+  position: static !important;
+  inset: auto !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+}
+
+.organization-logo-frame .organization-logo-asset > img,
+.organization-logo-frame-standard .organization-logo-asset > img,
+.organization-logo-frame-wide .organization-logo-asset > img,
+.organization-logo-frame-luh-rect .organization-logo-asset > img,
+.organization-logo-frame-tubs-rect .organization-logo-asset > img,
+.organization-logo-frame-ikco-new .organization-logo-asset > img,
+.organization-logo-frame-azad-symbol .organization-logo-asset > img {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 68px !important;
+  max-height: 68px !important;
+  margin: auto !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: scale(var(--logo-scale, 1)) !important;
+  transform-origin: center !important;
+  image-rendering: auto !important;
+  animation: none !important;
+  mix-blend-mode: normal !important;
+  filter:
+    drop-shadow(0 0 5px hsla(var(--brand-hue), 82%, 66%, .12))
+    saturate(1.04)
+    contrast(1.05)
+    brightness(1.04) !important;
+}
+
+.organization-logo-frame-wide .organization-logo-asset > img,
+.organization-logo-frame-luh-rect .organization-logo-asset > img {
+  max-width: 118px !important;
+  max-height: 50px !important;
+}
+
+/* Per-brand optical normalization inside the same 132 x 76 visual slot. */
+.organization-mark[data-brand="tu-braunschweig"] .organization-logo-asset > img {
+  max-width: 116px !important;
+  max-height: 50px !important;
+}
+.organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img {
+  max-width: 122px !important;
+  max-height: 52px !important;
+}
+.organization-mark[data-brand="ptb"] .organization-logo-asset > img {
+  max-width: 120px !important;
+  max-height: 48px !important;
+}
+.organization-mark[data-brand="intel"] .organization-logo-asset > img {
+  max-width: 106px !important;
+  max-height: 48px !important;
+}
+.organization-mark[data-brand="texas-instruments"] .organization-logo-asset > img {
+  max-width: 118px !important;
+  max-height: 52px !important;
+}
+.organization-mark[data-brand="infineon"] .organization-logo-asset > img {
+  max-width: 118px !important;
+  max-height: 46px !important;
+}
+.organization-mark[data-brand="volkswagen"] .organization-logo-asset > img,
+.organization-mark[data-brand="huawei"] .organization-logo-asset > img,
+.organization-mark[data-brand="sharif"] .organization-logo-asset > img,
+.organization-mark[data-brand="ferdowsi"] .organization-logo-asset > img,
+.organization-mark[data-brand="azad-university"] .organization-logo-asset > img,
+.organization-mark[data-brand="iran-khodro"] .organization-logo-asset > img {
+  max-width: 68px !important;
+  max-height: 68px !important;
+}
+
+.organization-mark-fallback {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 8px !important;
+  color: rgba(235,241,249,.82) !important;
+  font-size: 10px !important;
+  line-height: 1.25 !important;
+  letter-spacing: .05em !important;
+}
+
+@media (max-width: 1024px) {
+  .organization-rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    width: min(100%, 760px) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .organization-rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .organization-mark {
+    height: 94px !important;
+    min-height: 94px !important;
+    border-radius: 16px !important;
+  }
+
+  .organization-mark-content {
+    padding: 11px 6px !important;
+  }
+
+  .organization-logo-frame,
+  .organization-logo-frame-standard,
+  .organization-logo-frame-wide,
+  .organization-logo-frame-luh-rect,
+  .organization-logo-frame-tubs-rect,
+  .organization-logo-frame-ikco-new,
+  .organization-logo-frame-azad-symbol {
+    width: 96px !important;
+    height: 62px !important;
+  }
+
+  .organization-logo-frame .organization-logo-asset > img,
+  .organization-logo-frame-standard .organization-logo-asset > img,
+  .organization-logo-frame-wide .organization-logo-asset > img,
+  .organization-logo-frame-luh-rect .organization-logo-asset > img,
+  .organization-logo-frame-tubs-rect .organization-logo-asset > img,
+  .organization-logo-frame-ikco-new .organization-logo-asset > img,
+  .organization-logo-frame-azad-symbol .organization-logo-asset > img {
+    max-width: 56px !important;
+    max-height: 56px !important;
+  }
+
+  .organization-logo-frame-wide .organization-logo-asset > img,
+  .organization-logo-frame-luh-rect .organization-logo-asset > img,
+  .organization-mark[data-brand="tu-braunschweig"] .organization-logo-asset > img,
+  .organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img,
+  .organization-mark[data-brand="ptb"] .organization-logo-asset > img,
+  .organization-mark[data-brand="intel"] .organization-logo-asset > img,
+  .organization-mark[data-brand="texas-instruments"] .organization-logo-asset > img,
+  .organization-mark[data-brand="infineon"] .organization-logo-asset > img {
+    max-width: 88px !important;
+    max-height: 40px !important;
+  }
+}
