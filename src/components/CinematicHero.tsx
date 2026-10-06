@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { expertiseCapabilities } from "../expertise/expertiseData";
+import { useSiteCopy } from "../content/useSiteCopy";
 import "./cinematicHero.scss";
 
 type Point3 = { x: number; y: number; z: number };
@@ -38,24 +39,9 @@ const BASIS_COLORS: Record<BasisKey, string> = {
   CH: "#5e9fff",
   CS: "#f0b957",
 };
-const BASIS_NAMES: Record<BasisKey, string> = {
-  QH: "Quantum Hardware",
-  QS: "Quantum Computing",
-  CH: "Classical Hardware",
-  CS: "Classical Computing",
-};
 const BASIS_KEYS: BasisKey[] = ["CH", "QH", "CS", "QS"];
 
 const STOPS = [0, 0.18, 0.36, 0.58, 0.78, 1];
-const STAGE_COPY = [
-  { eyebrow: "", title: "", copy: "" },
-  { eyebrow: "01 · BACHELOR", title: "Computer Engineering", copy: "" },
-  { eyebrow: "02 · MASTER", title: "Quantum Engineering", copy: "" },
-  { eyebrow: "03 · EVIDENCE", title: "Every dot|is|one step.", copy: "" },
-  { eyebrow: "04 · DEPTH", title: "Each step|is either|knowledge or experience.", copy: "" },
-  { eyebrow: "05 · SUPERPOSITION", title: "I am a qubit|in superposition|of 4 states.", copy: "" },
-];
-
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 const clamp01 = (v: number) => clamp(v, 0, 1);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -128,6 +114,7 @@ const pointSegmentDistance = (px: number, py: number, a: Point2, b: Point2) => {
 };
 
 function CinematicHero() {
+  const copy = useSiteCopy();
   const rootRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
@@ -518,24 +505,24 @@ function CinematicHero() {
         const left = projectLegacy({ x: -ex, y: 0, z: 0 }, legacyScale);
         const right = projectLegacy({ x: ex, y: 0, z: 0 }, legacyScale);
         arrow(left, right, 0.3 * xAxisIn * (1 - collapse));
-        axisLabel("HARDWARE", left, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
-        axisLabel("SOFTWARE", right, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(copy.careerState.axes.hardware, left, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(copy.careerState.axes.software, right, 0.64 * xAxisIn * (1 - collapse), mobile ? 28 : 42);
       }
       if (yAxisIn > 0.001 && collapse < 0.999) {
         const ex = AXIS_R * yAxisIn;
         const classical = projectLegacy({ x: 0, y: -ex, z: 0 }, legacyScale);
         const quantum = projectLegacy({ x: 0, y: ex, z: 0 }, legacyScale);
         arrow(classical, quantum, 0.28 * yAxisIn * (1 - collapse));
-        axisLabel("CLASSICAL", classical, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
-        axisLabel("QUANTUM", quantum, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(copy.careerState.axes.classical, classical, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(copy.careerState.axes.quantum, quantum, 0.62 * yAxisIn * (1 - collapse), mobile ? 28 : 42);
       }
       if (zAxisIn > 0.001 && collapse < 0.999) {
         const ex = AXIS_R * zAxisIn;
         const experience = projectLegacy({ x: 0, y: 0, z: -ex }, legacyScale);
         const knowledge = projectLegacy({ x: 0, y: 0, z: ex }, legacyScale);
         arrow(experience, knowledge, 0.28 * zAxisIn * (1 - collapse));
-        axisLabel("EXPERIENCE", experience, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
-        axisLabel("KNOWLEDGE", knowledge, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(copy.careerState.axes.experience, experience, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
+        axisLabel(copy.careerState.axes.knowledge, knowledge, 0.62 * zAxisIn * (1 - collapse), mobile ? 28 : 42);
       }
 
       if (collapse > 0.001 && sphereReveal < 0.75) {
@@ -846,11 +833,11 @@ function CinematicHero() {
     setMeasurementKey(key);
   };
 
-  const stage = STAGE_COPY[activeStage] || STAGE_COPY[0];
+  const stage = copy.careerState.stages[activeStage] || copy.careerState.stages[0];
   const titleLines = stage.title.split("|");
 
   return (
-    <section ref={rootRef} className="cinematic-hero" aria-label="Career expertise state">
+    <section ref={rootRef} className="cinematic-hero" aria-label={copy.careerState.ariaLabel}>
       <div className="cinematic-hero-sticky">
         <canvas
           ref={canvasRef}
@@ -864,7 +851,35 @@ function CinematicHero() {
         />
 
         <div className="career-state-vignette" aria-hidden="true" />
-        <div className="career-state-brand">EXPERTISE STATE</div>
+
+        <div className="career-state-semantic sr-only">
+          <h2>{copy.careerState.semanticHeading}</h2>
+          <p>{copy.careerState.semanticIntro}</p>
+          <ol>
+            {copy.careerState.stages.slice(1).map((item, index) => (
+              <li key={`${item.eyebrow}-${index}`}>
+                <strong>{item.eyebrow}</strong>{" "}
+                {item.title.replaceAll("|", " ")}
+                {item.copy ? ` — ${item.copy}` : ""}
+              </li>
+            ))}
+          </ol>
+          <p>
+            Axes: {copy.careerState.axes.hardware} ↔ {copy.careerState.axes.software};{" "}
+            {copy.careerState.axes.classical} ↔ {copy.careerState.axes.quantum};{" "}
+            {copy.careerState.axes.experience} ↔ {copy.careerState.axes.knowledge}.
+          </p>
+          <p>
+            Final states: QH — {copy.careerState.basisNames.QH}; QS — {copy.careerState.basisNames.QS};{" "}
+            CH — {copy.careerState.basisNames.CH}; CS — {copy.careerState.basisNames.CS}.
+          </p>
+          <ul>
+            {capabilities.map((item) => (
+              <li key={item.id}>{item.name} — {item.mode}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="career-state-brand">{copy.careerState.brand}</div>
 
         <div className={`career-state-copy ${activeStage === 0 ? "is-hidden" : ""}`}>
           <div className="career-state-kicker">{stage.eyebrow}</div>
@@ -890,7 +905,7 @@ function CinematicHero() {
             {measurementKey ? (
               <span className="career-state-collapsed-equation">
                 <span>|ψ<sub>Career</sub>⟩ = </span>
-                <span style={{ color: BASIS_COLORS[measurementKey] }}>|{BASIS_NAMES[measurementKey]}⟩</span>
+                <span style={{ color: BASIS_COLORS[measurementKey] }}>|{copy.careerState.basisNames[measurementKey]}⟩</span>
               </span>
             ) : (
               <span className="career-state-full-equation">
@@ -898,18 +913,18 @@ function CinematicHero() {
               </span>
             )}
           </button>
-          <div className="career-state-equation-hint">click ψ to measure</div>
+          <div className="career-state-equation-hint">{copy.careerState.equationHint}</div>
         </div>
 
         <div className={`career-state-legend ${legendReady ? "show" : ""}`} aria-hidden="true">
-          <span><i style={{ background: BASIS_COLORS.QH }} />QH · Quantum Hardware</span>
-          <span><i style={{ background: BASIS_COLORS.QS }} />QS · Quantum Computing</span>
-          <span><i style={{ background: BASIS_COLORS.CH }} />CH · Classical Hardware</span>
-          <span><i style={{ background: BASIS_COLORS.CS }} />CS · Classical Computing</span>
+          <span><i style={{ background: BASIS_COLORS.QH }} />QH · {copy.careerState.basisNames.QH}</span>
+          <span><i style={{ background: BASIS_COLORS.QS }} />QS · {copy.careerState.basisNames.QS}</span>
+          <span><i style={{ background: BASIS_COLORS.CH }} />CH · {copy.careerState.basisNames.CH}</span>
+          <span><i style={{ background: BASIS_COLORS.CS }} />CS · {copy.careerState.basisNames.CS}</span>
         </div>
 
         <div className={`career-state-scroll-hint ${activeStage === 0 ? "show" : ""}`} aria-hidden="true">
-          <span>↓</span> scroll
+          <span>↓</span> {copy.careerState.scrollHint}
         </div>
 
         {tooltip && (
