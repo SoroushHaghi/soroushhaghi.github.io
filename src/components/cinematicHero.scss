@@ -45,44 +45,39 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: min(78vw, 1279px) auto;
+  display: grid;
+  place-items: center;
+  margin: 0;
   opacity: 1;
-  filter: none;
   transform: translate(var(--hero-artwork-x, 0px), var(--hero-artwork-y, 0px)) scale(var(--hero-artwork-scale, 1));
   transform-origin: center;
   pointer-events: none;
   user-select: none;
 }
 
-.career-state-intro-backdrop img {
-  width: min(78vw, 1279px);
-  height: auto;
-  max-height: 94svh;
+.career-state-intro-artwork-image {
   display: block;
+  width: min(94vw, 2048px);
+  height: auto;
+  max-width: none;
+  max-height: 86svh;
   object-fit: contain;
   object-position: center;
-  background: #000;
   border: 0;
   outline: 0;
-  filter: brightness(1.08) contrast(1.04);
-  -webkit-mask-image: radial-gradient(ellipse 78% 76% at 50% 50%, #000 56%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 84%, transparent 100%);
-  mask-image: radial-gradient(ellipse 78% 76% at 50% 50%, #000 56%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 84%, transparent 100%);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
+  background: #000;
+  opacity: 1;
+  filter: none;
+  clip-path: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+  box-shadow: none;
   user-select: none;
   -webkit-user-drag: none;
 }
 
 .career-state-intro-backdrop::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  pointer-events: none;
-  box-shadow: inset 0 0 88px 34px #000;
+  display: none;
 }
 
 .cinematic-hero-canvas {
@@ -381,18 +376,10 @@
 @media (max-width: 760px) {
   .cinematic-hero { height: 650svh; }
 
-  .career-state-intro-backdrop img {
-    width: 110vw;
+  .career-state-intro-artwork-image {
+    width: min(100vw, 1254px);
     max-width: none;
-    max-height: 88svh;
-    transform: scale(1.045);
-    clip-path: inset(1.5%);
-    -webkit-mask-image: radial-gradient(ellipse 75% 72% at 50% 50%, #000 48%, rgba(0,0,0,.98) 62%, rgba(0,0,0,.42) 82%, transparent 100%);
-    mask-image: radial-gradient(ellipse 75% 72% at 50% 50%, #000 48%, rgba(0,0,0,.98) 62%, rgba(0,0,0,.42) 82%, transparent 100%);
-  }
-
-  .career-state-intro-backdrop::after {
-    box-shadow: inset 0 0 64px 30px #000;
+    max-height: 82svh;
   }
 
   .career-state-intro-copy {
@@ -459,11 +446,6 @@
   opacity: 1;
 }
 
-@media (max-width: 760px) {
-  .career-state-intro-artwork {
-    background-size: 110vw auto;
-  }
-}
 
 
 /* 2026-10-07 approved Hero Lab V2 responsive layout.
