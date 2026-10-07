@@ -49,9 +49,25 @@
   object-fit: contain;
   object-position: center;
   background: #000;
+  border: 0;
+  outline: 0;
   filter: brightness(1.08) contrast(1.04);
+  -webkit-mask-image: radial-gradient(ellipse 78% 76% at 50% 50%, #000 56%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 84%, transparent 100%);
+  mask-image: radial-gradient(ellipse 78% 76% at 50% 50%, #000 56%, rgba(0,0,0,.98) 68%, rgba(0,0,0,.55) 84%, transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.career-state-intro-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  box-shadow: inset 0 0 88px 34px #000;
 }
 
 .cinematic-hero-canvas {
@@ -351,8 +367,17 @@
   .cinematic-hero { height: 650svh; }
 
   .career-state-intro-backdrop img {
-    width: min(94vw, 1279px);
-    max-height: 82svh;
+    width: 110vw;
+    max-width: none;
+    max-height: 88svh;
+    transform: scale(1.045);
+    clip-path: inset(1.5%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 72% at 50% 50%, #000 48%, rgba(0,0,0,.98) 62%, rgba(0,0,0,.42) 82%, transparent 100%);
+    mask-image: radial-gradient(ellipse 75% 72% at 50% 50%, #000 48%, rgba(0,0,0,.98) 62%, rgba(0,0,0,.42) 82%, transparent 100%);
+  }
+
+  .career-state-intro-backdrop::after {
+    box-shadow: inset 0 0 64px 30px #000;
   }
 
   .career-state-intro-copy {
