@@ -12,7 +12,7 @@
 
 .cinematic-hero {
   position: relative;
-  height: 720svh;
+  height: 760svh;
   background: #000;
   isolation: isolate;
 }
@@ -87,7 +87,7 @@
   letter-spacing: .22em;
   opacity: 0;
   transform: translateY(5px);
-  transition: opacity .34s ease, transform .34s ease;
+  transition: opacity .40s ease, transform .40s ease;
   pointer-events: none;
 }
 
@@ -126,7 +126,7 @@
 }
 
 .career-state-stage-content {
-  animation: career-state-copy-in .42s cubic-bezier(.2,.8,.2,1) both;
+  animation: career-state-copy-in .50s cubic-bezier(.2,.8,.2,1) both;
 }
 
 @keyframes career-state-copy-in {
@@ -209,7 +209,7 @@
   opacity: 0;
   text-align: center;
   pointer-events: none;
-  transition: opacity .28s ease, transform .28s ease;
+  transition: opacity .34s ease, transform .34s ease;
 }
 
 .career-state-equation.show {
@@ -241,7 +241,7 @@
 .career-state-full-equation,
 .career-state-collapsed-equation {
   display: inline-block;
-  animation: career-state-equation-in .35s cubic-bezier(.22, .8, .2, 1) both;
+  animation: career-state-equation-in .42s cubic-bezier(.22, .8, .2, 1) both;
 }
 
 @keyframes career-state-equation-in {
@@ -270,7 +270,7 @@
   color: #74879e;
   font-size: 9px;
   pointer-events: none;
-  transition: opacity .28s ease;
+  transition: opacity .34s ease;
 }
 
 .career-state-legend.show { opacity: 1; }
@@ -293,7 +293,7 @@
   letter-spacing: .15em;
   text-transform: uppercase;
   pointer-events: none;
-  transition: opacity .25s ease;
+  transition: opacity .30s ease;
 }
 
 .career-state-scroll-hint.show { opacity: 1; }
