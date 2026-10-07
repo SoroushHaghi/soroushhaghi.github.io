@@ -13,6 +13,12 @@ type Selected =
   | { type: "capability"; item: ExpertiseCapability }
   | { type: "target"; item: ExpertiseTarget };
 
+type Props = {
+  capabilityIds?: readonly string[];
+  compact?: boolean;
+  ariaLabel?: string;
+};
+
 const SPHERE_R = 115;
 const CAMERA_DISTANCE = 430;
 const VIEW_PITCH = (-68 * Math.PI) / 180;
@@ -21,7 +27,11 @@ const KNOWLEDGE = "#4b86d8";
 const EXPERIENCE = "#cf5a5a";
 const TARGET = "#e4c449";
 
-function ExpertiseSphere() {
+function ExpertiseSphere({
+  capabilityIds,
+  compact = false,
+  ariaLabel = "Interactive expertise sphere",
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const hitItemsRef = useRef<Array<{ selected: Selected; x: number; y: number; r: number }>>([]);
   const draggingRef = useRef(false);
@@ -31,16 +41,37 @@ function ExpertiseSphere() {
   const [spin, setSpin] = useState(-0.35);
   const [zoom, setZoom] = useState(1);
   const [showLabels, setShowLabels] = useState(false);
-  const [showTargetLabels, setShowTargetLabels] = useState(true);
-  const [selected, setSelected] = useState<Selected>({
+  const [showTargetLabels, setShowTargetLabels] = useState(!compact);
+  const capabilities = useMemo(() => {
+    if (!capabilityIds?.length) return expertiseCapabilities;
+    const wanted = new Set(capabilityIds);
+    return expertiseCapabilities.filter((item) => wanted.has(item.id));
+  }, [capabilityIds]);
+  const [selected, setSelected] = useState<Selected>(() => ({
     type: "capability",
-    item: expertiseCapabilities.find((item) => item.id === "career") || expertiseCapabilities[0],
-  });
+    item:
+      capabilities.find((item) => item.id === "career") ||
+      capabilities[0] ||
+      expertiseCapabilities[0],
+  }));
   const [sizeTick, setSizeTick] = useState(0);
+
+  useEffect(() => {
+    if (!compact) return;
+    if (
+      selected.type === "capability" &&
+      capabilities.some((item) => item.id === selected.item.id)
+    ) {
+      return;
+    }
+    if (capabilities[0]) {
+      setSelected({ type: "capability", item: capabilities[0] });
+    }
+  }, [capabilities, compact, selected]);
 
   const preparedCapabilities = useMemo(
     () =>
-      expertiseCapabilities.map((row) => {
+      capabilities.map((row) => {
         const score100 = Math.max(0, Math.min(100, Number(row.score || 0) * 20));
         const zBias = row.mode === "Knowledge" ? 70 : -70;
         const n = Math.hypot(row.x, row.y, zBias) || 1;
@@ -50,7 +81,7 @@ function ExpertiseSphere() {
           dir: { x: row.x / n, y: row.y / n, z: zBias / n },
         };
       }),
-    []
+    [capabilities]
   );
 
   useEffect(() => {
@@ -341,6 +372,7 @@ function ExpertiseSphere() {
     const targetLabels: Array<{ item: ExpertiseTarget; p: ProjectedPoint; back: boolean }> = [];
 
     const drawTargets = () => {
+      if (compact) return;
       const rows = expertiseTargets
         .map((item) => {
           return { item, p: project(item.pos), back: !isSurfaceFront(item.pos) };
@@ -376,6 +408,7 @@ function ExpertiseSphere() {
     };
 
     const drawSelected = () => {
+      if (compact) return;
       if (selected.type === "capability") {
         const rec = preparedCapabilities.find((item) => item.id === selected.item.id);
         if (!rec) return;
@@ -430,7 +463,7 @@ function ExpertiseSphere() {
     drawSelected();
     ctx.restore();
 
-    if (showTargetLabels) {
+    if (!compact && showTargetLabels) {
       for (const { item, p, back } of targetLabels) {
         if (back) continue;
         ctx.save();
@@ -443,7 +476,7 @@ function ExpertiseSphere() {
     }
 
     drawOuterRim();
-  }, [preparedCapabilities, selected, showLabels, showTargetLabels, sizeTick, spin, zoom]);
+  }, [compact, preparedCapabilities, selected, showLabels, showTargetLabels, sizeTick, spin, zoom]);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLCanvasElement>) => {
     draggingRef.current = true;
@@ -497,35 +530,40 @@ function ExpertiseSphere() {
   };
 
   return (
-    <div className="expertise-sphere">
+    <div className={`expertise-sphere${compact ? " expertise-sphere--compact" : ""}`}>
       <div className="expertise-sphere-stage">
         <canvas
           ref={canvasRef}
           className="expertise-sphere-canvas"
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={endPointer}
-          onPointerCancel={endPointer}
-          onClick={handleClick}
-          onWheel={handleWheel}
-          aria-label="Interactive expertise sphere"
+          onPointerDown={compact ? undefined : handlePointerDown}
+          onPointerMove={compact ? undefined : handlePointerMove}
+          onPointerUp={compact ? undefined : endPointer}
+          onPointerCancel={compact ? undefined : endPointer}
+          onClick={compact ? undefined : handleClick}
+          onWheel={compact ? undefined : handleWheel}
+          aria-label={ariaLabel}
         />
-        <div className="expertise-sphere-hud">
-          <span>Blue = Knowledge</span>
-          <span>Red = Experience</span>
-          <span>Yellow = Target areas</span>
-        </div>
-        <div className="expertise-sphere-controls">
-          <button type="button" onClick={reset}>Reset</button>
-          <button type="button" onClick={() => setShowLabels((value) => !value)}>
-            Nodes {showLabels ? "on" : "off"}
-          </button>
-          <button type="button" onClick={() => setShowTargetLabels((value) => !value)}>
-            Targets {showTargetLabels ? "on" : "off"}
-          </button>
-        </div>
+        {!compact && (
+          <>
+            <div className="expertise-sphere-hud">
+              <span>Blue = Knowledge</span>
+              <span>Red = Experience</span>
+              <span>Yellow = Target areas</span>
+            </div>
+            <div className="expertise-sphere-controls">
+              <button type="button" onClick={reset}>Reset</button>
+              <button type="button" onClick={() => setShowLabels((value) => !value)}>
+                Nodes {showLabels ? "on" : "off"}
+              </button>
+              <button type="button" onClick={() => setShowTargetLabels((value) => !value)}>
+                Targets {showTargetLabels ? "on" : "off"}
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
+      {!compact && (
       <aside className="expertise-sphere-panel">
         <div className="expertise-sphere-kicker">
           {selected.type === "capability" ? "Selected capability" : "Selected target area"}
@@ -564,6 +602,7 @@ function ExpertiseSphere() {
           hierarchy and final data pipeline remain intentionally open for refinement.
         </p>
       </aside>
+      )}
     </div>
   );
 }
