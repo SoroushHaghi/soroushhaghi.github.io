@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { organizationMarks } from "../siteConfig";
+import "./affiliationRail.scss";
 
 const visibleCount = 4;
 const rotationMs = 2800;
