@@ -37,7 +37,7 @@ function HomePage({ onNavigate }: Props) {
             const qubitData = educationQubitData[item.id as keyof typeof educationQubitData];
 
             return (
-              <article className="education-card education-card--with-sphere glass-panel" key={item.id}>
+              <article className="education-card education-card--with-qubit glass-panel" key={item.id}>
                 <div className="education-card-copy">
                   <div className="card-meta">{item.period}</div>
                   <h3>{item.degree}</h3>
@@ -47,7 +47,7 @@ function HomePage({ onNavigate }: Props) {
                   </ul>
                   {"achievement" in item && item.achievement && <div className="achievement">{item.achievement}</div>}
                 </div>
-                <div className="education-card-sphere">
+                <div className="education-card-qubit">
                   <CareerStateQubit
                     data={qubitData}
                     ariaLabel={`${item.degree} career-state Qubit`}
