@@ -120,3 +120,10 @@ export const expertiseViews = {
 } as const;
 
 export type ExpertiseViewKey = keyof typeof expertiseViews;
+
+export const getExpertiseView = (key: ExpertiseViewKey): ExpertiseCapability[] => {
+  const byId = new Map(expertiseCapabilities.map((item) => [item.id, item]));
+  return expertiseViews[key]
+    .map((id) => byId.get(id))
+    .filter((item): item is ExpertiseCapability => Boolean(item));
+};

@@ -3,17 +3,17 @@ import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import CinematicHero from "../components/CinematicHero";
-import ExpertiseSphere from "../components/ExpertiseSphere";
-import { expertiseViews } from "../expertise/expertiseData";
+import CareerStateQubit from "../components/CareerStateQubit";
+import { getExpertiseView } from "../expertise/expertiseData";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 import { useSiteCopy } from "../content/useSiteCopy";
 
 type Props = { onNavigate: (path: string) => void };
 
-const educationSphereCapabilities: Record<string, readonly string[]> = {
-  msc: expertiseViews.master,
-  bsc: expertiseViews.bachelor,
+const educationQubitData = {
+  msc: getExpertiseView("master"),
+  bsc: getExpertiseView("bachelor"),
 };
 
 function HomePage({ onNavigate }: Props) {
@@ -34,10 +34,10 @@ function HomePage({ onNavigate }: Props) {
         />
         <div className="education-preview-grid">
           {education.map((item) => {
-            const capabilityIds = educationSphereCapabilities[item.id];
+            const qubitData = educationQubitData[item.id as keyof typeof educationQubitData];
 
             return (
-              <article className="education-card education-card--with-sphere glass-panel" key={item.id}>
+              <article className="education-card education-card--with-qubit glass-panel" key={item.id}>
                 <div className="education-card-copy">
                   <div className="card-meta">{item.period}</div>
                   <h3>{item.degree}</h3>
@@ -47,11 +47,10 @@ function HomePage({ onNavigate }: Props) {
                   </ul>
                   {"achievement" in item && item.achievement && <div className="achievement">{item.achievement}</div>}
                 </div>
-                <div className="education-card-sphere">
-                  <ExpertiseSphere
-                    compact
-                    capabilityIds={capabilityIds}
-                    ariaLabel={`${item.degree} knowledge and experience state`}
+                <div className="education-card-qubit">
+                  <CareerStateQubit
+                    data={qubitData}
+                    ariaLabel={`${item.degree} career-state Qubit`}
                   />
                 </div>
               </article>
