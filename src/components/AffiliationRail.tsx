@@ -6,7 +6,7 @@ const rotationMs = 2800;
 
 const organizationLogoMetrics: Record<string, { width: number; height: number; scale: number }> = {
   "tu-braunschweig": { width: 116, height: 50, scale: 1.00 },
-  "leibniz-hannover": { width: 122, height: 56, scale: 1.08 },
+  "leibniz-hannover": { width: 132, height: 60, scale: 1.00 },
   sharif: { width: 82, height: 82, scale: 1.00 },
   ferdowsi: { width: 68, height: 68, scale: 1.00 },
   "azad-university": { width: 68, height: 68, scale: 1.00 },
@@ -15,7 +15,7 @@ const organizationLogoMetrics: Record<string, { width: number; height: number; s
   intel: { width: 106, height: 48, scale: 1.00 },
   "texas-instruments": { width: 118, height: 52, scale: 1.00 },
   volkswagen: { width: 80, height: 80, scale: 1.00 },
-  huawei: { width: 92, height: 92, scale: 1.35 },
+  huawei: { width: 104, height: 82, scale: 1.00 },
   infineon: { width: 128, height: 52, scale: 1.00 },
 };
 
