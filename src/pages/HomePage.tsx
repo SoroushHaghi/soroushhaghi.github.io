@@ -2,7 +2,6 @@ import React from "react";
 import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
-import StaticIntroHero from "../components/StaticIntroHero";
 import CinematicHero from "../components/CinematicHero";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
@@ -16,7 +15,6 @@ function HomePage({ onNavigate }: Props) {
 
   return (
     <main>
-      <StaticIntroHero />
       <CinematicHero />
 
       <section className="section page-shell" id="education-preview" data-scroll-section="education">
