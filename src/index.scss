@@ -6121,3 +6121,33 @@ html[data-theme="light"] .lab-token-readout strong {
     max-height: 40px !important;
   }
 }
+
+
+/* 2026-10-07 static cinematic intro preview */
+.hero-lab-static-stage {
+  position: relative;
+  overflow: hidden;
+  background: #000 !important;
+  display: grid;
+  place-items: center;
+}
+
+.hero-lab-static-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.62), rgba(0,0,0,.06) 52%, rgba(0,0,0,.14));
+  pointer-events: none;
+}
+
+.hero-lab-static-stage img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  transform: scale(var(--hero-visual-scale));
+  transform-origin: center;
+  user-select: none;
+}

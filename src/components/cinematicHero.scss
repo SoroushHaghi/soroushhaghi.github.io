@@ -28,8 +28,45 @@
     #020406;
 }
 
+.career-state-intro-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: center center;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+}
+
+.career-state-intro-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.76) 0%, rgba(0,0,0,.28) 28%, rgba(0,0,0,.02) 58%, rgba(0,0,0,.10) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.14));
+  pointer-events: none;
+}
+
+.career-state-intro-backdrop img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center center;
+  background: #000;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 .cinematic-hero-canvas {
   position: absolute;
+  z-index: 0;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -42,6 +79,7 @@
 
 .career-state-vignette {
   position: absolute;
+  z-index: 2;
   inset: 0;
   pointer-events: none;
   background:
@@ -359,5 +397,17 @@
   .career-state-full-equation,
   .career-state-collapsed-equation {
     animation: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .career-state-intro-backdrop::after {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.10) 0%, rgba(0,0,0,.02) 50%, rgba(0,0,0,.24) 100%);
+  }
+
+  .career-state-intro-backdrop img {
+    object-fit: contain;
+    transform: scale(.96);
   }
 }

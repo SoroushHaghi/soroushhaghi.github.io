@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SignaturePlaceholder from "../components/SignaturePlaceholder";
 import Wordmark from "../components/Wordmark";
 
 type HeroValues = {
@@ -74,7 +73,7 @@ function HeroLab() {
             <input type="range" min="0.82" max="1.14" step="0.01" value={values.nameScale} onChange={(e) => update("nameScale", Number(e.target.value))} />
           </label>
           <label>
-            <span>3D stage scale <strong>{values.visualScale.toFixed(2)}</strong></span>
+            <span>Hero visual scale <strong>{values.visualScale.toFixed(2)}</strong></span>
             <input type="range" min="0.82" max="1.16" step="0.01" value={values.visualScale} onChange={(e) => update("visualScale", Number(e.target.value))} />
           </label>
 
@@ -91,8 +90,12 @@ function HeroLab() {
             <p>Connecting software and computation with physical systems, communication, and quantum technologies.</p>
             <span className="button primary">View work →</span>
           </div>
-          <div className="hero-lab-stage">
-            <SignaturePlaceholder />
+          <div className="hero-lab-stage hero-lab-static-stage">
+            <img
+              src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation.webp`}
+              alt=""
+              draggable={false}
+            />
           </div>
         </section>
       </div>
