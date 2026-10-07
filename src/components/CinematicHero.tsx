@@ -120,7 +120,7 @@ function CinematicHero() {
       }
       if (introCopyRef.current) {
         introCopyRef.current.style.opacity = String(1 - introCopyFade);
-        introCopyRef.current.style.transform = `translateY(calc(-50% - ${introCopyFade * 6}px))`;
+        introCopyRef.current.style.transform = `translateY(-${introCopyFade * 6}px)`;
       }
       const equationReady = progress >= 0.94;
       const basisLegendReady = progress >= 0.96;
@@ -288,8 +288,15 @@ function CinematicHero() {
 
       const mobile = W < 760;
       const tablet = W >= 760 && W < 1180;
-      const centerX = mobile ? W * 0.5 : tablet ? W * 0.58 : W * 0.61;
-      const centerY = mobile ? H * 0.60 : tablet ? H * 0.55 : H * 0.54;
+
+      // Approved Hero Lab V2 responsive composition values.
+      // Keep these in renderer-space so pointer hit-testing stays aligned with the visual.
+      const visualX = mobile ? 0 : tablet ? 56 : 60;
+      const visualY = mobile ? 0 : tablet ? 0 : -110;
+      const visualScale = mobile ? 0.8 : 1;
+
+      const centerX = (mobile ? W * 0.5 : tablet ? W * 0.58 : W * 0.61) + visualX;
+      const centerY = (mobile ? H * 0.60 : tablet ? H * 0.55 : H * 0.54) + visualY;
       const leftReserve = mobile ? 0 : tablet ? Math.max(230, W * 0.27) : Math.max(320, W * 0.31);
       const sideSafe = mobile ? 18 : tablet ? 30 : 44;
       const topSafe = mobile ? 165 : tablet ? 120 : 102;
@@ -302,7 +309,7 @@ function CinematicHero() {
       const scaleX = Math.max(0.72, Math.min(availableLeft, availableRight) / AXIS_R);
       const scaleTop = Math.max(0.72, (centerY - topSafe - labelReserve) / AXIS_R);
       const scaleBottom = Math.max(0.72, (H - bottomSafe - centerY - labelReserve) / AXIS_R);
-      const fittedScale = Math.min(scaleX, scaleTop, scaleBottom) * (mobile ? 1.04 : tablet ? 0.96 : 0.92);
+      const fittedScale = Math.min(scaleX, scaleTop, scaleBottom) * (mobile ? 1.04 : tablet ? 0.96 : 0.92) * visualScale;
 
       const depthInteractive = smooth(STOPS[3], STOPS[4], p);
       const rotation = smooth(STOPS[3], STOPS[4], p);
