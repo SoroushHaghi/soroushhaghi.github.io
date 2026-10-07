@@ -1,18 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { organizationMarks } from "../siteConfig";
 
-const desktopVisibleCount = 6;
-const tabletVisibleCount = 4;
-const mobileVisibleCount = 3;
+const visibleCount = 4;
 const rotationMs = 2800;
 
 type Mark = (typeof organizationMarks)[number];
-
-const getVisibleCount = () => {
-  if (window.innerWidth <= 640) return mobileVisibleCount;
-  if (window.innerWidth <= 1024) return tabletVisibleCount;
-  return desktopVisibleCount;
-};
 
 function MarkVisual({ item }: { item: Mark }) {
   const [failed, setFailed] = useState(false);
@@ -47,24 +39,11 @@ function MarkVisual({ item }: { item: Mark }) {
 }
 
 function AffiliationRail() {
-  const [visibleCount, setVisibleCount] = useState(getVisibleCount);
   const [visible, setVisible] = useState(() =>
-    organizationMarks.slice(0, getVisibleCount())
+    organizationMarks.slice(0, visibleCount)
   );
   const cursor = useRef(visibleCount);
   const slot = useRef(0);
-
-  useEffect(() => {
-    const onResize = () => setVisibleCount(getVisibleCount());
-    window.addEventListener("resize", onResize, { passive: true });
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  useEffect(() => {
-    setVisible(organizationMarks.slice(0, visibleCount));
-    cursor.current = visibleCount;
-    slot.current = 0;
-  }, [visibleCount]);
 
   useEffect(() => {
     organizationMarks.forEach((item) => {
@@ -87,7 +66,7 @@ function AffiliationRail() {
     }, rotationMs);
 
     return () => window.clearInterval(timer);
-  }, [visibleCount]);
+  }, []);
 
   return (
     <div className="organization-rail" aria-label="Affiliations and organizational context">
