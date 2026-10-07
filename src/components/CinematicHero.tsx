@@ -125,6 +125,8 @@ function CinematicHero() {
     knowledge: axisKnowledge,
   } = copy.careerState.axes;
   const rootRef = useRef<HTMLElement | null>(null);
+  const introVisualRef = useRef<HTMLDivElement | null>(null);
+  const introCopyRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
   const activeStageRef = useRef(0);
@@ -219,6 +221,19 @@ function CinematicHero() {
       const travel = Math.max(1, root.offsetHeight - window.innerHeight);
       const progress = clamp01(-rect.top / travel);
       progressRef.current = progress;
+      const introFade = smooth(0.02, 0.16, progress);
+      const introCopyFade = smooth(0.055, 0.13, progress);
+      if (introVisualRef.current) {
+        const visible = 1 - introFade;
+        introVisualRef.current.style.opacity = String(visible);
+        introVisualRef.current.style.transform = `scale(${1 - introFade * 0.022})`;
+        introVisualRef.current.style.filter = `blur(${introFade * 3.5}px)`;
+        introVisualRef.current.style.visibility = visible <= 0.002 ? "hidden" : "visible";
+      }
+      if (introCopyRef.current) {
+        introCopyRef.current.style.opacity = String(1 - introCopyFade);
+        introCopyRef.current.style.transform = `translateY(calc(-50% - ${introCopyFade * 6}px))`;
+      }
       const equationReady = progress >= 0.94;
       const basisLegendReady = progress >= 0.96;
       setFinalReady((prev) => (prev === equationReady ? prev : equationReady));
@@ -860,6 +875,14 @@ function CinematicHero() {
           aria-hidden="true"
         />
 
+        <div ref={introVisualRef} className="career-state-intro-backdrop" aria-hidden="true">
+          <img
+            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation.webp`}
+            alt=""
+            draggable={false}
+          />
+        </div>
+
         <div className="career-state-vignette" aria-hidden="true" />
 
         <div className="career-state-semantic sr-only">
@@ -889,28 +912,29 @@ function CinematicHero() {
             ))}
           </ul>
         </div>
+        <div ref={introCopyRef} className="career-state-intro-copy">
+          <div className="career-state-kicker">{copy.careerState.stages[0].eyebrow}</div>
+          <h1 className="hero-name career-state-intro-wordmark">
+            <Wordmark variant="hero" />
+          </h1>
+        </div>
+
         <div className={`career-state-brand ${activeStage === 0 ? "" : "show"}`}>{copy.careerState.brand}</div>
 
-        <div className={`career-state-copy ${activeStage === 0 ? "is-intro" : ""}`}>
+        {activeStage !== 0 && <div className="career-state-copy">
           <div className="career-state-stage-content" key={activeStage}>
             <div className="career-state-kicker">{stage.eyebrow}</div>
-            {activeStage === 0 ? (
-              <h1 className="hero-name career-state-intro-wordmark">
-                <Wordmark variant="hero" />
-              </h1>
-            ) : (
-              <h1>
-                {titleLines.map((line, index) => (
-                  <React.Fragment key={`${line}-${index}`}>
-                    {index > 0 && <br />}
-                    {line}
-                  </React.Fragment>
-                ))}
-              </h1>
-            )}
+            <h1>
+              {titleLines.map((line, index) => (
+                <React.Fragment key={`${line}-${index}`}>
+                  {index > 0 && <br />}
+                  {line}
+                </React.Fragment>
+              ))}
+            </h1>
             {stage.copy && <p>{stage.copy}</p>}
           </div>
-        </div>
+        </div>}
 
         <div className="career-state-steps" aria-hidden="true">
           {STOPS.slice(1).map((_, index) => (
