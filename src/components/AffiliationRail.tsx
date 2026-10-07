@@ -4,11 +4,31 @@ import { organizationMarks } from "../siteConfig";
 const visibleCount = 4;
 const rotationMs = 2800;
 
+const organizationLogoMetrics: Record<string, { width: number; height: number; scale: number }> = {
+  "tu-braunschweig": { width: 116, height: 50, scale: 1.00 },
+  "leibniz-hannover": { width: 122, height: 56, scale: 1.08 },
+  sharif: { width: 82, height: 82, scale: 1.00 },
+  ferdowsi: { width: 68, height: 68, scale: 1.00 },
+  "azad-university": { width: 68, height: 68, scale: 1.00 },
+  "iran-khodro": { width: 80, height: 80, scale: 1.03 },
+  ptb: { width: 120, height: 48, scale: 1.00 },
+  intel: { width: 106, height: 48, scale: 1.00 },
+  "texas-instruments": { width: 118, height: 52, scale: 1.00 },
+  volkswagen: { width: 80, height: 80, scale: 1.00 },
+  huawei: { width: 92, height: 92, scale: 1.35 },
+  infineon: { width: 128, height: 52, scale: 1.00 },
+};
+
 type Mark = (typeof organizationMarks)[number];
 
 function MarkVisual({ item }: { item: Mark }) {
   const [failed, setFailed] = useState(false);
   const variant = "variant" in item ? item.variant : "standard";
+  const metrics = organizationLogoMetrics[item.id] ?? {
+    width: 80,
+    height: 68,
+    scale: item.scale ?? 1,
+  };
 
   useEffect(() => {
     setFailed(false);
@@ -17,7 +37,11 @@ function MarkVisual({ item }: { item: Mark }) {
   return (
     <span
       className={`organization-logo-frame organization-logo-frame-${variant}`}
-      style={{ "--logo-scale": String(item.scale) } as React.CSSProperties}
+      style={{
+        "--logo-width": `${metrics.width}px`,
+        "--logo-height": `${metrics.height}px`,
+        "--logo-scale": String(metrics.scale),
+      } as React.CSSProperties}
     >
       {failed ? (
         <span className="organization-mark-fallback">{item.short}</span>
