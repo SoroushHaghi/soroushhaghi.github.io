@@ -297,9 +297,9 @@ function CinematicHero() {
       const active = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
       if (!active) return;
 
-      const deltaScale = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+      const deltaScale = event.deltaMode === 1
         ? 16
-        : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+        : event.deltaMode === 2
           ? window.innerHeight
           : 1;
       const delta = event.deltaY * deltaScale;
@@ -319,7 +319,7 @@ function CinematicHero() {
       // Intent-aware escape hatch: a hard/rapid wheel or trackpad gesture means
       // "move through the page", so stop fighting the browser and let native
       // scrolling carry the user across the long sticky Hero.
-      const fastIntent = Math.abs(delta) >= 220 || burst.total >= 440;
+      const fastIntent = Math.abs(delta) >= 220 || burst.total >= 360;
       if (fastIntent) {
         cancelSnap();
         wheelBypassUntilRef.current = now + 650;
