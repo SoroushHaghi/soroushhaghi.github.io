@@ -181,3 +181,87 @@
     right: auto;
   }
 }
+
+/* Contextual mini-sphere: the same career-state geometry, without lab chrome. */
+.expertise-sphere--compact {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
+.expertise-sphere--compact .expertise-sphere-stage {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: transparent;
+}
+
+.expertise-sphere--compact .expertise-sphere-canvas {
+  cursor: default;
+  touch-action: auto;
+}
+
+/* Education: copy on the left, degree-specific state on the right. */
+.education-card--with-sphere {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.72fr);
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 34px);
+}
+
+.education-card-copy,
+.education-card-sphere {
+  min-width: 0;
+}
+
+.education-card-sphere {
+  height: 250px;
+}
+
+.education-card-sphere .expertise-sphere--compact {
+  height: 100%;
+}
+
+/* Expertise: each domain gets its own filtered state instead of a text provenance label. */
+.expertise-domain--with-sphere {
+  min-height: 340px;
+  gap: 16px;
+}
+
+.expertise-domain--with-sphere > strong {
+  align-self: flex-start;
+}
+
+.expertise-domain--with-sphere .expertise-sphere--compact {
+  width: 100%;
+  height: 210px;
+}
+
+.expertise-domain--with-sphere .expertise-domain-line {
+  margin-top: auto;
+}
+
+@media (max-width: 620px) {
+  .education-card--with-sphere {
+    grid-template-columns: 1fr;
+  }
+
+  .education-card-sphere {
+    height: 220px;
+    margin-top: 4px;
+  }
+
+  .expertise-domain--with-sphere {
+    min-height: 310px;
+  }
+
+  .expertise-domain--with-sphere .expertise-sphere--compact {
+    height: 190px;
+  }
+}
