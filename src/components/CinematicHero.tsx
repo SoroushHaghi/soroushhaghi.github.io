@@ -319,10 +319,10 @@ function CinematicHero() {
       // Intent-aware escape hatch: a hard/rapid wheel or trackpad gesture means
       // "move through the page", so stop fighting the browser and let native
       // scrolling carry the user across the long sticky Hero.
-      const fastIntent = Math.abs(delta) >= 220 || burst.total >= 360;
+      const fastIntent = Math.abs(delta) >= 280 || burst.total >= 520;
       if (fastIntent) {
         cancelSnap();
-        wheelBypassUntilRef.current = now + 650;
+        wheelBypassUntilRef.current = now + 600;
         burst.total = 0;
         return;
       }
@@ -346,7 +346,7 @@ function CinematicHero() {
       const next = clamp(nearest + direction, 0, STOPS.length - 1);
       const sectionTop = window.scrollY + rect.top;
       const travel = Math.max(1, root.offsetHeight - window.innerHeight);
-      const duration = next === STOPS.length - 1 ? 1150 : 820;
+      const duration = next === STOPS.length - 1 ? 1320 : 950;
       wheelLockUntilRef.current = now + duration + 40;
       animateTo(sectionTop + STOPS[next] * travel, duration);
     };
@@ -916,7 +916,7 @@ function CinematicHero() {
 
         <div ref={introVisualRef} className="career-state-intro-backdrop" aria-hidden="true">
           <img
-            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation.webp`}
+            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation-v3.webp`}
             alt=""
             draggable={false}
           />
