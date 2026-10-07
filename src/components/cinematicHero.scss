@@ -29,7 +29,7 @@
 .career-state-intro-backdrop {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -42,13 +42,14 @@
 }
 
 .career-state-intro-backdrop img {
-  width: min(74vw, 1279px);
+  width: min(78vw, 1279px);
   height: auto;
   max-height: 94svh;
   display: block;
   object-fit: contain;
   object-position: center;
   background: #000;
+  filter: brightness(1.08) contrast(1.04);
   user-select: none;
   -webkit-user-drag: none;
 }
@@ -109,20 +110,27 @@
   position: absolute;
   left: clamp(52px, 5.2vw, 96px);
   top: 55%;
-  z-index: 4;
+  z-index: 5;
   width: min(780px, calc(100% - clamp(104px, 10.4vw, 192px)));
   transform: translateY(-50%);
-  pointer-events: none;
+  pointer-events: auto;
   will-change: opacity, transform;
 }
 
 .career-state-intro-copy .career-state-kicker {
+  display: block;
   margin-bottom: 16px;
-  color: #b7bec7;
+  color: #d4d9df;
+  opacity: 1;
+  text-shadow: 0 1px 16px rgba(0,0,0,.9);
   font-size: 11px;
   font-weight: 720;
   letter-spacing: .14em;
   text-transform: uppercase;
+}
+
+.career-state-intro-copy .hero-name {
+  pointer-events: auto;
 }
 
 .career-state-stage-content {
