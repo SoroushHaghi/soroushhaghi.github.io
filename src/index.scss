@@ -6153,7 +6153,7 @@ html[data-theme="light"] .lab-token-readout strong {
 }
 
 
-/* 2026-10-07 affiliation 2x2 layout and targeted brand fixes */
+/* 2026-10-07 canonical affiliation 2x2 layout + optical normalization */
 .affiliations-section {
   padding-top: 44px;
   padding-bottom: 58px;
@@ -6179,27 +6179,46 @@ html[data-theme="light"] .lab-token-readout strong {
   padding: 20px 14px !important;
 }
 
-/* Keep already-good marks untouched; only correct the brands called out in review. */
-.organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img {
-  max-width: 132px !important;
-  max-height: 58px !important;
+/*
+ * One sizing system for every organization mark.
+ * Per-brand optical dimensions live in AffiliationRail.tsx and are fed here
+ * through --logo-width / --logo-height / --logo-scale.
+ */
+.organization-mark[data-brand] .organization-logo-frame {
+  width: 136px !important;
+  height: 92px !important;
+  overflow: visible !important;
 }
 
+.organization-mark[data-brand] .organization-logo-asset,
+.organization-mark[data-brand] .organization-logo-asset > img {
+  overflow: visible !important;
+}
+
+.organization-mark[data-brand] .organization-logo-asset > img {
+  width: auto !important;
+  height: auto !important;
+  max-width: var(--logo-width, 80px) !important;
+  max-height: var(--logo-height, 68px) !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: scale(var(--logo-scale, 1)) !important;
+  transform-origin: center !important;
+  filter:
+    drop-shadow(0 0 5px hsla(var(--brand-hue), 82%, 66%, .12))
+    saturate(1.04)
+    contrast(1.05)
+    brightness(1.04) !important;
+}
+
+/* These source SVGs are monochrome; lift them cleanly on the dark rail. */
 .organization-mark[data-brand="sharif"] .organization-logo-asset > img,
-.organization-mark[data-brand="iran-khodro"] .organization-logo-asset > img,
-.organization-mark[data-brand="volkswagen"] .organization-logo-asset > img {
-  max-width: 80px !important;
-  max-height: 80px !important;
-}
-
-.organization-mark[data-brand="huawei"] .organization-logo-asset > img {
-  max-width: 84px !important;
-  max-height: 84px !important;
-}
-
-.organization-mark[data-brand="infineon"] .organization-logo-asset > img {
-  max-width: 128px !important;
-  max-height: 52px !important;
+.organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img {
+  filter:
+    brightness(0)
+    invert(1)
+    opacity(.94)
+    drop-shadow(0 0 6px hsla(var(--brand-hue), 72%, 72%, .14)) !important;
 }
 
 @media (max-width: 640px) {
@@ -6224,25 +6243,14 @@ html[data-theme="light"] .lab-token-readout strong {
     padding: 13px 8px !important;
   }
 
-  .organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img {
-    max-width: 104px !important;
-    max-height: 46px !important;
+  .organization-mark[data-brand] .organization-logo-frame {
+    width: 106px !important;
+    height: 72px !important;
   }
 
-  .organization-mark[data-brand="sharif"] .organization-logo-asset > img,
-  .organization-mark[data-brand="iran-khodro"] .organization-logo-asset > img,
-  .organization-mark[data-brand="volkswagen"] .organization-logo-asset > img {
-    max-width: 66px !important;
-    max-height: 66px !important;
-  }
-
-  .organization-mark[data-brand="huawei"] .organization-logo-asset > img {
-    max-width: 68px !important;
-    max-height: 68px !important;
-  }
-
-  .organization-mark[data-brand="infineon"] .organization-logo-asset > img {
-    max-width: 102px !important;
-    max-height: 42px !important;
+  .organization-mark[data-brand] .organization-logo-asset > img {
+    max-width: min(var(--logo-width, 80px), 104px) !important;
+    max-height: min(var(--logo-height, 68px), 68px) !important;
   }
 }
+
