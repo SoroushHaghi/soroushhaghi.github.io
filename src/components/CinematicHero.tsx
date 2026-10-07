@@ -291,8 +291,8 @@ function CinematicHero() {
 
       // Approved Hero Lab V2 responsive composition values.
       // Keep these in renderer-space so pointer hit-testing stays aligned with the visual.
-      const visualX = mobile ? 0 : tablet ? -33 : 60;
-      const visualY = mobile ? 0 : tablet ? 0 : 1;
+      const visualX = mobile ? 0 : tablet ? -33 : 0;
+      const visualY = mobile ? 0 : tablet ? 0 : 0;
       const visualScale = mobile ? 0.8 : 1;
 
       const centerX = (mobile ? W * 0.5 : tablet ? W * 0.58 : W * 0.61) + visualX;
