@@ -464,3 +464,131 @@
     background-size: 110vw auto;
   }
 }
+
+
+/* 2026-10-07 approved Hero Lab V2 responsive layout.
+   Desktop = >=1181px, tablet = 760-1180px, mobile = <=759px. */
+.career-state-intro-copy {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  pointer-events: none;
+}
+
+.career-state-intro-copy .career-state-kicker {
+  position: absolute;
+  left: 60px;
+  top: 67%;
+  margin: 0;
+  transform: translateY(-50%);
+  font-size: 24px;
+  color: #fff;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.career-state-intro-wordmark {
+  position: absolute;
+  left: 55px;
+  top: 73%;
+  margin: 0;
+  transform: translateY(-50%);
+  font-size: 81px;
+  pointer-events: auto;
+}
+
+.career-state-copy {
+  left: 65px;
+  top: 150px;
+}
+
+.career-state-copy h1 {
+  font-size: 60px;
+}
+
+.career-state-steps {
+  left: 55px;
+  top: 60%;
+}
+
+.career-state-scroll-hint {
+  bottom: 50px;
+}
+
+@media (min-width: 760px) and (max-width: 1180px) {
+  .career-state-intro-copy .career-state-kicker {
+    left: 36px;
+    top: 68%;
+    font-size: 32px;
+  }
+
+  .career-state-intro-wordmark {
+    left: 32px;
+    top: 75%;
+    font-size: 65px;
+  }
+
+  .career-state-copy {
+    left: 44px;
+    top: 156px;
+  }
+
+  .career-state-copy h1 {
+    font-size: 42px;
+  }
+
+  .career-state-steps {
+    left: 40px;
+    top: 55%;
+  }
+
+  .career-state-scroll-hint {
+    bottom: 55px;
+  }
+}
+
+@media (max-width: 759px) {
+  .career-state-intro-copy {
+    left: 0;
+    right: auto;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .career-state-intro-copy .career-state-kicker {
+    left: 20px;
+    top: 85%;
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .career-state-intro-wordmark {
+    left: 18px;
+    top: 88%;
+    margin: 0;
+    font-size: 41px;
+  }
+
+  .career-state-copy {
+    left: 25px;
+    right: 18px;
+    top: 144px;
+    width: auto;
+  }
+
+  .career-state-copy h1 {
+    font-size: 31px;
+  }
+
+  .career-state-steps {
+    left: 20px;
+    top: 78%;
+  }
+
+  .career-state-scroll-hint {
+    bottom: 35px;
+  }
+}
