@@ -7,7 +7,7 @@ const rotationMs = 2800;
 
 const organizationLogoMetrics: Record<string, { width: number; height: number; scale: number }> = {
   "tu-braunschweig": { width: 116, height: 50, scale: 1.00 },
-  "leibniz-hannover": { width: 132, height: 60, scale: 1.00 },
+  "leibniz-hannover": { width: 132, height: 60, scale: 1.80 },
   sharif: { width: 82, height: 82, scale: 1.00 },
   ferdowsi: { width: 68, height: 68, scale: 1.00 },
   "azad-university": { width: 68, height: 68, scale: 1.00 },
