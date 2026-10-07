@@ -41,6 +41,21 @@
   will-change: opacity, transform, filter;
 }
 
+.career-state-intro-artwork {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(78vw, 1279px) auto;
+  opacity: 1;
+  filter: none;
+  transform: translate(var(--hero-artwork-x, 0px), var(--hero-artwork-y, 0px)) scale(var(--hero-artwork-scale, 1));
+  transform-origin: center;
+  pointer-events: none;
+  user-select: none;
+}
+
 .career-state-intro-backdrop img {
   width: min(78vw, 1279px);
   height: auto;
@@ -431,3 +446,21 @@
   }
 }
 
+
+
+/* Hero stage-0 visibility baseline: keep the real asset unmistakably visible.
+   Scroll/fade logic stays on the parent and is intentionally untouched. */
+.career-state-intro-backdrop::after {
+  display: none;
+}
+
+.career-state-intro-copy .career-state-kicker {
+  color: #fff;
+  opacity: 1;
+}
+
+@media (max-width: 760px) {
+  .career-state-intro-artwork {
+    background-size: 110vw auto;
+  }
+}
