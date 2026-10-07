@@ -125,7 +125,6 @@ function CinematicHero() {
     knowledge: axisKnowledge,
   } = copy.careerState.axes;
   const rootRef = useRef<HTMLElement | null>(null);
-  const introVisualRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressRef = useRef(0);
   const activeStageRef = useRef(0);
@@ -220,15 +219,6 @@ function CinematicHero() {
       const travel = Math.max(1, root.offsetHeight - window.innerHeight);
       const progress = clamp01(-rect.top / travel);
       progressRef.current = progress;
-      const introFade = smooth(0.015, 0.145, progress);
-      const introVisual = introVisualRef.current;
-      if (introVisual) {
-        const visible = 1 - introFade;
-        introVisual.style.opacity = String(visible);
-        introVisual.style.transform = `scale(${1 - introFade * 0.035})`;
-        introVisual.style.filter = `blur(${introFade * 5}px)`;
-        introVisual.style.visibility = visible <= 0.002 ? "hidden" : "visible";
-      }
       const equationReady = progress >= 0.94;
       const basisLegendReady = progress >= 0.96;
       setFinalReady((prev) => (prev === equationReady ? prev : equationReady));
@@ -337,7 +327,7 @@ function CinematicHero() {
       if (!ctx) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = "#020406";
+      ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, W, H);
 
       const p = progressRef.current;
@@ -481,8 +471,9 @@ function CinematicHero() {
       };
 
       const glow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(W, H) * 0.68);
-      glow.addColorStop(0, "rgba(31,46,66,.10)");
-      glow.addColorStop(0.56, "rgba(8,15,22,.024)");
+      const ambient = smooth(0.07, 0.20, p);
+      glow.addColorStop(0, `rgba(31,46,66,${0.10 * ambient})`);
+      glow.addColorStop(0.56, `rgba(8,15,22,${0.024 * ambient})`);
       glow.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, W, H);
@@ -868,14 +859,6 @@ function CinematicHero() {
           onPointerLeave={() => !draggingRef.current && setTooltip(null)}
           aria-hidden="true"
         />
-
-        <div ref={introVisualRef} className="career-state-intro-backdrop" aria-hidden="true">
-          <img
-            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation.webp`}
-            alt=""
-            draggable={false}
-          />
-        </div>
 
         <div className="career-state-vignette" aria-hidden="true" />
 
