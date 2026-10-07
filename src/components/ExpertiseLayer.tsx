@@ -1,28 +1,36 @@
 import React from "react";
+import CareerStateQubit from "./CareerStateQubit";
 import { domains } from "../siteConfig";
-import { expertiseViews } from "../expertise/expertiseData";
-import ExpertiseSphere from "./ExpertiseSphere";
+import {
+  ExpertiseViewKey,
+  getExpertiseView,
+} from "../expertise/expertiseData";
 
-const domainSphereCapabilities: Record<string, readonly string[]> = {
-  quantum: expertiseViews.quantum,
-  communication: expertiseViews.communication,
-  photonics: expertiseViews.photonics,
-  "ai-perception": expertiseViews["ai-perception"],
-  "devices-sensing": expertiseViews["devices-sensing"],
-  "software-systems": expertiseViews["software-systems"],
-};
+const domainOrder = [
+  "quantum",
+  "ai-perception",
+  "photonics",
+  "devices-sensing",
+  "communication",
+  "software-systems",
+] as const;
+
+const orderedDomains = domainOrder
+  .map((id) => domains.find((domain) => domain.id === id))
+  .filter((domain): domain is (typeof domains)[number] => Boolean(domain));
 
 function ExpertiseLayer() {
   return (
-    <div className="expertise-index" aria-label="Technical domain index">
-      {domains.map((domain) => (
-        <article className="expertise-domain expertise-domain--with-sphere" key={domain.id}>
+    <div className="expertise-index expertise-index--qubit-grid" aria-label="Technical domain index">
+      {orderedDomains.map((domain) => (
+        <article className="expertise-domain expertise-domain--with-qubit" key={domain.id}>
           <strong>{domain.label}</strong>
-          <ExpertiseSphere
-            compact
-            capabilityIds={domainSphereCapabilities[domain.id]}
-            ariaLabel={`${domain.label} knowledge and experience state`}
-          />
+          <div className="expertise-domain-qubit">
+            <CareerStateQubit
+              data={getExpertiseView(domain.id as ExpertiseViewKey)}
+              ariaLabel={`${domain.label} career-state Qubit`}
+            />
+          </div>
           <span className="expertise-domain-line" aria-hidden="true" />
         </article>
       ))}
