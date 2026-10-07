@@ -223,8 +223,8 @@ function CinematicHero() {
       const travel = Math.max(1, root.offsetHeight - window.innerHeight);
       const progress = clamp01(-rect.top / travel);
       progressRef.current = progress;
-      const introFade = smooth(0.02, 0.16, progress);
-      const introCopyFade = smooth(0.055, 0.13, progress);
+      const introFade = smooth(0.08, 0.18, progress);
+      const introCopyFade = smooth(0.10, 0.18, progress);
       if (introVisualRef.current) {
         const visible = 1 - introFade;
         introVisualRef.current.style.opacity = String(visible);
@@ -916,7 +916,7 @@ function CinematicHero() {
 
         <div ref={introVisualRef} className="career-state-intro-backdrop" aria-hidden="true">
           <img
-            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation-v3.webp`}
+            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation-v5.webp`}
             alt=""
             draggable={false}
           />
@@ -952,7 +952,7 @@ function CinematicHero() {
           </ul>
         </div>
         <div ref={introCopyRef} className="career-state-intro-copy">
-          <div className="career-state-kicker">{copy.careerState.stages[0].eyebrow}</div>
+          <div className="career-state-kicker">AI &amp; QUANTUM</div>
           <h1 className="hero-name career-state-intro-wordmark">
             <Wordmark variant="hero" />
           </h1>
