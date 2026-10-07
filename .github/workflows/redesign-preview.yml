@@ -1,0 +1,99 @@
+name: Redesign Preview
+
+on:
+  push:
+    branches:
+      - redesign-2026-10
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-publish
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish-preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout redesign branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build preview
+        env:
+          PUBLIC_URL: /redesign-preview
+          REACT_APP_BASE_PATH: /redesign-preview
+          REACT_APP_ENABLE_LAB: "true"
+        run: npm run build
+
+      - name: Remove duplicated CV artifact from preview build
+        run: |
+          rm -rf build/cv
+
+      - name: Add direct-route HTML fallbacks
+        run: |
+          for route in work education lab; do
+            mkdir -p "build/$route"
+            cp build/index.html "build/$route/index.html"
+          done
+          mkdir -p build/lab/polish
+          cp build/index.html build/lab/polish/index.html
+          mkdir -p build/lab/hero
+          cp build/index.html build/lab/hero/index.html
+          mkdir -p build/lab/work
+          cp build/index.html build/lab/work/index.html
+          mkdir -p build/lab/education
+          cp build/index.html build/lab/education/index.html
+          mkdir -p build/lab/background
+          cp build/index.html build/lab/background/index.html
+          mkdir -p build/lab/expertise
+          cp build/index.html build/lab/expertise/index.html
+          mkdir -p build/review-sphere-flow-60aa2fac
+          cp build/index.html build/review-sphere-flow-60aa2fac/index.html
+          mkdir -p build/review-centering-v2-4b88a7b3
+          cp build/index.html build/review-centering-v2-4b88a7b3/index.html
+          mkdir -p build/review-staged-v3-496645f9
+          cp build/index.html build/review-staged-v3-496645f9/index.html
+          mkdir -p build/review-sphere-depth-v4-0ccee488
+          cp build/index.html build/review-sphere-depth-v4-0ccee488/index.html
+          mkdir -p build/review-wheel-snap-v5-b7c55abf
+          cp build/index.html build/review-wheel-snap-v5-b7c55abf/index.html
+          mkdir -p build/review-soft-axis-v6-a4a71e32
+          cp build/index.html build/review-soft-axis-v6-a4a71e32/index.html
+          mkdir -p build/review-axis-continuity-v7
+          cp build/index.html build/review-axis-continuity-v7/index.html
+          mkdir -p build/review-camera-lab-v7
+          cp build/index.html build/review-camera-lab-v7/index.html
+
+      - name: Refresh semantic route fallbacks
+        run: node scripts/generate-semantic-content.js
+
+      - name: Publish preview without changing production root
+        run: |
+          cp -a build /tmp/redesign-preview-build
+          git fetch origin gh-pages
+          git worktree add --detach /tmp/gh-pages origin/gh-pages
+          rm -rf /tmp/gh-pages/redesign-preview
+          mkdir -p /tmp/gh-pages/redesign-preview
+          cp -a /tmp/redesign-preview-build/. /tmp/gh-pages/redesign-preview/
+          cd /tmp/gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add redesign-preview
+          if git diff --cached --quiet; then
+            echo "Preview is already current."
+            exit 0
+          fi
+          git commit -m "Publish redesign preview"
+          git push origin HEAD:gh-pages

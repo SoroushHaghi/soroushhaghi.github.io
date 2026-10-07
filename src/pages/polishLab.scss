@@ -1,0 +1,376 @@
+.polish-lab {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: minmax(340px, 430px) 1fr;
+  min-width: 0;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #080a0d;
+  color: #edf1f5;
+}
+
+.polish-lab-editor {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,.08);
+  background: #0d1014;
+}
+
+.polish-lab-head {
+  padding: 22px 22px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.polish-lab-kicker {
+  margin-bottom: 6px;
+  color: #748397;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+.polish-lab-head h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+
+.polish-lab-head a {
+  color: #aab7c7;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.polish-lab-note {
+  margin: 0 22px 16px;
+  padding: 12px 13px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 12px;
+  background: rgba(255,255,255,.025);
+  color: #8895a5;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.polish-lab-tabs {
+  padding: 0 22px 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.polish-lab-tabs button,
+.polish-lab-actions button,
+.polish-device-switcher button {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,.025);
+  color: #8995a4;
+  font: inherit;
+  cursor: pointer;
+}
+
+.polish-lab-tabs button {
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.polish-lab-tabs button.active,
+.polish-device-switcher button.active {
+  background: #edf1f5;
+  color: #0a0c0f;
+  border-color: transparent;
+}
+
+.polish-lab-editor-body {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 14px;
+}
+
+.polish-lab-editor-body textarea {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  resize: none;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  outline: none;
+  padding: 14px;
+  background: #07090c;
+  color: #dce6f1;
+  font: 12px/1.55 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  tab-size: 2;
+}
+
+.polish-lab-editor-body textarea:focus {
+  border-color: rgba(166,196,232,.30);
+  box-shadow: 0 0 0 3px rgba(118,158,204,.08);
+}
+
+.polish-lab-status {
+  min-height: 30px;
+  padding: 8px 4px 0;
+  color: #6f849b;
+  font-size: 10px;
+}
+
+.polish-lab-status.error { color: #d27f7f; }
+
+.polish-lab-actions {
+  padding: 12px 14px 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.polish-lab-actions button {
+  min-height: 36px;
+  padding: 0 12px;
+  color: #b8c3d0;
+  font-size: 10px;
+}
+
+.polish-lab-actions button:hover {
+  background: rgba(255,255,255,.06);
+  color: #fff;
+}
+
+.polish-lab-preview {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 52px 1fr;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(113,140,171,.09), transparent 38%),
+    #080a0d;
+}
+
+.polish-lab-preview-bar {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  color: #69798b;
+  font-size: 10px;
+}
+
+.polish-device-switcher {
+  display: flex;
+  gap: 7px;
+}
+
+.polish-device-switcher button {
+  min-height: 30px;
+  padding: 0 10px;
+  text-transform: capitalize;
+  font-size: 10px;
+}
+
+.polish-frame-shell {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.polish-frame-shell iframe {
+  flex: 0 0 auto;
+  height: calc(100dvh - 88px);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  background: #0b0d10;
+  box-shadow: 0 28px 80px rgba(0,0,0,.44);
+}
+
+.polish-frame-shell.is-desktop iframe {
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .polish-lab {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(310px, 44dvh) 1fr;
+  }
+
+  .polish-lab-editor {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .polish-lab-head {
+    padding: 14px 14px 10px;
+  }
+
+  .polish-lab-note {
+    margin: 0 14px 10px;
+  }
+
+  .polish-lab-tabs {
+    padding: 0 14px 8px;
+  }
+
+  .polish-lab-editor-body {
+    padding: 0 10px;
+  }
+
+  .polish-lab-actions {
+    padding: 8px 10px 10px;
+  }
+
+  .polish-frame-shell {
+    padding: 10px;
+  }
+
+  .polish-frame-shell iframe {
+    height: calc(56dvh - 64px);
+  }
+}
+
+
+.polish-lab-layout-body {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 0 14px 14px;
+}
+
+.polish-control-group {
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 14px;
+  background: rgba(255,255,255,.018);
+}
+
+.polish-control-group-head {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.polish-control-group-head strong {
+  font-size: 11px;
+  font-weight: 700;
+  color: #d6deea;
+}
+
+.polish-control-group-head span {
+  color: #718096;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.polish-control {
+  display: grid;
+  grid-template-columns: minmax(108px, 1fr) minmax(100px, 1.25fr) 56px;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  color: #8f9cab;
+  font-size: 10px;
+}
+
+.polish-control input[type="range"] {
+  width: 100%;
+  accent-color: #dbe5f0;
+}
+
+.polish-control output {
+  color: #d0dae6;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 9px;
+  text-align: right;
+}
+
+.polish-add-text,
+.polish-reset-layout,
+.polish-remove-text {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,.025);
+  color: #aeb9c7;
+  font: inherit;
+  cursor: pointer;
+}
+
+.polish-add-text {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 12px;
+  font-size: 10px;
+}
+
+.polish-add-text.active {
+  background: #edf1f5;
+  color: #090b0e;
+  border-color: transparent;
+}
+
+.polish-empty-note {
+  margin: 10px 0 0;
+  color: #66768a;
+  font-size: 10px;
+}
+
+.polish-mock-row {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 11px;
+  background: #090c10;
+}
+
+.polish-mock-row > input[type="text"] {
+  width: 100%;
+  min-height: 34px;
+  margin-bottom: 7px;
+  padding: 0 9px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px;
+  outline: none;
+  background: #06080b;
+  color: #dce6f1;
+  font: 11px/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.polish-remove-text,
+.polish-reset-layout {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 9px;
+}
+
+.polish-remove-text {
+  margin-top: 6px;
+}
+
+.polish-reset-layout {
+  margin-top: 10px;
+}
+
+.polish-add-text:hover,
+.polish-reset-layout:hover,
+.polish-remove-text:hover {
+  background: rgba(255,255,255,.06);
+  color: #fff;
+}

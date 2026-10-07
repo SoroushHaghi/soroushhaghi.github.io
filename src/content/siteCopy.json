@@ -1,0 +1,121 @@
+{
+  "identity": {
+    "fullName": "Soroush Haghi",
+    "shortName": "S. Haghi"
+  },
+  "nav": {
+    "work": "WORK",
+    "education": "EDUCATION",
+    "cv": "CV"
+  },
+  "home": {
+    "education": {
+      "eyebrow": "EDUCATION",
+      "title": "Engineering foundation, built current direction.",
+      "copy": "From AI & Computer Engineering into Quantum Technologies, with focus spanning computation, communication, optimization, photonics and devices.",
+      "action": "Explore education"
+    },
+    "expertise": {
+      "eyebrow": "EXPERTISE",
+      "title": "Where my education and technical work connect.",
+      "copy": "A readable index of the domains that recur across my coursework, projects and systems."
+    },
+    "work": {
+      "eyebrow": "SELECTED WORK",
+      "title": "Selected technical work.",
+      "copy": "Three representative projects and systems; the Work page carries the broader set.",
+      "action": "View all work",
+      "cardAction": "View work"
+    },
+    "affiliations": {
+      "eyebrow": "AFFILIATIONS & CONTEXT"
+    },
+    "contact": {
+      "eyebrow": "CONTACT",
+      "title": "Seeking an internship.",
+      "email": "Email",
+      "cv": "Open CV"
+    }
+  },
+  "careerState": {
+    "ariaLabel": "Career expertise state",
+    "brand": "WHO AM I?",
+    "stages": [
+      {
+        "eyebrow": "AI & QUANTUM",
+        "title": "Soroush Haghi",
+        "copy": ""
+      },
+      {
+        "eyebrow": "01 · BACHELOR · 2019",
+        "title": " AI & Computer Engineer",
+        "copy": ""
+      },
+      {
+        "eyebrow": "02 · MASTER · 2024",
+        "title": "A Quantum Engineer",
+        "copy": ""
+      },
+      {
+        "eyebrow": "03 · PORTFOLIO · since 2019",
+        "title": "A dot|in my|professional life.",
+        "copy": ""
+      },
+      {
+        "eyebrow": "04 · PORTFOLIO DEPTH",
+        "title": "Depth of |Knowledge, Experience.",
+        "copy": ""
+      },
+      {
+        "eyebrow": "05 · live PORTFOLIO SUPERPOSITION",
+        "title": "I`m QUBIT. In|Superposition.|with Probability of Knowldege & Experience.",
+        "copy": ""
+      }
+    ],
+    "axes": {
+      "hardware": "HARDWARE",
+      "software": "SOFTWARE",
+      "classical": "CLASSICAL",
+      "quantum": "QUANTUM",
+      "experience": "EXPERIENCE",
+      "knowledge": "KNOWLEDGE"
+    },
+    "basisNames": {
+      "QH": "Quantum Hardware",
+      "QS": "Quantum Computing",
+      "CH": "Classical Hardware",
+      "CS": "Classical Computing"
+    },
+    "equationHint": "click ψ to measure",
+    "scrollHint": "scroll",
+    "semanticHeading": "Career-state narrative",
+    "semanticIntro": "An interactive visualization of the trajectory from Computer Engineering into Quantum Engineering, the evidence behind it, and the relationship between knowledge and experience across classical and quantum hardware/software domains."
+  },
+  "workPage": {
+    "eyebrow": "WORK",
+    "title": "Experience and projects over time.",
+    "filters": {
+      "all": "All",
+      "experience": "Experience",
+      "project": "Projects",
+      "co-op": "Co-op"
+    },
+    "details": "Details"
+  },
+  "educationPage": {
+    "eyebrow": "EDUCATION",
+    "title": "Academic journey over time.",
+    "copy": "Degrees, academic work and credentials in one chronological view.",
+    "filters": {
+      "all": "All",
+      "degree": "Degrees",
+      "academic": "Academic Work",
+      "credential": "Credentials"
+    },
+    "timelineRuleLabel": "Timeline rule",
+    "timelineRuleCopy": "Exact dates are shown where verified. Academic work without a verified month/day stays within its known study period instead of receiving an invented date."
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}
