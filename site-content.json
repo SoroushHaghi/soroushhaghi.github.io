@@ -863,6 +863,7 @@
     ],
     "trainingAndCredentials": [
       {
+        "id": "qpl-sharif",
         "period": "2026",
         "title": "Quantum Programming Language",
         "issuer": "Sharif University of Technology",
@@ -870,6 +871,7 @@
         "artifact": "Course record"
       },
       {
+        "id": "qml-ariaquanta",
         "period": "2025",
         "title": "Quantum Machine Learning",
         "issuer": "Ariaquanta Institute",
@@ -877,6 +879,7 @@
         "artifact": "Certificate"
       },
       {
+        "id": "kaggle-ml-python",
         "period": "2025",
         "title": "Machine Learning + Introduction to Programming Using Python",
         "issuer": "Kaggle",
@@ -884,6 +887,7 @@
         "artifact": "Certificates"
       },
       {
+        "id": "toefl-ibt",
         "period": "2024",
         "title": "TOEFL iBT",
         "issuer": "ETS",
@@ -891,6 +895,7 @@
         "artifact": "Score report"
       },
       {
+        "id": "data-ml-bootcamp",
         "period": "2023",
         "title": "Data & ML Bootcamp — 96 hours",
         "issuer": "Azad University, Mashhad",
@@ -898,6 +903,7 @@
         "artifact": "Certificate"
       },
       {
+        "id": "python-jahad",
         "period": "2021",
         "title": "Python Programming — 40 hours",
         "issuer": "Jahad Daneshgahi, Khorasan Razavi",
