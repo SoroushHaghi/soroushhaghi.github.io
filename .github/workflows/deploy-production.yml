@@ -1,5 +1,7 @@
 name: Deploy Production Site
 
+# Production deployment is intentionally explicit and preserves /redesign-preview.
+
 on:
   push:
     branches:
