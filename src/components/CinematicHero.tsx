@@ -132,6 +132,8 @@ function CinematicHero() {
   const activeStageRef = useRef(0);
   const wheelLockUntilRef = useRef(0);
   const wheelAnimationRef = useRef<number | null>(null);
+  const wheelBurstRef = useRef({ total: 0, lastAt: 0, direction: 0 });
+  const wheelBypassUntilRef = useRef(0);
   const measureRef = useRef<Measurement | null>(null);
   const measurementEndingRef = useRef(false);
   const draggingRef = useRef(false);
@@ -279,19 +281,56 @@ function CinematicHero() {
       wheelAnimationRef.current = requestAnimationFrame(tick);
     };
 
+    const cancelSnap = () => {
+      if (wheelAnimationRef.current !== null) {
+        cancelAnimationFrame(wheelAnimationRef.current);
+        wheelAnimationRef.current = null;
+      }
+      wheelLockUntilRef.current = 0;
+    };
+
     const onWheel = (event: WheelEvent) => {
       const root = rootRef.current;
       if (!root) return;
+
       const rect = root.getBoundingClientRect();
       const active = rect.top <= 1 && rect.bottom >= window.innerHeight - 1;
-      if (!active || Math.abs(event.deltaY) < 4) return;
+      if (!active) return;
 
-      const direction = event.deltaY > 0 ? 1 : -1;
+      const deltaScale = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+        ? 16
+        : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+          ? window.innerHeight
+          : 1;
+      const delta = event.deltaY * deltaScale;
+      if (Math.abs(delta) < 3) return;
+
+      const direction = delta > 0 ? 1 : -1;
       const current = progressRef.current;
       if ((direction < 0 && current <= 0.001) || (direction > 0 && current >= 0.999)) return;
 
-      event.preventDefault();
       const now = performance.now();
+      const burst = wheelBurstRef.current;
+      const sameBurst = now - burst.lastAt < 180 && burst.direction === direction;
+      burst.total = sameBurst ? burst.total + Math.abs(delta) : Math.abs(delta);
+      burst.lastAt = now;
+      burst.direction = direction;
+
+      // Intent-aware escape hatch: a hard/rapid wheel or trackpad gesture means
+      // "move through the page", so stop fighting the browser and let native
+      // scrolling carry the user across the long sticky Hero.
+      const fastIntent = Math.abs(delta) >= 220 || burst.total >= 440;
+      if (fastIntent) {
+        cancelSnap();
+        wheelBypassUntilRef.current = now + 650;
+        burst.total = 0;
+        return;
+      }
+
+      if (now < wheelBypassUntilRef.current) return;
+
+      // A deliberate, normal-speed gesture still gets the cinematic stage snap.
+      event.preventDefault();
       if (now < wheelLockUntilRef.current) return;
 
       let nearest = 0;
@@ -307,8 +346,8 @@ function CinematicHero() {
       const next = clamp(nearest + direction, 0, STOPS.length - 1);
       const sectionTop = window.scrollY + rect.top;
       const travel = Math.max(1, root.offsetHeight - window.innerHeight);
-      const duration = next === STOPS.length - 1 ? 2800 : 1100;
-      wheelLockUntilRef.current = now + duration + 90;
+      const duration = next === STOPS.length - 1 ? 1150 : 820;
+      wheelLockUntilRef.current = now + duration + 40;
       animateTo(sectionTop + STOPS[next] * travel, duration);
     };
 
