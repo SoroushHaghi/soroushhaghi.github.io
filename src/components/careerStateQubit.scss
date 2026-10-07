@@ -12,3 +12,99 @@
   height: 100%;
   pointer-events: none;
 }
+
+/* Home education: same fixed Qubit renderer, with degree-specific data. */
+.education-card--with-qubit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.72fr);
+  align-items: center;
+  gap: clamp(14px, 2vw, 30px);
+}
+
+.education-card--with-qubit .education-card-copy,
+.education-card--with-qubit .education-card-qubit {
+  min-width: 0;
+}
+
+.education-card-qubit {
+  height: 240px;
+}
+
+/* Expertise: six compact evidence views, locked as a 2 × 3 grid. */
+.expertise-index--qubit-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.expertise-index--qubit-grid .expertise-domain--with-qubit {
+  min-height: 244px !important;
+  padding: 20px 18px;
+  gap: 8px;
+  border-right: 1px solid var(--hairline) !important;
+  border-bottom: 1px solid var(--hairline) !important;
+}
+
+.expertise-index--qubit-grid .expertise-domain--with-qubit:nth-child(2n) {
+  border-right: 0 !important;
+}
+
+.expertise-index--qubit-grid .expertise-domain--with-qubit:nth-last-child(-n + 2) {
+  border-bottom: 0 !important;
+}
+
+.expertise-domain--with-qubit > strong {
+  align-self: flex-start;
+  font-size: clamp(18px, 1.7vw, 27px);
+}
+
+.expertise-domain-qubit {
+  width: min(100%, 176px);
+  height: 154px;
+  margin: 0 auto;
+}
+
+.expertise-domain--with-qubit .expertise-domain-line {
+  margin-top: auto;
+}
+
+@media (max-width: 760px) {
+  .education-card--with-qubit {
+    grid-template-columns: 1fr;
+  }
+
+  .education-card-qubit {
+    height: 220px;
+    margin-top: 4px;
+  }
+
+  .expertise-index--qubit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .expertise-index--qubit-grid .expertise-domain--with-qubit {
+    min-height: 206px !important;
+    padding: 16px 10px 14px;
+    gap: 5px;
+  }
+
+  .expertise-domain--with-qubit > strong {
+    font-size: clamp(15px, 4.7vw, 21px);
+    line-height: 1.05;
+  }
+
+  .expertise-domain-qubit {
+    width: min(100%, 138px);
+    height: 124px;
+  }
+}
+
+@media (max-width: 390px) {
+  .expertise-index--qubit-grid .expertise-domain--with-qubit {
+    min-height: 194px !important;
+    padding-inline: 8px;
+  }
+
+  .expertise-domain-qubit {
+    width: min(100%, 124px);
+    height: 114px;
+  }
+}
