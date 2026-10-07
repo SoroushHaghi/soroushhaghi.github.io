@@ -6151,3 +6151,98 @@ html[data-theme="light"] .lab-token-readout strong {
   transform-origin: center;
   user-select: none;
 }
+
+
+/* 2026-10-07 affiliation 2x2 layout and targeted brand fixes */
+.affiliations-section {
+  padding-top: 44px;
+  padding-bottom: 58px;
+}
+
+.organization-rail {
+  width: min(100%, 760px) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.organization-rail .organization-mark:nth-child(n) {
+  display: grid !important;
+}
+
+.organization-mark {
+  height: 138px !important;
+  min-height: 138px !important;
+  border-radius: 22px !important;
+}
+
+.organization-mark-content {
+  padding: 20px 14px !important;
+}
+
+/* Keep already-good marks untouched; only correct the brands called out in review. */
+.organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img {
+  max-width: 132px !important;
+  max-height: 58px !important;
+}
+
+.organization-mark[data-brand="sharif"] .organization-logo-asset > img,
+.organization-mark[data-brand="iran-khodro"] .organization-logo-asset > img,
+.organization-mark[data-brand="volkswagen"] .organization-logo-asset > img {
+  max-width: 80px !important;
+  max-height: 80px !important;
+}
+
+.organization-mark[data-brand="huawei"] .organization-logo-asset > img {
+  max-width: 84px !important;
+  max-height: 84px !important;
+}
+
+.organization-mark[data-brand="infineon"] .organization-logo-asset > img {
+  max-width: 128px !important;
+  max-height: 52px !important;
+}
+
+@media (max-width: 640px) {
+  .affiliations-section {
+    padding-top: 38px;
+    padding-bottom: 50px;
+  }
+
+  .organization-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .organization-mark {
+    height: 108px !important;
+    min-height: 108px !important;
+    border-radius: 18px !important;
+  }
+
+  .organization-mark-content {
+    padding: 13px 8px !important;
+  }
+
+  .organization-mark[data-brand="leibniz-hannover"] .organization-logo-asset > img {
+    max-width: 104px !important;
+    max-height: 46px !important;
+  }
+
+  .organization-mark[data-brand="sharif"] .organization-logo-asset > img,
+  .organization-mark[data-brand="iran-khodro"] .organization-logo-asset > img,
+  .organization-mark[data-brand="volkswagen"] .organization-logo-asset > img {
+    max-width: 66px !important;
+    max-height: 66px !important;
+  }
+
+  .organization-mark[data-brand="huawei"] .organization-logo-asset > img {
+    max-width: 68px !important;
+    max-height: 68px !important;
+  }
+
+  .organization-mark[data-brand="infineon"] .organization-logo-asset > img {
+    max-width: 102px !important;
+    max-height: 42px !important;
+  }
+}
