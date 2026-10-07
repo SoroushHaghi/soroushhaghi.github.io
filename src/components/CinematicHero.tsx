@@ -339,19 +339,6 @@ function CinematicHero() {
       }
       lastFrameRef.current = now;
 
-      const rotateFinal = (point: Point3): Point3 => {
-        const yaw = -0.52 + userSpinRef.current + autoSpinRef.current;
-        const finalPitch = -0.3 + userPitchRef.current;
-        const cy = Math.cos(yaw);
-        const sy = Math.sin(yaw);
-        const x1 = cy * point.x + sy * point.z;
-        const z1 = -sy * point.x + cy * point.z;
-        const y1 = point.y;
-        const cp = Math.cos(finalPitch);
-        const sp = Math.sin(finalPitch);
-        return { x: x1, y: cp * y1 - sp * z1, z: sp * y1 + cp * z1 };
-      };
-
       const projectLegacy = (point: Point3, legacyScale = 1) => {
         const q = { x: point.x * legacyScale, y: point.y * legacyScale, z: point.z * legacyScale };
         const r = rotateLegacy(q);
