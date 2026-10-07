@@ -3,11 +3,18 @@ import AffiliationRail from "../components/AffiliationRail";
 import ExpertiseLayer from "../components/ExpertiseLayer";
 import SectionHeading from "../components/SectionHeading";
 import CinematicHero from "../components/CinematicHero";
+import ExpertiseSphere from "../components/ExpertiseSphere";
+import { expertiseViews } from "../expertise/expertiseData";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 import { useSiteCopy } from "../content/useSiteCopy";
 
 type Props = { onNavigate: (path: string) => void };
+
+const educationSphereCapabilities: Record<string, readonly string[]> = {
+  msc: expertiseViews.master,
+  bsc: expertiseViews.bachelor,
+};
 
 function HomePage({ onNavigate }: Props) {
   const copy = useSiteCopy();
@@ -26,17 +33,30 @@ function HomePage({ onNavigate }: Props) {
           onNavigate={onNavigate}
         />
         <div className="education-preview-grid">
-          {education.map((item) => (
-            <article className="education-card glass-panel" key={item.id}>
-              <div className="card-meta">{item.period}</div>
-              <h3>{item.degree}</h3>
-              <p className="muted">{item.institution}</p>
-              <ul>
-                {item.focus.slice(0, 3).map((focus) => <li key={focus}>{focus}</li>)}
-              </ul>
-              {"achievement" in item && item.achievement && <div className="achievement">{item.achievement}</div>}
-            </article>
-          ))}
+          {education.map((item) => {
+            const capabilityIds = educationSphereCapabilities[item.id];
+
+            return (
+              <article className="education-card education-card--with-sphere glass-panel" key={item.id}>
+                <div className="education-card-copy">
+                  <div className="card-meta">{item.period}</div>
+                  <h3>{item.degree}</h3>
+                  <p className="muted">{item.institution}</p>
+                  <ul>
+                    {item.focus.slice(0, 3).map((focus) => <li key={focus}>{focus}</li>)}
+                  </ul>
+                  {"achievement" in item && item.achievement && <div className="achievement">{item.achievement}</div>}
+                </div>
+                <div className="education-card-sphere">
+                  <ExpertiseSphere
+                    compact
+                    capabilityIds={capabilityIds}
+                    ariaLabel={`${item.degree} knowledge and experience state`}
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
