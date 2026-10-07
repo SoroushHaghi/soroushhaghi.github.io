@@ -915,10 +915,9 @@ function CinematicHero() {
         />
 
         <div ref={introVisualRef} className="career-state-intro-backdrop" aria-hidden="true">
-          <img
-            src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation-v5.webp`}
-            alt=""
-            draggable={false}
+          <div
+            className="career-state-intro-artwork"
+            style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/media/hero/hero-constellation-v5.webp)` }}
           />
         </div>
 
