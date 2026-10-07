@@ -345,7 +345,7 @@ function ExpertiseSphere({
         ctx.fill();
         ctx.restore();
 
-        if (showLabels || (selected.type === "capability" && selected.item.id === rec.id)) {
+        if (!compact && (showLabels || (selected.type === "capability" && selected.item.id === rec.id))) {
           const dx = p.x - origin.x;
           const dy = p.y - origin.y;
           const length = Math.hypot(dx, dy) || 1;
