@@ -26,6 +26,33 @@
   background: #000;
 }
 
+.career-state-intro-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: center;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+}
+
+.career-state-intro-backdrop img {
+  width: min(92vw, 1672px);
+  height: auto;
+  max-height: 94svh;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 .cinematic-hero-canvas {
   position: absolute;
   z-index: 0;
@@ -78,11 +105,24 @@
   pointer-events: none;
 }
 
-.career-state-copy.is-intro {
+.career-state-intro-copy {
+  position: absolute;
+  left: clamp(52px, 5.2vw, 96px);
   top: 55%;
+  z-index: 4;
   width: min(780px, calc(100% - clamp(104px, 10.4vw, 192px)));
   transform: translateY(-50%);
-  pointer-events: auto;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.career-state-intro-copy .career-state-kicker {
+  margin-bottom: 16px;
+  color: #b7bec7;
+  font-size: 11px;
+  font-weight: 720;
+  letter-spacing: .14em;
+  text-transform: uppercase;
 }
 
 .career-state-stage-content {
@@ -100,15 +140,6 @@
   font-size: 9px;
   font-weight: 650;
   letter-spacing: .20em;
-}
-
-.career-state-copy.is-intro .career-state-kicker {
-  margin-bottom: 16px;
-  color: #b7bec7;
-  font-size: 11px;
-  font-weight: 720;
-  letter-spacing: .14em;
-  text-transform: uppercase;
 }
 
 .career-state-intro-wordmark {
@@ -311,14 +342,19 @@
 @media (max-width: 760px) {
   .cinematic-hero { height: 650svh; }
 
-  .career-state-copy.is-intro {
+  .career-state-intro-backdrop img {
+    width: 100vw;
+    max-height: 82svh;
+  }
+
+  .career-state-intro-copy {
     left: 18px;
     right: 18px;
     top: 55%;
     width: auto;
   }
 
-  .career-state-copy.is-intro .career-state-kicker {
+  .career-state-intro-copy .career-state-kicker {
     margin-bottom: 12px;
     font-size: 9px;
   }
