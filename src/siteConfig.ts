@@ -121,7 +121,7 @@ export const organizationMarks = [
     name: "Sharif University of Technology",
     short: "Sharif",
     url: "https://en.sharif.edu/",
-    logo: "https://www.hse.ru/pubs/share/direct/857833748.jpg",
+    logo: "https://upload.wikimedia.org/wikipedia/fa/a/a9/Sharif_logo.svg",
     hue: "210",
     scale: 1.05,
   },
