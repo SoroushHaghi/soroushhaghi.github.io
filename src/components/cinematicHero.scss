@@ -482,7 +482,7 @@
 }
 
 .career-state-copy {
-  left: 65px;
+  left: 44px;
   top: 150px;
 }
 
@@ -497,6 +497,12 @@
 
 .career-state-scroll-hint {
   bottom: 50px;
+}
+
+.career-state-intro-artwork {
+  --hero-artwork-x: 0px;
+  --hero-artwork-y: -165px;
+  --hero-artwork-scale: 1;
 }
 
 @media (min-width: 760px) and (max-width: 1180px) {
@@ -528,6 +534,12 @@
 
   .career-state-scroll-hint {
     bottom: 55px;
+  }
+
+  .career-state-intro-artwork {
+    --hero-artwork-x: 0px;
+    --hero-artwork-y: -182px;
+    --hero-artwork-scale: 1;
   }
 }
 
@@ -572,5 +584,11 @@
 
   .career-state-scroll-hint {
     bottom: 35px;
+  }
+
+  .career-state-intro-artwork {
+    --hero-artwork-x: -6px;
+    --hero-artwork-y: -99px;
+    --hero-artwork-scale: 1;
   }
 }
