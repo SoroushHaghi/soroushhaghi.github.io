@@ -649,10 +649,18 @@ function CinematicHero() {
         />
 
         <div ref={introVisualRef} className="career-state-intro-backdrop" aria-hidden="true">
-          <div
-            className="career-state-intro-artwork"
-            style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/media/hero/hero-constellation-v5.webp)` }}
-          />
+          <picture className="career-state-intro-artwork">
+            <source
+              media="(max-width: 759px)"
+              srcSet={`${process.env.PUBLIC_URL}/media/hero/hero-mobile.png`}
+            />
+            <img
+              className="career-state-intro-artwork-image"
+              src={`${process.env.PUBLIC_URL}/media/hero/hero-desktop.png`}
+              alt=""
+              draggable={false}
+            />
+          </picture>
         </div>
 
         <div className="career-state-vignette" aria-hidden="true" />
