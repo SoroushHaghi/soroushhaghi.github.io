@@ -7,6 +7,7 @@ import {
   trainingAndCredentials
 } from "../portfolioContent";
 import { useSiteCopy } from "../content/useSiteCopy";
+import { getPortfolioMedia } from "../content/portfolioMedia";
 
 type Filter = "all" | "degree" | "academic" | "credential";
 
@@ -22,6 +23,7 @@ type EducationTimelineItem = {
   tags?: string[];
   artifactLabel: string;
   artifactNote: string;
+  mediaKey?: string;
   achievement?: string;
 };
 
@@ -35,7 +37,8 @@ const timelineItems: EducationTimelineItem[] = [
     title: "M.Sc. Quantum Technologies in Electrical and Computer Engineering",
     subtitle: "Technische Universität Braunschweig",
     artifactLabel: degreeArtifacts.master.label,
-    artifactNote: degreeArtifacts.master.note
+    artifactNote: degreeArtifacts.master.note,
+    mediaKey: "msc-qtec"
   },
 
   ...academicWork.map((item, index): EducationTimelineItem => ({
@@ -53,11 +56,12 @@ const timelineItems: EducationTimelineItem[] = [
     artifactLabel: item.status.includes("PENDING")
       ? "Presentation in preparation"
       : "Presentation / academic artifact",
-    artifactNote: "Approved slide or document image can be added here later."
+    artifactNote: "Approved slide or document image can be added here later.",
+    mediaKey: item.id
   })),
 
   ...trainingAndCredentials.map((item, index): EducationTimelineItem => ({
-    id: item.period + item.title,
+    id: item.id,
     kind: "credential",
     sort: item.title === "TOEFL iBT"
       ? 20240522
@@ -67,7 +71,8 @@ const timelineItems: EducationTimelineItem[] = [
     title: item.title,
     subtitle: item.issuer,
     artifactLabel: item.artifact ?? "Credential",
-    artifactNote: "Approved credential image can be added here later."
+    artifactNote: "Approved credential image can be added here later.",
+    mediaKey: item.id
   })),
 
   {
@@ -80,7 +85,8 @@ const timelineItems: EducationTimelineItem[] = [
     subtitle: "Islamic Azad University, Mashhad Branch",
     achievement: "Ranked 5th of 131 students",
     artifactLabel: degreeArtifacts.bachelor.label,
-    artifactNote: degreeArtifacts.bachelor.note
+    artifactNote: degreeArtifacts.bachelor.note,
+    mediaKey: "bsc-computer-engineering"
   }
 ];
 
@@ -158,6 +164,7 @@ function EducationPage() {
                   label: item.artifactLabel,
                   note: item.artifactNote
                 }}
+                media={getPortfolioMedia(item.mediaKey ?? item.id)}
               />
             </div>
           </article>

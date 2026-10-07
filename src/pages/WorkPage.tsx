@@ -3,6 +3,7 @@ import SectionHeading from "../components/SectionHeading";
 import WorkArtifactPreview from "../components/WorkArtifactPreview";
 import { workTimeline, WorkTimelineItem } from "../portfolioContent";
 import { useSiteCopy } from "../content/useSiteCopy";
+import { getPortfolioMedia } from "../content/portfolioMedia";
 
 type Filter = "all" | WorkTimelineItem["kind"];
 
@@ -95,7 +96,7 @@ function WorkPage() {
             </div>
 
             <div className="timeline-artifact-column">
-              <WorkArtifactPreview artifact={item.artifact} title={item.title} tags={item.tags} />
+              <WorkArtifactPreview artifact={item.artifact} title={item.title} tags={item.tags} media={getPortfolioMedia(item.id)} />
             </div>
           </article>
         ))}

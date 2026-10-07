@@ -1,13 +1,61 @@
 import React from "react";
 import { WorkArtifact } from "../portfolioContent";
+import { PortfolioMedia } from "../content/portfolioMedia";
 
 type Props = {
   artifact?: WorkArtifact;
   title: string;
   tags?: string[];
+  media?: PortfolioMedia;
 };
 
-function WorkArtifactPreview({ artifact, title, tags = [] }: Props) {
+function WorkArtifactPreview({ artifact, title, tags = [], media }: Props) {
+  const primaryHref = artifact?.href?.replace("?embed=true", "");
+  const resolvedMedia: PortfolioMedia | undefined = media ?? (
+    artifact?.image
+      ? {
+          src: artifact.image,
+          alt: `${title} project preview`,
+          href: primaryHref,
+          label: artifact.label,
+        }
+      : undefined
+  );
+
+  if (resolvedMedia) {
+    const preview = (
+      <>
+        <img
+          src={resolvedMedia.src}
+          alt={resolvedMedia.alt}
+          loading="lazy"
+          decoding="async"
+          style={{
+            objectFit: resolvedMedia.fit ?? "cover",
+            objectPosition: resolvedMedia.position ?? "center",
+          }}
+        />
+        <span className="artifact-chip">{resolvedMedia.label ?? artifact?.label ?? "PROJECT"}</span>
+      </>
+    );
+
+    if (resolvedMedia.href ?? primaryHref) {
+      return (
+        <a
+          className="work-artifact work-artifact-media"
+          href={resolvedMedia.href ?? primaryHref}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={artifact?.label ?? resolvedMedia.alt}
+        >
+          {preview}
+        </a>
+      );
+    }
+
+    return <div className="work-artifact work-artifact-media">{preview}</div>;
+  }
+
   if (!artifact) {
     return (
       <div className="work-artifact work-artifact-empty" aria-hidden="true">
@@ -15,8 +63,6 @@ function WorkArtifactPreview({ artifact, title, tags = [] }: Props) {
       </div>
     );
   }
-
-  const primaryHref = artifact.href?.replace("?embed=true", "");
 
   if (artifact.kind === "live") {
     return (

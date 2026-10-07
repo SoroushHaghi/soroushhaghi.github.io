@@ -368,10 +368,10 @@ export const degreeArtifacts: Record<string, EducationArtifact> = {
 };
 
 export const trainingAndCredentials = [
-  { period: "2026", title: "Quantum Programming Language", issuer: "Sharif University of Technology", status: "In progress", artifact: "Course record" },
-  { period: "2025", title: "Quantum Machine Learning", issuer: "Ariaquanta Institute", status: "Training", artifact: "Certificate" },
-  { period: "2025", title: "Machine Learning + Introduction to Programming Using Python", issuer: "Kaggle", status: "Training", artifact: "Certificates" },
-  { period: "2024", title: "TOEFL iBT", issuer: "ETS", status: "Language credential", artifact: "Score report" },
-  { period: "2023", title: "Data & ML Bootcamp — 96 hours", issuer: "Azad University, Mashhad", status: "Training", artifact: "Certificate" },
-  { period: "2021", title: "Python Programming — 40 hours", issuer: "Jahad Daneshgahi, Khorasan Razavi", status: "Certificate", artifact: "Certificate" }
+  { id: "qpl-sharif", period: "2026", title: "Quantum Programming Language", issuer: "Sharif University of Technology", status: "In progress", artifact: "Course record" },
+  { id: "qml-ariaquanta", period: "2025", title: "Quantum Machine Learning", issuer: "Ariaquanta Institute", status: "Training", artifact: "Certificate" },
+  { id: "kaggle-ml-python", period: "2025", title: "Machine Learning + Introduction to Programming Using Python", issuer: "Kaggle", status: "Training", artifact: "Certificates" },
+  { id: "toefl-ibt", period: "2024", title: "TOEFL iBT", issuer: "ETS", status: "Language credential", artifact: "Score report" },
+  { id: "data-ml-bootcamp", period: "2023", title: "Data & ML Bootcamp — 96 hours", issuer: "Azad University, Mashhad", status: "Training", artifact: "Certificate" },
+  { id: "python-jahad", period: "2021", title: "Python Programming — 40 hours", issuer: "Jahad Daneshgahi, Khorasan Razavi", status: "Certificate", artifact: "Certificate" }
 ];

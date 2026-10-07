@@ -8,6 +8,7 @@ import { getExpertiseView } from "../expertise/expertiseData";
 import { education, workItems } from "../siteConfig";
 import { toPublicPath } from "../routes";
 import { useSiteCopy } from "../content/useSiteCopy";
+import { getPortfolioMedia } from "../content/portfolioMedia";
 
 type Props = { onNavigate: (path: string) => void };
 
@@ -77,10 +78,26 @@ function HomePage({ onNavigate }: Props) {
           onNavigate={onNavigate}
         />
         <div className="work-preview-grid">
-          {featured.map((item) => (
+          {featured.map((item) => {
+            const media = getPortfolioMedia(item.id);
+
+            return (
             <article className="work-card glass-panel" key={item.id}>
               <div className="card-meta">{item.type.toUpperCase()}</div>
-              <div className="work-visual-placeholder" />
+              <div className={`work-visual-placeholder${media ? " has-media" : ""}`}>
+                {media && (
+                  <img
+                    src={media.src}
+                    alt={media.alt}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      objectFit: media.fit ?? "cover",
+                      objectPosition: media.position ?? "center",
+                    }}
+                  />
+                )}
+              </div>
               <h3>{item.title}</h3>
               <p>{item.subtitle}</p>
               <a
@@ -94,7 +111,8 @@ function HomePage({ onNavigate }: Props) {
                 {copy.home.work.cardAction} <span>→</span>
               </a>
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
 
