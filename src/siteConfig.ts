@@ -111,7 +111,7 @@ export const organizationMarks = [
     name: "Leibniz Universität Hannover",
     short: "LUH",
     url: "https://www.uni-hannover.de/en/",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/1/12/Universit%C3%A4t_Hannover.svg",
+    logo: "https://d3nc7nwi4bo41q.cloudfront.net/Institues-logo/GERMANY_Leibniz-Universitat-Hannover.png",
     hue: "211",
     scale: 1.12,
     variant: "luh-rect",
