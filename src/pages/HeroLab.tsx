@@ -8,6 +8,8 @@ type HeroLayoutValues = {
   openingX: number;
   openingY: number;
   openingNameSize: number;
+  kickerX: number;
+  kickerY: number;
   kickerSize: number;
   artworkX: number;
   artworkY: number;
@@ -47,6 +49,8 @@ const defaults: HeroLayouts = {
     openingX: 75,
     openingY: 55,
     openingNameSize: 104,
+    kickerX: 75,
+    kickerY: 46,
     kickerSize: 11,
     artworkX: 0,
     artworkY: 0,
@@ -65,6 +69,8 @@ const defaults: HeroLayouts = {
     openingX: 44,
     openingY: 55,
     openingNameSize: 59,
+    kickerX: 44,
+    kickerY: 47,
     kickerSize: 10,
     artworkX: 0,
     artworkY: 0,
@@ -83,6 +89,8 @@ const defaults: HeroLayouts = {
     openingX: 18,
     openingY: 55,
     openingNameSize: 62,
+    kickerX: 18,
+    kickerY: 46,
     kickerSize: 9,
     artworkX: 0,
     artworkY: 0,
@@ -180,19 +188,34 @@ function HeroLab() {
 }
 
 .career-state-intro-copy {
-  left: ${current.openingX}px !important;
-  top: ${current.openingY}% !important;
-  transform: translateY(-50%) !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  pointer-events: none !important;
 }
 
 .career-state-intro-copy .career-state-kicker {
+  position: absolute !important;
+  left: ${current.kickerX}px !important;
+  top: ${current.kickerY}% !important;
+  margin: 0 !important;
+  transform: translateY(-50%) !important;
   font-size: ${current.kickerSize}px !important;
   color: #fff !important;
   opacity: 1 !important;
+  pointer-events: none !important;
 }
 
 .career-state-intro-wordmark {
+  position: absolute !important;
+  left: ${current.openingX}px !important;
+  top: ${current.openingY}% !important;
+  margin: 0 !important;
+  transform: translateY(-50%) !important;
   font-size: ${current.openingNameSize}px !important;
+  pointer-events: auto !important;
 }
 
 .career-state-intro-artwork {
@@ -368,13 +391,22 @@ function HeroLab() {
         <div className="hero-tuning-scroll">
           <section className="hero-tuning-group">
             <div className="hero-tuning-group-head">
-              <strong>Opening identity</strong>
-              <span>Stage 00</span>
+              <strong>Soroush Haghi</strong>
+              <span>Stage 00 · independent</span>
             </div>
-            <Slider label="Text left / right" value={current.openingX} min={0} max={Math.max(120, deviceWidths[device] - 80)} unit="px" onChange={(value) => update("openingX", value)} />
-            <Slider label="Text up / down" value={current.openingY} min={10} max={90} unit="%" onChange={(value) => update("openingY", value)} />
+            <Slider label="Name left / right" value={current.openingX} min={0} max={Math.max(120, deviceWidths[device] - 80)} unit="px" onChange={(value) => update("openingX", value)} />
+            <Slider label="Name up / down" value={current.openingY} min={5} max={95} unit="%" onChange={(value) => update("openingY", value)} />
             <Slider label="Name size" value={current.openingNameSize} min={28} max={170} unit="px" onChange={(value) => update("openingNameSize", value)} />
-            <Slider label="AI & QUANTUM size" value={current.kickerSize} min={7} max={24} unit="px" onChange={(value) => update("kickerSize", value)} />
+          </section>
+
+          <section className="hero-tuning-group">
+            <div className="hero-tuning-group-head">
+              <strong>AI &amp; QUANTUM</strong>
+              <span>Stage 00 · independent</span>
+            </div>
+            <Slider label="Label left / right" value={current.kickerX} min={0} max={Math.max(120, deviceWidths[device] - 80)} unit="px" onChange={(value) => update("kickerX", value)} />
+            <Slider label="Label up / down" value={current.kickerY} min={5} max={95} unit="%" onChange={(value) => update("kickerY", value)} />
+            <Slider label="Label size" value={current.kickerSize} min={7} max={32} unit="px" onChange={(value) => update("kickerSize", value)} />
           </section>
 
           <section className="hero-tuning-group">
