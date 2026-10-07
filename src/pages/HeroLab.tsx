@@ -92,7 +92,7 @@ function HeroLab() {
           </div>
           <div className="hero-lab-stage hero-lab-static-stage">
             <img
-              src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation.webp`}
+              src={`${process.env.PUBLIC_URL}/media/hero/hero-constellation-v3.webp`}
               alt=""
               draggable={false}
             />
