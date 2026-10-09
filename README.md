@@ -1,82 +1,51 @@
-# Developer Portfolio Template 🚀
+# Soroush Haghi — Personal Portfolio
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![Node.js](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)
+**Computer Engineering · Software & AI · Quantum Technologies**
 
-## What is this?
+[**Live portfolio**](https://soroushhaghi.github.io/) · [**Work**](https://soroushhaghi.github.io/work/) · [**Education**](https://soroushhaghi.github.io/education/) · [**Current CV**](https://soroushhaghi.github.io/cv/)
 
-This simple portfolio template is designed to showcase your past projects, career history, skill sets, and more.
+This repository contains the public source for my personal engineering portfolio. The site presents selected technical projects, relevant experience, university work, and links to inspectable project evidence.
 
-**This template is free to use, and no attribution is required.** You can fork or download this repository to customize it for your own use. Please don't forget to leave a ⭐ if you like this portfolio!
+## Selected work
 
-## Features
+- [Career OS](https://github.com/SoroushHaghi/career-os) — public framework and reusable code for AI context and evidence-to-knowledge workflows.
+- [Activity Recognition](https://github.com/SoroushHaghi/Activity_Recognition) — sensor-based ML comparison and CI configuration.
+- [Gas Detection](https://github.com/SoroushHaghi/gas-detection) — sensor-feature classification and dashboard.
+- [MRI Tumor Detection](https://github.com/SoroushHaghi/MRI-tumor-detection) — segmentation inference application.
+- [Bachelor Engineering Projects](https://soroushhaghi.github.io/bachelor-engineering-projects/) — curated computer vision, signal processing and embedded-systems coursework.
 
-✅ Open source (free to use, no attribution required)  
-✅ Responsive design & mobile-friendly  
-✅ Supports both dark and light modes  
-✅ Highly customizable multi-component layout  
-✅ Built with modern technologies (React, TypeScript, JavaScript, and SCSS)  
+Project descriptions are deliberately evidence-bounded; the site distinguishes academic work and prototypes from validated professional deployment.
 
-## Quick Setup
+## Architecture
 
-1. Ensure you have [Node.js](https://nodejs.org/) installed. Check your installation by running:
+- **Frontend:** React 18, TypeScript, SCSS, Material UI and custom components.
+- **Content:** structured portfolio records in `src/portfolioContent.ts`; interface copy in `src/content/siteCopy.json`.
+- **Assets:** brand/favicon and public media under `public/`; application code under `src/`.
+- **Semantic output:** `scripts/generate-semantic-content.js` runs after the production build.
+- **Hosting:** GitHub Pages, with GitHub Actions publishing the `main` branch build to `gh-pages`. A separate redesign-preview subtree is retained by the deploy workflow.
+- **CV route:** `/cv/` points to the latest *published, approved* PDF copy. The canonical editable CV and source evidence are maintained privately; this repository is the public presentation layer, not the candidate-truth store.
 
-    ```bash
-    node -v
-    ```
+## Local development
 
-2. In the project directory, install dependencies:
+Requires Node.js 20 or later.
 
-    ```bash
-    npm install
-    ```
+```bash
+npm ci
+npm start
+```
 
-3. Start the development server:
+Production build:
 
-    ```bash
-    npm start
-    ```
+```bash
+npm run build
+```
 
-4. Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
+The production workflow is in `.github/workflows/deploy-production.yml`. Changes to `main` trigger its GitHub Actions deployment; avoid manual edits of the generated `gh-pages` output. Generated semantic pages are refreshed during the build.
 
-5. Customize the template by navigating to `src/portfolio.js`. Modify texts, pictures, and other information as needed.
+## Brand and publication hygiene
 
-The page will reload if you make edits, and you will see any lint errors in the console.
+Use the **SH / Soroush Haghi** identity on all public pages. Keep the SVG favicon in `public/favicon.svg`, and ensure standalone HTML routes also declare it explicitly. Prefer updating approved structured content over inserting unsupported claims or resurrecting legacy template assets.
 
-If you are interested in creating a mockup image like the ones from the personal projects section, I recommend [Genmoo](https://gemoo.com/tools/browser-mockup-generator/). This website lets you generate sleek looking browser mockups for free.
+---
 
-## Deployment
-
-You can choose your preferred service (e.g., [Netlify](https://www.netlify.com/), [Render](https://render.com/), [Heroku](https://www.heroku.com/)) for deployment. One of the easiest ways to host this portfolio is using GitHub Pages. Follow the instructions below for a production deploy.
-
-1. **Set Up GitHub Repository**
-
-    Create a new repository on GitHub for your portfolio app.
-
-2. **Configure `package.json`**
-
-    Edit the following properties in your `package.json` file:
-
-    ```json
-    {
-        "homepage": "https://SoroushHaghi.github.io/my_website",
-        "scripts": {
-            "predeploy": "npm run build",
-            "deploy": "gh-pages -d build",
-            ...
-        }
-    }
-    ```
-
-    Replace `yourusername` with your GitHub username and `your-repo-name` with the name of your GitHub repository.
-
-3. **Deploy to GitHub Pages**
-
-    Run the following command to deploy your app:
-
-    ```bash
-    npm run deploy
-    ```
-
-4. **Access Your Deployed App**
-
-    After successfully deploying, you can access your app at `https://SoroushHaghi.github.io/my_website`.
+© Soroush Haghi. The implementation may include open-source dependencies and adapted design foundations; third-party licensing remains applicable.

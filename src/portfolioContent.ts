@@ -117,9 +117,8 @@ export const workTimeline: WorkTimelineItem[] = [
     summary: "Curated undergraduate work spanning computer vision, embedded systems, image processing, and signal processing.",
     bullets: [
       "Day/Night Vehicle Detection — MATLAB computer vision and image processing.",
-      "Hybrid Image Generation — low/high spatial-frequency image composition.",
-      "ATmega32 Digital Clock and Digital Safe — embedded C coursework.",
-      "Stereo Sound Direction — MATLAB signal-processing artifact; authorship remains bounded."
+      "Stereo Sound Direction — MATLAB signal-processing artifact; authorship remains bounded.",
+      "ATmega32 Digital Clock and Digital Safe — embedded C coursework."
     ],
     tags: ["MATLAB", "Computer vision", "Embedded C", "ATmega32", "Signal processing"],
     links: [
