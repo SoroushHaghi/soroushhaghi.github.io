@@ -52,7 +52,6 @@ Public repo · Nov 2025 | Gas Classification Pipeline & Dashboard | Python/Strea
 Public repo · Nov 2025 | Activity Recognition ML Comparison | Structured sensor-ML project comparing RandomForest and 1D-CNN approaches with Poetry-managed dependencies and GitLab CI lint/test stages.
 Undergraduate work · 2018 — 2024 | Bachelor Engineering Projects | Curated undergraduate work spanning computer vision, embedded systems, image processing, and signal processing.
 Sep 2023 — Jan 2024 | Teaching Assistant — Theory of Formal Languages and Automata | Led supervised weekly exercise and problem-solving sessions for approximately 20 students and supported assignment/exam evaluation.
-Public repo · Dec 2023 | Image Noise / Denoising / PSNR Repository | Public repository structured around noise simulation, denoising, and PSNR-based image-quality evaluation.
 Apr 2023 — Sep 2023 | Iran Khodro (IKCO) | University participation in a talent/industry context with personal work on a MATLAB day/night vehicle-detection project.
 Mar 2023 — Aug 2023 | Ferdowsi University Startup | Temporary project-based collaboration supporting coordination, external presentations, stakeholder communication, outreach, attendee coordination, on-site presentation, and professional networking.
 Oct 2022 — Aug 2023 | Volunteer IT Support | Continued supporting the university IT team after the internship, progressing from central support to on-site troubleshooting and repair across internal university units.

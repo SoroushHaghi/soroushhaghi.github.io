@@ -586,33 +586,6 @@
         "scope": "Demonstrated role; supervised course responsibility"
       },
       {
-        "id": "rd-denoising",
-        "kind": "project",
-        "period": "Public repo · Dec 2023",
-        "sort": 20231218,
-        "title": "Image Noise / Denoising / PSNR Repository",
-        "summary": "Public repository structured around noise simulation, denoising, and PSNR-based image-quality evaluation.",
-        "tags": [
-          "Python",
-          "Image processing",
-          "Denoising",
-          "PSNR"
-        ],
-        "links": [
-          {
-            "label": "GitHub",
-            "href": "https://github.com/SoroushHaghi/RD_denoising"
-          }
-        ],
-        "artifact": {
-          "kind": "repo",
-          "label": "Public repository",
-          "href": "https://github.com/SoroushHaghi/RD_denoising",
-          "repo": "SoroushHaghi/RD_denoising"
-        },
-        "scope": "Public repository scope only; no stronger authorship or benchmark claim"
-      },
-      {
         "id": "ikco",
         "kind": "co-op",
         "period": "Apr 2023 — Sep 2023",
