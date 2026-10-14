@@ -63,12 +63,6 @@ export const portfolioMedia: Record<string, PortfolioMedia> = {
     href: "https://github.com/SoroushHaghi/Activity_Recognition",
     label: "PROJECT",
   },
-  "rd-denoising": {
-    src: githubRepoPreview("SoroushHaghi/RD_denoising"),
-    alt: "Image denoising and PSNR project repository preview",
-    href: "https://github.com/SoroushHaghi/RD_denoising",
-    label: "PROJECT",
-  },
 };
 
 export function getPortfolioMedia(id: string): PortfolioMedia | undefined {
