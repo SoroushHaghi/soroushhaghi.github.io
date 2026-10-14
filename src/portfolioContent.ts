@@ -174,8 +174,8 @@ export const workTimeline: WorkTimelineItem[] = [
     kind: "experience",
     period: "Mar 2023 — Aug 2023",
     sort: 20230301,
-    title: "Ferdowsi University Startup",
-    organization: "Project Contributor",
+    title: "Ferdowsi University",
+    organization: "Project Contributor — Enodine",
     summary: "Temporary project-based collaboration supporting coordination, external presentations, stakeholder communication, outreach, attendee coordination, on-site presentation, and professional networking.",
     tags: ["Project coordination", "Presentations", "Stakeholder communication"],
     artifact: {
