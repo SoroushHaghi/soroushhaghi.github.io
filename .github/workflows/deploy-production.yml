@@ -1,6 +1,6 @@
 name: Deploy Production Site
 
-# Production deployment is intentionally explicit and preserves /redesign-preview.
+# Production deployment publishes only the current website. Obsolete previews are retired.
 
 on:
   push:
@@ -49,17 +49,15 @@ jobs:
       - name: Refresh semantic route fallbacks
         run: node scripts/generate-semantic-content.js
 
-      - name: Publish production root while preserving redesign preview
+      - name: Publish current production website
         run: |
           cp -a build /tmp/production-build
           git fetch origin gh-pages
           git worktree add --detach /tmp/gh-pages origin/gh-pages
           cd /tmp/gh-pages
 
-          # Preserve the redesign-preview subtree used for continued QA/lab work.
           find . -mindepth 1 -maxdepth 1 \
             ! -name .git \
-            ! -name redesign-preview \
             -exec rm -rf {} +
 
           cp -a /tmp/production-build/. .
