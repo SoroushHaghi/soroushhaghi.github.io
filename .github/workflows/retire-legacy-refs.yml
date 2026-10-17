@@ -1,0 +1,74 @@
+name: One-time retire legacy branches
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/retire-legacy-refs.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.repository == 'SoroushHaghi/soroushhaghi.github.io'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete only previously audited obsolete refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "main"
+          open_prs=$(gh api "repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" --jq 'length')
+          if [[ "$open_prs" != "0" ]]; then
+            echo "Open pull requests detected; refusing branch deletion."
+            exit 1
+          fi
+          count=0
+          while IFS='|' read -r branch expected_sha; do
+            [[ -n "$branch" ]] || continue
+            case "$branch" in
+              backup/*|prod-snapshot-*|redesign-2026-10|chore/retire-legacy-20261017|feat/expertise-sphere-integration|work/context-qubit-spheres-2026-10-07|work/shared-career-qubit-2026-10-07) ;;
+              *) echo "Unexpected branch: $branch"; exit 1 ;;
+            esac
+            current=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$branch" --jq '.object.sha')
+            if [[ "$current" != "$expected_sha" ]]; then
+              echo "Branch changed, refusing deletion: $branch"
+              exit 1
+            fi
+            gh api --method DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$branch"
+            echo "Retired: $branch"
+            count=$((count+1))
+          done <<'END_OLD_REFS'
+          backup/brand-sharif-before-transparent-svg-20261008|0f768d42d7329fe0484fd00bd62a4bc78aa5d53f
+          backup/redesign-before-axis-continuity-camera-v7-2026-10-05|c0a123cf3156162b2aa74b4b91dcd9852a1f52f1
+          backup/redesign-before-black-intro-integration-2026-10-06|10c32e5e0d298986cedad8ca1db61acbd1901089
+          backup/redesign-before-brand-rail-normalization-2026-10-06|0fe06b4b8a52624ecf6fabc67a3852b7134a7b5b
+          backup/redesign-before-career-state-main-2026-10-06|75824dbda9a39bd870f8d55f37e4ad5dd38e6189
+          backup/redesign-before-centering-v2-2026-10-03|fc3e20ad983ac536c01583bd022844f67e6d4580
+          backup/redesign-before-cinematic-home-2026-10-02|1d4d68bfeba34cb18e24406edf9d3a0084c1eb08
+          backup/redesign-before-final-polish-lab-2026-10-06|b39fdc07b4b583a873f16217ea3a29056cf60a4c
+          backup/redesign-before-hero-lab-v2-2026-10-07|a7047798b8d880024b2c8b0fd63fc30fd5ea514c
+          backup/redesign-before-hero-visibility-fix-2026-10-07|b67f9ef148e9352b64095f681b5c920c91fb6fc6
+          backup/redesign-before-mouse-driven-story-2026-10-02|bfab94b2d41491467e4c32ba6d9e4642f1163eb4
+          backup/redesign-before-polish-layout-controls-2026-10-06|8610ad752804a4df9daa2900590678590596cd0d
+          backup/redesign-before-scroll-input-fix-2026-10-02|69c653ddc28f4bd84661722d1a368b56e70d18c7
+          backup/redesign-before-scroll-paced-cinematic-2026-10-02|19e5341251c6390dbf19e2bd6b98509e5b846c4b
+          backup/redesign-before-semantic-content-2026-10-06|334dd8702d83a9bfb7640488a5394d816af1677a
+          backup/redesign-before-shared-qubit-2026-10-07|a7047798b8d880024b2c8b0fd63fc30fd5ea514c
+          backup/redesign-before-simplified-sphere-flow-2026-10-02|c9560ce09292953625bb745006c89ab05cb185b5
+          backup/redesign-before-sphere-depth-fix-2026-10-03|65d1fbe721015798a4ec244e2ff2e0c2bd9a959b
+          backup/redesign-before-staged-flow-v3-2026-10-03|9487cde6182a3d1e52f234146337d6750886c10f
+          backup/redesign-pre-expertise-sphere-2026-10-02|39f9b93137871672728f7e3b69d9cda5b991d4fd
+          chore/retire-legacy-20261017|13eaeb0ef5d06850f865804bf8d7d2ecd42d9db4
+          feat/expertise-sphere-integration|39f9b93137871672728f7e3b69d9cda5b991d4fd
+          prod-snapshot-2026-10-07-before-media-catalog|5e17ba6791810f8d0722106893504169e7fe9509
+          prod-snapshot-2026-10-07-before-redesign|0af3c513ea476ea383295ca62d10a31db5e563dc
+          prod-snapshot-2026-10-08-before-brand-icons|2794b5395f150202625fe59e1bb63c1e9a1af504
+          redesign-2026-10|ec99814fb1c8991d7b1885c940650585f2722f3b
+          work/context-qubit-spheres-2026-10-07|748b8471cfc0683d542ee035c572d231d3637bde
+          work/shared-career-qubit-2026-10-07|04c1ad55a3d538d98e363ad0fd28a5eb63adc0eb
+          END_OLD_REFS
+          echo "Retired $count old branches"
