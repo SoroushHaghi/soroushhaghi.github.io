@@ -1,0 +1,39 @@
+name: Validate Portfolio Build
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install exact dependencies
+        run: npm ci
+      - name: Build production site
+        env:
+          CI: "true"
+          PUBLIC_URL: /
+          REACT_APP_BASE_PATH: /
+          REACT_APP_ENABLE_LAB: "false"
+        run: npm run build
+      - name: Smoke-test essential output
+        run: |
+          test -s build/index.html
+          test -s build/cv/HAGHI_CV.pdf
+          test -s build/cv/index.html
+          test -s build/favicon.svg
+          test -s build/media/hero/hero-desktop.png
+          test -s build/media/hero/hero-mobile.png
+          test -s build/site-content.json
