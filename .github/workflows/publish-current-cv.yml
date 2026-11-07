@@ -5,8 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "public/cv/HAGHI_CV.pdf"
-      - "public/cv/index.html"
+      - "public/cv/**"
       - ".github/workflows/publish-current-cv.yml"
   workflow_dispatch:
 

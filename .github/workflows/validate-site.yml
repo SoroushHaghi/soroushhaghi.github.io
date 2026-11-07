@@ -32,6 +32,7 @@ jobs:
         run: |
           test -s build/index.html
           test -s build/cv/HAGHI_CV.pdf
+          test -s build/cv/HAGHI_CV_DE.pdf
           test -s build/cv/index.html
           test -s build/favicon.svg
           test -s build/media/hero/hero-desktop.png

@@ -23,7 +23,7 @@ Project descriptions are deliberately evidence-bounded; the site distinguishes a
 - **Assets:** brand/favicon and public media under `public/`; application code under `src/`.
 - **Semantic output:** `scripts/generate-semantic-content.js` runs after the production build.
 - **Hosting:** GitHub Pages, with GitHub Actions publishing the `main` branch build to `gh-pages`. Historical redesign previews have been retired; production deploys publish only the current live site.
-- **CV route:** `/cv/` points to the latest *published, approved* PDF copy. The canonical editable CV and source evidence are maintained privately; this repository is the public presentation layer, not the candidate-truth store.
+- **CV route:** `/cv/` first asks for the language (English / Deutsch), then shows the latest *published, approved* PDF (`HAGHI_CV.pdf` / `HAGHI_CV_DE.pdf`); `?lang=en|de` opens one directly and the LANGUAGES menu switches. The canonical editable CV and source evidence are maintained privately; this repository is the public presentation layer, not the candidate-truth store.
 
 ## Local development
 
