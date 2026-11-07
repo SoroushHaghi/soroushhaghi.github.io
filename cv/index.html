@@ -17,8 +17,42 @@
   <style>
     :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html { scroll-behavior: smooth; }
     body { margin: 0; min-height: 100vh; background: #0b0c0f; color: #f5f6f8; }
+    /* language chooser: same background as the main site */
+    body.choosing { background:
+      radial-gradient(1200px 760px at 78% -8%, rgba(255,255,255,.07), transparent 64%),
+      radial-gradient(900px 620px at 8% 22%, rgba(255,255,255,.018), transparent 68%),
+      linear-gradient(180deg, #121419 0%, hsl(220 8% 7%) 42%, #0b0d10 100%); background-attachment: fixed; }
+    body.choosing .topbar { background: transparent; border-bottom-color: transparent; }
+    body.choosing .lang-menu, body.choosing .action.primary { display: none; }
+    .chooser { display: grid; place-items: center; min-height: calc(100vh - 66px); padding: 24px 16px 64px; }
+    .chooser-card { width: min(460px, 100%); padding: clamp(28px, 5vw, 44px); text-align: center; border-radius: 32px;
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.015)), rgba(18,20,24,.04);
+      border: 1px solid rgba(255,255,255,.06); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 24px 70px rgba(0,0,0,.4);
+      -webkit-backdrop-filter: blur(4px) saturate(118%); backdrop-filter: blur(4px) saturate(118%); }
+    .chooser-card h1 { margin: 0 0 6px; font-size: clamp(22px, 4vw, 28px); letter-spacing: -.03em; font-weight: 720; }
+    .chooser-card p { margin: 0 0 26px; color: #9da5af; font-size: 14px; }
+    .chooser-options { display: grid; gap: 12px; }
+    .lang-option { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.025); color: #f4f6f8; text-decoration: none;
+      font-size: 16px; font-weight: 650; transition: transform 160ms ease, background 160ms ease, border-color 160ms ease; }
+    .lang-option small { color: #9da5af; font-weight: 500; font-size: 13px; }
+    .lang-option:hover, .lang-option:focus-visible { transform: translateY(-1px); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.28); }
+    .lang-option:focus-visible { outline: 3px solid #83bfff; outline-offset: 3px; }
+    /* LANGUAGES menu in the CV header */
+    .lang-menu { position: relative; }
+    .lang-menu summary { list-style: none; cursor: pointer; }
+    .lang-menu summary::-webkit-details-marker { display: none; }
+    .lang-list { position: absolute; right: 0; top: calc(100% + 6px); min-width: 170px; padding: 6px; margin: 0; list-style: none;
+      background: #16181d; border: 1px solid #3a3e46; border-radius: 11px; box-shadow: 0 14px 40px rgba(0,0,0,.55); z-index: 20; }
+    .lang-list a { display: flex; justify-content: space-between; gap: 10px; padding: 9px 11px; border-radius: 8px; color: #f7f8fa;
+      text-decoration: none; font-size: 13px; font-weight: 600; }
+    .lang-list a:hover, .lang-list a:focus-visible { background: #25282f; }
+    .lang-short { display: none; }
+    @media (max-width: 520px) { .lang-long { display: none; } .lang-short { display: inline; } }
+    .lang-list a[aria-current="true"]::after { content: "✓"; color: #83bfff; }
     .topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px clamp(12px, 3vw, 44px); min-height: 66px; background: #0b0c0f; border-bottom: 1px solid #272a30; color: #f7f8fa; }
     .identity { display: flex; align-items: center; min-width: 0; gap: 11px; }
     .monogram { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #62666e; border-radius: 11px; font-size: 15px; font-weight: 750; flex-shrink: 0; }
@@ -67,21 +101,63 @@
     </div>
     <nav class="actions" aria-label="CV actions">
       <a class="action" href="/" aria-label="Back to portfolio">← Back</a>
-      <a class="action primary" href="./HAGHI_CV.pdf" download="Soroush_Haghi_CV.pdf">↓ Download CV</a>
+      <details class="lang-menu" id="langMenu">
+        <summary class="action" aria-label="Choose CV language"><span class="lang-long">LANGUAGES</span><span class="lang-short">EN/DE</span>&nbsp;▾</summary>
+        <ul class="lang-list">
+          <li><a href="?lang=en" data-lang="en" lang="en">English</a></li>
+          <li><a href="?lang=de" data-lang="de" lang="de">Deutsch</a></li>
+        </ul>
+      </details>
+      <a class="action primary" id="download" href="./HAGHI_CV.pdf" download="Soroush_Haghi_CV.pdf">↓ Download CV</a>
     </nav>
   </header>
   <main>
-    <div id="viewer" class="viewer" aria-label="Complete CV document">
-      <p class="status" role="status">Loading the full CV…</p>
-    </div>
-    <noscript><p class="status">JavaScript is required for the page-by-page display. <a href="./HAGHI_CV.pdf">View the original PDF</a>.</p></noscript>
+    <section id="chooser" class="chooser" hidden aria-labelledby="chooserTitle">
+      <div class="chooser-card">
+        <h1 id="chooserTitle">Which language?</h1>
+        <p>Choose the language of the CV · Sprache des Lebenslaufs wählen</p>
+        <div class="chooser-options">
+          <a class="lang-option" href="?lang=en" lang="en">English <small>CV</small></a>
+          <a class="lang-option" href="?lang=de" lang="de">Deutsch <small>Lebenslauf</small></a>
+        </div>
+      </div>
+    </section>
+    <div id="viewer" class="viewer" aria-label="Complete CV document"></div>
+    <noscript><p class="status">JavaScript is required for the page-by-page display. <a href="./HAGHI_CV.pdf">English CV (PDF)</a> · <a href="./HAGHI_CV_DE.pdf">Deutscher Lebenslauf (PDF)</a></p></noscript>
   </main>
   <!-- Render the actual published PDF, all pages, without relying on mobile iframe PDF plugins. -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (async function () {
-      const pdfPath = "./HAGHI_CV.pdf";
+      // Language: ?lang=en|de. Without it (e.g. after scanning the QR code) the visitor chooses first.
+      const FILES = {
+        en: { pdf: "./HAGHI_CV.pdf", name: "Soroush_Haghi_CV.pdf", label: "↓ Download CV", sub: "Curriculum Vitae", loading: "Loading the full CV…", htmlLang: "en" },
+        de: { pdf: "./HAGHI_CV_DE.pdf", name: "Soroush_Haghi_Lebenslauf.pdf", label: "↓ Herunterladen", sub: "Lebenslauf", loading: "Lebenslauf wird geladen…", htmlLang: "de" }
+      };
+      const lang = (new URLSearchParams(window.location.search).get("lang") || "").toLowerCase();
       const viewer = document.getElementById("viewer");
+      if (!FILES[lang]) {
+        document.body.classList.add("choosing");
+        document.getElementById("chooser").hidden = false;
+        viewer.hidden = true;
+        return;
+      }
+      const cv = FILES[lang];
+      const pdfPath = cv.pdf;
+      document.documentElement.lang = cv.htmlLang;
+      const dl = document.getElementById("download");
+      dl.href = cv.pdf; dl.setAttribute("download", cv.name); dl.textContent = cv.label;
+      document.querySelector(".wordmark > span").textContent = cv.sub;
+      document.querySelectorAll(".lang-list a").forEach(function (a) {
+        if (a.dataset.lang === lang) a.setAttribute("aria-current", "true");
+      });
+      const status = document.createElement("p");
+      status.className = "status"; status.setAttribute("role", "status"); status.textContent = cv.loading;
+      viewer.appendChild(status);
+      document.addEventListener("click", function (e) {
+        const menu = document.getElementById("langMenu");
+        if (menu.open && !menu.contains(e.target)) menu.open = false;
+      });
       const pdfjs = window.pdfjsLib;
       // If the rendering library is unavailable, open the original PDF directly.
       if (!pdfjs) { window.location.replace(pdfPath); return; }
