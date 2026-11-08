@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0c0f" />
+  <meta name="description" content="Read or download the complete current CV of Soroush Haghi." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="CV | Soroush Haghi" />
+  <meta property="og:description" content="Current curriculum vitae and selected engineering experience." />
+  <meta property="og:url" content="https://soroushhaghi.github.io/cv/" />
+  <link rel="canonical" href="https://soroushhaghi.github.io/cv/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20261009" />
+  <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg?v=20261009" />
+  <link rel="apple-touch-icon" href="/favicon.svg?v=20261009" />
+  <title>CV | Soroush Haghi</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100vh; background: #0b0c0f; color: #f5f6f8; }
+    /* language chooser: same background as the main site */
+    body.choosing { background:
+      radial-gradient(1200px 760px at 78% -8%, rgba(255,255,255,.07), transparent 64%),
+      radial-gradient(900px 620px at 8% 22%, rgba(255,255,255,.018), transparent 68%),
+      linear-gradient(180deg, #121419 0%, hsl(220 8% 7%) 42%, #0b0d10 100%); background-attachment: fixed; }
+    body.choosing .topbar { background: transparent; border-bottom-color: transparent; }
+    body.choosing .lang-menu, body.choosing .action.primary { display: none; }
+    .chooser { display: grid; place-items: center; min-height: calc(100vh - 66px); padding: 24px 16px 64px; }
+    .chooser-card { width: min(460px, 100%); padding: clamp(28px, 5vw, 44px); text-align: center; border-radius: 32px;
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.015)), rgba(18,20,24,.04);
+      border: 1px solid rgba(255,255,255,.06); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 24px 70px rgba(0,0,0,.4);
+      -webkit-backdrop-filter: blur(4px) saturate(118%); backdrop-filter: blur(4px) saturate(118%); }
+    .chooser-card h1 { margin: 0 0 6px; font-size: clamp(22px, 4vw, 28px); letter-spacing: -.03em; font-weight: 720; }
+    .chooser-card p { margin: 0 0 26px; color: #9da5af; font-size: 14px; }
+    .chooser-options { display: grid; gap: 12px; }
+    .lang-option { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.025); color: #f4f6f8; text-decoration: none;
+      font-size: 16px; font-weight: 650; transition: transform 160ms ease, background 160ms ease, border-color 160ms ease; }
+    .lang-option small { color: #9da5af; font-weight: 500; font-size: 13px; }
+    .lang-option:hover, .lang-option:focus-visible { transform: translateY(-1px); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.28); }
+    .lang-option:focus-visible { outline: 3px solid #83bfff; outline-offset: 3px; }
+    /* LANGUAGES menu in the CV header */
+    .lang-menu { position: relative; }
+    .lang-menu summary { list-style: none; cursor: pointer; }
+    .lang-menu summary::-webkit-details-marker { display: none; }
+    .lang-list { position: absolute; right: 0; top: calc(100% + 6px); min-width: 170px; padding: 6px; margin: 0; list-style: none;
+      background: #16181d; border: 1px solid #3a3e46; border-radius: 11px; box-shadow: 0 14px 40px rgba(0,0,0,.55); z-index: 20; }
+    .lang-list a { display: flex; justify-content: space-between; gap: 10px; padding: 9px 11px; border-radius: 8px; color: #f7f8fa;
+      text-decoration: none; font-size: 13px; font-weight: 600; }
+    .lang-list a:hover, .lang-list a:focus-visible { background: #25282f; }
+    .lang-short { display: none; }
+    @media (max-width: 520px) { .lang-long { display: none; } .lang-short { display: inline; } }
+    .lang-list a[aria-current="true"]::after { content: "✓"; color: #83bfff; }
+    .topbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px clamp(12px, 3vw, 44px); min-height: 66px; background: #0b0c0f; border-bottom: 1px solid #272a30; color: #f7f8fa; }
+    .identity { display: flex; align-items: center; min-width: 0; gap: 11px; }
+    .monogram { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #62666e; border-radius: 11px; font-size: 15px; font-weight: 750; flex-shrink: 0; }
+    .wordmark strong { display: block; font-size: 14px; letter-spacing: -.02em; white-space: nowrap; }
+    .wordmark span { display: block; margin-top: 2px; color: #a3a6af; font-size: 11px; }
+    .actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 9px 13px; border: 1px solid #62666e; border-radius: 9px; color: #f7f8fa; text-decoration: none; font-size: 12px; font-weight: 650; white-space: nowrap; }
+    .action:hover, .action:focus-visible { background: #25282f; border-color: #b4b9c1; }
+    .action.primary { color: #111317; background: #f7f8fa; border-color: #f7f8fa; }
+    .action.primary:hover, .action.primary:focus-visible { background: #dce0e5; }
+    .action:focus-visible { outline: 3px solid #83bfff; outline-offset: 3px; }
+    main { padding: 15px 0 32px; }
+    .viewer { display: flex; flex-direction: column; align-items: center; gap: 16px; width: min(860px, calc(100% - 24px)); margin: 0 auto; }
+    .paper { position: relative; flex: none; max-width: 100%; background: #fff; box-shadow: 0 4px 28px rgba(0, 0, 0, .5); overflow: hidden; }
+    .paper canvas { display: block; max-width: 100%; height: auto; }
+    .textLayer { position: absolute; inset: 0; overflow: hidden; line-height: 1; text-align: initial; }
+    .textLayer span, .textLayer br { position: absolute; color: transparent; white-space: pre; cursor: text; transform-origin: 0 0; }
+    .textLayer ::selection { background: rgba(50, 110, 210, .3); }
+    .pdf-link { position: absolute; z-index: 2; display: block; background: transparent; }
+    .pdf-link:focus-visible { outline: 2px solid #2776c7; background: rgba(39, 118, 199, .14); }
+    .status { margin: 35px auto; color: #d1d5dc; text-align: center; font-size: 14px; }
+    .status a { color: #a9d1ff; }
+    @media (max-width: 620px) {
+      .topbar { min-height: 60px; padding: 9px 10px; gap: 6px; }
+      .monogram { width: 34px; height: 34px; border-radius: 9px; font-size: 12px; }
+      .identity { gap: 7px; }
+      .wordmark strong { font-size: 12px; }
+      .wordmark span { font-size: 10px; }
+      .actions { gap: 5px; }
+      .action { min-height: 38px; padding: 7px 9px; font-size: 11px; }
+      main { padding-top: 9px; }
+      .viewer { width: calc(100% - 16px); gap: 13px; }
+    }
+    @media (max-width: 375px) {
+      .wordmark span { display: none; }
+      .monogram { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="identity" aria-label="Soroush Haghi — Curriculum Vitae">
+      <span class="monogram" aria-hidden="true">SH</span>
+      <span class="wordmark"><strong>Soroush Haghi</strong><span>Curriculum Vitae</span></span>
+    </div>
+    <nav class="actions" aria-label="CV actions">
+      <a class="action" href="/" aria-label="Back to portfolio">← Back</a>
+      <details class="lang-menu" id="langMenu">
+        <summary class="action" aria-label="Choose CV language"><span class="lang-long">LANGUAGES</span><span class="lang-short">EN/DE</span>&nbsp;▾</summary>
+        <ul class="lang-list">
+          <li><a href="/cv/en/" data-lang="en" lang="en">English</a></li>
+          <li><a href="/cv/de/" data-lang="de" lang="de">Deutsch</a></li>
+        </ul>
+      </details>
+      <a class="action primary" id="download" href="/cv/HAGHI_CV.pdf" download="Soroush_Haghi_CV.pdf">↓ Download CV</a>
+    </nav>
+  </header>
+  <main>
+    <section id="chooser" class="chooser" hidden aria-labelledby="chooserTitle">
+      <div class="chooser-card">
+        <h1 id="chooserTitle">Which language?</h1>
+        <p>Choose the language of the CV · Sprache des Lebenslaufs wählen</p>
+        <div class="chooser-options">
+          <a class="lang-option" href="/cv/en/" lang="en">English <small>CV</small></a>
+          <a class="lang-option" href="/cv/de/" lang="de">Deutsch <small>Lebenslauf</small></a>
+        </div>
+      </div>
+    </section>
+    <div id="viewer" class="viewer" aria-label="Complete CV document"></div>
+    <noscript><p class="status">JavaScript is required for the page-by-page display. <a href="/cv/HAGHI_CV.pdf">English CV (PDF)</a> · <a href="/cv/HAGHI_CV_DE.pdf">Deutscher Lebenslauf (PDF)</a></p></noscript>
+  </main>
+  <!-- Render the actual published PDF, all pages, without relying on mobile iframe PDF plugins. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    (async function () {
+      // Language: /cv/en/ or /cv/de/ (short links), or ?lang=en|de (older links).
+      // Without either (e.g. after scanning the QR code) the visitor chooses first.
+      const FILES = {
+        en: { pdf: "/cv/HAGHI_CV.pdf", name: "Soroush_Haghi_CV.pdf", label: "↓ Download CV", sub: "Curriculum Vitae", loading: "Loading the full CV…", htmlLang: "en" },
+        de: { pdf: "/cv/HAGHI_CV_DE.pdf", name: "Soroush_Haghi_Lebenslauf.pdf", label: "↓ Herunterladen", sub: "Lebenslauf", loading: "Lebenslauf wird geladen…", htmlLang: "de" }
+      };
+      const pathMatch = window.location.pathname.match(/\/cv\/(en|de)\/?$/i);
+      const lang = ((pathMatch && pathMatch[1]) || new URLSearchParams(window.location.search).get("lang") || "").toLowerCase();
+      const viewer = document.getElementById("viewer");
+      if (!FILES[lang]) {
+        document.body.classList.add("choosing");
+        document.getElementById("chooser").hidden = false;
+        viewer.hidden = true;
+        return;
+      }
+      const cv = FILES[lang];
+      const pdfPath = cv.pdf;
+      document.documentElement.lang = cv.htmlLang;
+      const dl = document.getElementById("download");
+      dl.href = cv.pdf; dl.setAttribute("download", cv.name); dl.textContent = cv.label;
+      document.querySelector(".wordmark > span").textContent = cv.sub;
+      document.querySelectorAll(".lang-list a").forEach(function (a) {
+        if (a.dataset.lang === lang) a.setAttribute("aria-current", "true");
+      });
+      const status = document.createElement("p");
+      status.className = "status"; status.setAttribute("role", "status"); status.textContent = cv.loading;
+      viewer.appendChild(status);
+      document.addEventListener("click", function (e) {
+        const menu = document.getElementById("langMenu");
+        if (menu.open && !menu.contains(e.target)) menu.open = false;
+      });
+      const pdfjs = window.pdfjsLib;
+      // If the rendering library is unavailable, open the original PDF directly.
+      if (!pdfjs) { window.location.replace(pdfPath); return; }
+      pdfjs.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+      let pdf;
+      let generation = 0;
+      let renderTask = null;
+      let renderedWidth = 0;
+      let resizeTimer;
+      const redirectToOriginal = () => window.location.replace(pdfPath);
+
+      async function renderAllPages() {
+        const currentGeneration = ++generation;
+        if (renderTask) renderTask.cancel();
+        viewer.replaceChildren();
+        const width = Math.floor(viewer.clientWidth);
+        renderedWidth = width;
+
+        try {
+          for (let number = 1; number <= pdf.numPages; number++) {
+            if (currentGeneration !== generation) return;
+            const page = await pdf.getPage(number);
+            if (currentGeneration !== generation) return;
+            const natural = page.getViewport({ scale: 1 });
+            const viewport = page.getViewport({ scale: width / natural.width });
+            // Render the source PDF's vector text at print-like canvas density,
+            // not at the browser's often-blurry 1x desktop pixel ratio.
+            // Cap total pixels to keep mobile/low-memory browsers responsive.
+            const targetDpr = Math.min(3, Math.max(2.5, window.devicePixelRatio || 1));
+            const maxPixels = 10000000;
+            const areaBoundDpr = Math.sqrt(maxPixels / (viewport.width * viewport.height));
+            const dpr = Math.max(1, Math.min(targetDpr, areaBoundDpr));
+
+            const sheet = document.createElement("article");
+            sheet.className = "paper";
+            sheet.setAttribute("role", "group");
+            sheet.setAttribute("aria-label", "CV page " + number + " of " + pdf.numPages);
+            sheet.style.width = viewport.width + "px";
+            sheet.style.height = viewport.height + "px";
+
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(viewport.width * dpr);
+            canvas.height = Math.round(viewport.height * dpr);
+            canvas.style.width = viewport.width + "px";
+            canvas.style.height = viewport.height + "px";
+            sheet.appendChild(canvas);
+
+            const context = canvas.getContext("2d", { alpha: false });
+            if (!context) throw new Error("Canvas context is unavailable");
+            renderTask = page.render({
+              canvasContext: context,
+              viewport,
+              transform: [dpr, 0, 0, dpr, 0, 0]
+            });
+            await renderTask.promise;
+            renderTask = null;
+            if (currentGeneration !== generation) return;
+
+            // A selectable text layer makes the full PDF useful beyond a screenshot.
+            if (typeof pdfjs.renderTextLayer === "function") {
+              try {
+                const textLayer = document.createElement("div");
+                textLayer.className = "textLayer";
+                textLayer.style.setProperty("--scale-factor", String(viewport.scale));
+                const text = await page.getTextContent();
+                await pdfjs.renderTextLayer({
+                  textContentSource: text,
+                  container: textLayer,
+                  viewport,
+                  textDivs: []
+                }).promise;
+                if (currentGeneration !== generation) return;
+                sheet.appendChild(textLayer);
+              } catch (error) {
+                console.warn("Optional PDF text layer unavailable:", error);
+              }
+            }
+
+            // Preserve external hyperlinks from the actual PDF on top of each page.
+            const annotations = await page.getAnnotations({ intent: "display" });
+            for (const annotation of annotations) {
+              if (annotation.subtype !== "Link" || !annotation.rect) continue;
+              const href = annotation.url;
+              if (typeof href !== "string" || !/^https?:\/\//i.test(href)) continue;
+              const rect = viewport.convertToViewportRectangle(annotation.rect);
+              const x = Math.min(rect[0], rect[2]);
+              const y = Math.min(rect[1], rect[3]);
+              const link = document.createElement("a");
+              link.className = "pdf-link";
+              link.href = href;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.setAttribute("aria-label", "Open CV reference");
+              link.style.left = x + "px";
+              link.style.top = y + "px";
+              link.style.width = Math.abs(rect[2] - rect[0]) + "px";
+              link.style.height = Math.abs(rect[3] - rect[1]) + "px";
+              sheet.appendChild(link);
+            }
+            if (currentGeneration !== generation) return;
+            viewer.appendChild(sheet);
+
+          }
+        } catch (error) {
+          if (currentGeneration !== generation) return;
+          console.error("CV viewer failed; opening original PDF:", error);
+          redirectToOriginal();
+        }
+      }
+
+      try {
+        pdf = await pdfjs.getDocument({ url: pdfPath }).promise;
+        await renderAllPages();
+        window.addEventListener("resize", function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () {
+            if (Math.abs(viewer.clientWidth - renderedWidth) > 3) renderAllPages();
+          }, 180);
+        });
+      } catch (error) {
+        console.error("Could not load CV; opening original PDF:", error);
+        redirectToOriginal();
+      }
+    })();
+  </script>
+</body>
+</html>
