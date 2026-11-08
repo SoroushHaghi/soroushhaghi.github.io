@@ -30,6 +30,11 @@ jobs:
           rm -rf /tmp/gh-pages/cv
           mkdir -p /tmp/gh-pages/cv
           cp -a public/cv/. /tmp/gh-pages/cv/
+          # Short CV links: /cv/en/ and /cv/de/ open the same CV viewer in that language.
+          for lang in en de; do
+            mkdir -p "/tmp/gh-pages/cv/$lang"
+            cp public/cv/index.html "/tmp/gh-pages/cv/$lang/index.html"
+          done
           cd /tmp/gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
