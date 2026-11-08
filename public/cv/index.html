@@ -104,11 +104,11 @@
       <details class="lang-menu" id="langMenu">
         <summary class="action" aria-label="Choose CV language"><span class="lang-long">LANGUAGES</span><span class="lang-short">EN/DE</span>&nbsp;▾</summary>
         <ul class="lang-list">
-          <li><a href="?lang=en" data-lang="en" lang="en">English</a></li>
-          <li><a href="?lang=de" data-lang="de" lang="de">Deutsch</a></li>
+          <li><a href="/cv/en/" data-lang="en" lang="en">English</a></li>
+          <li><a href="/cv/de/" data-lang="de" lang="de">Deutsch</a></li>
         </ul>
       </details>
-      <a class="action primary" id="download" href="./HAGHI_CV.pdf" download="Soroush_Haghi_CV.pdf">↓ Download CV</a>
+      <a class="action primary" id="download" href="/cv/HAGHI_CV.pdf" download="Soroush_Haghi_CV.pdf">↓ Download CV</a>
     </nav>
   </header>
   <main>
@@ -117,24 +117,26 @@
         <h1 id="chooserTitle">Which language?</h1>
         <p>Choose the language of the CV · Sprache des Lebenslaufs wählen</p>
         <div class="chooser-options">
-          <a class="lang-option" href="?lang=en" lang="en">English <small>CV</small></a>
-          <a class="lang-option" href="?lang=de" lang="de">Deutsch <small>Lebenslauf</small></a>
+          <a class="lang-option" href="/cv/en/" lang="en">English <small>CV</small></a>
+          <a class="lang-option" href="/cv/de/" lang="de">Deutsch <small>Lebenslauf</small></a>
         </div>
       </div>
     </section>
     <div id="viewer" class="viewer" aria-label="Complete CV document"></div>
-    <noscript><p class="status">JavaScript is required for the page-by-page display. <a href="./HAGHI_CV.pdf">English CV (PDF)</a> · <a href="./HAGHI_CV_DE.pdf">Deutscher Lebenslauf (PDF)</a></p></noscript>
+    <noscript><p class="status">JavaScript is required for the page-by-page display. <a href="/cv/HAGHI_CV.pdf">English CV (PDF)</a> · <a href="/cv/HAGHI_CV_DE.pdf">Deutscher Lebenslauf (PDF)</a></p></noscript>
   </main>
   <!-- Render the actual published PDF, all pages, without relying on mobile iframe PDF plugins. -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (async function () {
-      // Language: ?lang=en|de. Without it (e.g. after scanning the QR code) the visitor chooses first.
+      // Language: /cv/en/ or /cv/de/ (short links), or ?lang=en|de (older links).
+      // Without either (e.g. after scanning the QR code) the visitor chooses first.
       const FILES = {
-        en: { pdf: "./HAGHI_CV.pdf", name: "Soroush_Haghi_CV.pdf", label: "↓ Download CV", sub: "Curriculum Vitae", loading: "Loading the full CV…", htmlLang: "en" },
-        de: { pdf: "./HAGHI_CV_DE.pdf", name: "Soroush_Haghi_Lebenslauf.pdf", label: "↓ Herunterladen", sub: "Lebenslauf", loading: "Lebenslauf wird geladen…", htmlLang: "de" }
+        en: { pdf: "/cv/HAGHI_CV.pdf", name: "Soroush_Haghi_CV.pdf", label: "↓ Download CV", sub: "Curriculum Vitae", loading: "Loading the full CV…", htmlLang: "en" },
+        de: { pdf: "/cv/HAGHI_CV_DE.pdf", name: "Soroush_Haghi_Lebenslauf.pdf", label: "↓ Herunterladen", sub: "Lebenslauf", loading: "Lebenslauf wird geladen…", htmlLang: "de" }
       };
-      const lang = (new URLSearchParams(window.location.search).get("lang") || "").toLowerCase();
+      const pathMatch = window.location.pathname.match(/\/cv\/(en|de)\/?$/i);
+      const lang = ((pathMatch && pathMatch[1]) || new URLSearchParams(window.location.search).get("lang") || "").toLowerCase();
       const viewer = document.getElementById("viewer");
       if (!FILES[lang]) {
         document.body.classList.add("choosing");
